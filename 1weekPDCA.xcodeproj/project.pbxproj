@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5CA6AC13298799D1004AE124 /* _weekPDCAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6AC12298799D1004AE124 /* _weekPDCAApp.swift */; };
+		5CA6AC13298799D1004AE124 /* login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6AC12298799D1004AE124 /* login.swift */; };
 		5CA6AC15298799D1004AE124 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6AC14298799D1004AE124 /* ContentView.swift */; };
 		5CA6AC17298799D5004AE124 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CA6AC16298799D5004AE124 /* Assets.xcassets */; };
 		5CA6AC1A298799D5004AE124 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CA6AC19298799D5004AE124 /* Preview Assets.xcassets */; };
@@ -42,7 +42,7 @@
 		360C89A90F466F1B3063CE05 /* Pods_1weekPDCA_1weekPDCAUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_1weekPDCA_1weekPDCAUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D63D9445BED265BCCE36233 /* Pods-1weekPDCA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-1weekPDCA.release.xcconfig"; path = "Target Support Files/Pods-1weekPDCA/Pods-1weekPDCA.release.xcconfig"; sourceTree = "<group>"; };
 		5CA6AC0F298799D1004AE124 /* 1weekPDCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 1weekPDCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5CA6AC12298799D1004AE124 /* _weekPDCAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _weekPDCAApp.swift; sourceTree = "<group>"; };
+		5CA6AC12298799D1004AE124 /* login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = login.swift; sourceTree = "<group>"; };
 		5CA6AC14298799D1004AE124 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5CA6AC16298799D5004AE124 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5CA6AC19298799D5004AE124 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -86,6 +86,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C86E3742987A0CB00AB639E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5CA6AC12298799D1004AE124 /* login.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		5C86E3752987A0E200AB639E /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		5C86E3762987A11100AB639E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		5CA6AC06298799D1004AE124 = {
 			isa = PBXGroup;
 			children = (
@@ -111,7 +133,9 @@
 		5CA6AC11298799D1004AE124 /* 1weekPDCA */ = {
 			isa = PBXGroup;
 			children = (
-				5CA6AC12298799D1004AE124 /* _weekPDCAApp.swift */,
+				5C86E3762987A11100AB639E /* Model */,
+				5C86E3742987A0CB00AB639E /* View */,
+				5C86E3752987A0E200AB639E /* ViewController */,
 				5CA6AC14298799D1004AE124 /* ContentView.swift */,
 				5CA6AC16298799D5004AE124 /* Assets.xcassets */,
 				5CA6AC18298799D5004AE124 /* Preview Content */,
@@ -164,7 +188,6 @@
 				E55A53642C0FD13C5F2E06A5 /* Pods-1weekPDCATests.debug.xcconfig */,
 				136F24161732E7EECCA00C16 /* Pods-1weekPDCATests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -407,7 +430,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CA6AC15298799D1004AE124 /* ContentView.swift in Sources */,
-				5CA6AC13298799D1004AE124 /* _weekPDCAApp.swift in Sources */,
+				5CA6AC13298799D1004AE124 /* login.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
