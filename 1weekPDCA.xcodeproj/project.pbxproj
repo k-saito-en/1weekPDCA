@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5CA6AC13298799D1004AE124 /* login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6AC12298799D1004AE124 /* login.swift */; };
+		5C4B8CED2994ADE100B6348E /* tabBar_model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4B8CEC2994ADE100B6348E /* tabBar_model.swift */; };
+		5C4B8CF02994CE4800B6348E /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4B8CEF2994CE4800B6348E /* ColorExtension.swift */; };
+		5C62FE7029922A640046A41F /* component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C62FE6F29922A640046A41F /* component.swift */; };
+		5C62FE7229922EE70046A41F /* theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C62FE7129922EE70046A41F /* theme.swift */; };
+		5CA6AC13298799D1004AE124 /* Plan_Do.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6AC12298799D1004AE124 /* Plan_Do.swift */; };
 		5CA6AC15298799D1004AE124 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6AC14298799D1004AE124 /* ContentView.swift */; };
 		5CA6AC17298799D5004AE124 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CA6AC16298799D5004AE124 /* Assets.xcassets */; };
 		5CA6AC1A298799D5004AE124 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CA6AC19298799D5004AE124 /* Preview Assets.xcassets */; };
@@ -41,8 +45,12 @@
 		136F24161732E7EECCA00C16 /* Pods-1weekPDCATests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-1weekPDCATests.release.xcconfig"; path = "Target Support Files/Pods-1weekPDCATests/Pods-1weekPDCATests.release.xcconfig"; sourceTree = "<group>"; };
 		360C89A90F466F1B3063CE05 /* Pods_1weekPDCA_1weekPDCAUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_1weekPDCA_1weekPDCAUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D63D9445BED265BCCE36233 /* Pods-1weekPDCA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-1weekPDCA.release.xcconfig"; path = "Target Support Files/Pods-1weekPDCA/Pods-1weekPDCA.release.xcconfig"; sourceTree = "<group>"; };
+		5C4B8CEC2994ADE100B6348E /* tabBar_model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tabBar_model.swift; sourceTree = "<group>"; };
+		5C4B8CEF2994CE4800B6348E /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		5C62FE6F29922A640046A41F /* component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = component.swift; sourceTree = "<group>"; };
+		5C62FE7129922EE70046A41F /* theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = theme.swift; sourceTree = "<group>"; };
 		5CA6AC0F298799D1004AE124 /* 1weekPDCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 1weekPDCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5CA6AC12298799D1004AE124 /* login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = login.swift; sourceTree = "<group>"; };
+		5CA6AC12298799D1004AE124 /* Plan_Do.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plan_Do.swift; sourceTree = "<group>"; };
 		5CA6AC14298799D1004AE124 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5CA6AC16298799D5004AE124 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5CA6AC19298799D5004AE124 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -86,31 +94,51 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5C86E3742987A0CB00AB639E /* View */ = {
+		5C4B8CEE2994CE1F00B6348E /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				5CA6AC12298799D1004AE124 /* login.swift */,
+				5C62FE7129922EE70046A41F /* theme.swift */,
+				5C4B8CEF2994CE4800B6348E /* ColorExtension.swift */,
 			);
-			path = View;
+			path = utils;
 			sourceTree = "<group>";
 		};
-		5C86E3752987A0E200AB639E /* ViewController */ = {
+		5C62FE6E2992299E0046A41F /* infrastructure */ = {
 			isa = PBXGroup;
 			children = (
 			);
-			path = ViewController;
+			path = infrastructure;
 			sourceTree = "<group>";
 		};
-		5C86E3762987A11100AB639E /* Model */ = {
+		5C86E3742987A0CB00AB639E /* application */ = {
 			isa = PBXGroup;
 			children = (
 			);
-			path = Model;
+			path = application;
+			sourceTree = "<group>";
+		};
+		5C86E3752987A0E200AB639E /* domain */ = {
+			isa = PBXGroup;
+			children = (
+				5C4B8CEC2994ADE100B6348E /* tabBar_model.swift */,
+			);
+			path = domain;
+			sourceTree = "<group>";
+		};
+		5C86E3762987A11100AB639E /* presentation */ = {
+			isa = PBXGroup;
+			children = (
+				5CA6AC12298799D1004AE124 /* Plan_Do.swift */,
+				5C62FE6F29922A640046A41F /* component.swift */,
+			);
+			path = presentation;
 			sourceTree = "<group>";
 		};
 		5CA6AC06298799D1004AE124 = {
 			isa = PBXGroup;
 			children = (
+				5CA6AC16298799D5004AE124 /* Assets.xcassets */,
+				5CA6AC14298799D1004AE124 /* ContentView.swift */,
 				5CA6AC11298799D1004AE124 /* 1weekPDCA */,
 				5CA6AC22298799D5004AE124 /* 1weekPDCATests */,
 				5CA6AC2C298799D5004AE124 /* 1weekPDCAUITests */,
@@ -133,11 +161,11 @@
 		5CA6AC11298799D1004AE124 /* 1weekPDCA */ = {
 			isa = PBXGroup;
 			children = (
-				5C86E3762987A11100AB639E /* Model */,
-				5C86E3742987A0CB00AB639E /* View */,
-				5C86E3752987A0E200AB639E /* ViewController */,
-				5CA6AC14298799D1004AE124 /* ContentView.swift */,
-				5CA6AC16298799D5004AE124 /* Assets.xcassets */,
+				5C4B8CEE2994CE1F00B6348E /* utils */,
+				5C86E3762987A11100AB639E /* presentation */,
+				5C86E3742987A0CB00AB639E /* application */,
+				5C86E3752987A0E200AB639E /* domain */,
+				5C62FE6E2992299E0046A41F /* infrastructure */,
 				5CA6AC18298799D5004AE124 /* Preview Content */,
 			);
 			path = 1weekPDCA;
@@ -429,8 +457,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C4B8CF02994CE4800B6348E /* ColorExtension.swift in Sources */,
 				5CA6AC15298799D1004AE124 /* ContentView.swift in Sources */,
-				5CA6AC13298799D1004AE124 /* login.swift in Sources */,
+				5C62FE7229922EE70046A41F /* theme.swift in Sources */,
+				5C62FE7029922A640046A41F /* component.swift in Sources */,
+				5C4B8CED2994ADE100B6348E /* tabBar_model.swift in Sources */,
+				5CA6AC13298799D1004AE124 /* Plan_Do.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
