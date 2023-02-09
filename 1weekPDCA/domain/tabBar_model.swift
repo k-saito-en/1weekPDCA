@@ -12,4 +12,6 @@ import SwiftUI
 struct TabItem {
     let image: String
     let view: AnyView
+    // デフォルト引数 false を設定
+    var isSelected: Bool = false
 }
