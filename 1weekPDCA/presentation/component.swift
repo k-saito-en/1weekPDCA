@@ -9,27 +9,32 @@ import Foundation
 import SwiftUI
 
 
-// TabアイコンとViewを設定
-// 現時点ではText()でモック化
-let tabItems: [TabItem] = [
-    TabItem(image: "graduationcap.fill", view: AnyView(Text("ActTabView()"))),
-    TabItem(image: "square.fill", view: AnyView(Text("PlanDoTabView()"))),
-    TabItem(image: "checkmark.circle.fill", view: AnyView(Text("CheckTabView()")))
-]
-
-// ボトムバーの実装
 struct BottomBar: View {
     
+    // ボトムバーの状態管理
+    @State private var selectedIndex = 0
+    
+    // ボトムバーのアイコン、ページ（view）
+    let tabItems: [TabItem] = [
+        TabItem(image: "graduationcap.fill", view: AnyView(Text("ActTabView()"))),
+        TabItem(image: "square.fill", view: AnyView(Text("PlanDoTabView()"))),
+        TabItem(image: "checkmark.circle.fill", view: AnyView(Text("CheckTabView()")))
+    ]
+    
+    // ボトムバーの実装
     var body: some View {
-        TabView {
-            // `image`をid（識別子）として反復処理を実装
-            ForEach(tabItems, id: \.image) { item in
-                item.view
+        TabView(selection: $selectedIndex) {
+            // tabItems.count だと定数じゃないから数値を指定しろって怒られた
+            ForEach(0 ..< 3) { index in
+                // その index の view を表示
+                self.tabItems[index].view
                     .tabItem {
-                        Image(systemName: item.image)
+                        Image(systemName: self.tabItems[index].image)
                             .renderingMode(.template)
-                            .foregroundColor(Color("UIColorGray"))
+                            .foregroundColor(self.selectedIndex == index ? Color("UIColorGreen") : Color("UIColorGray"))
                     }
+                    // 各 view にタグをつけて選択状態を管理
+                    .tag(index)
             }
         }
     }
