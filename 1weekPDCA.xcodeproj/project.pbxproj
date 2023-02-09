@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C4B8CED2994ADE100B6348E /* tabBar_model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4B8CEC2994ADE100B6348E /* tabBar_model.swift */; };
 		5C62FE7029922A640046A41F /* component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C62FE6F29922A640046A41F /* component.swift */; };
 		5C62FE7229922EE70046A41F /* theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C62FE7129922EE70046A41F /* theme.swift */; };
 		5CA6AC13298799D1004AE124 /* Plan_Do.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA6AC12298799D1004AE124 /* Plan_Do.swift */; };
@@ -43,6 +44,7 @@
 		136F24161732E7EECCA00C16 /* Pods-1weekPDCATests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-1weekPDCATests.release.xcconfig"; path = "Target Support Files/Pods-1weekPDCATests/Pods-1weekPDCATests.release.xcconfig"; sourceTree = "<group>"; };
 		360C89A90F466F1B3063CE05 /* Pods_1weekPDCA_1weekPDCAUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_1weekPDCA_1weekPDCAUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D63D9445BED265BCCE36233 /* Pods-1weekPDCA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-1weekPDCA.release.xcconfig"; path = "Target Support Files/Pods-1weekPDCA/Pods-1weekPDCA.release.xcconfig"; sourceTree = "<group>"; };
+		5C4B8CEC2994ADE100B6348E /* tabBar_model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tabBar_model.swift; sourceTree = "<group>"; };
 		5C62FE6F29922A640046A41F /* component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = component.swift; sourceTree = "<group>"; };
 		5C62FE7129922EE70046A41F /* theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = theme.swift; sourceTree = "<group>"; };
 		5CA6AC0F298799D1004AE124 /* 1weekPDCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 1weekPDCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,6 +109,7 @@
 		5C86E3752987A0E200AB639E /* domain */ = {
 			isa = PBXGroup;
 			children = (
+				5C4B8CEC2994ADE100B6348E /* tabBar_model.swift */,
 			);
 			path = domain;
 			sourceTree = "<group>";
@@ -446,6 +449,7 @@
 				5CA6AC15298799D1004AE124 /* ContentView.swift in Sources */,
 				5C62FE7229922EE70046A41F /* theme.swift in Sources */,
 				5C62FE7029922A640046A41F /* component.swift in Sources */,
+				5C4B8CED2994ADE100B6348E /* tabBar_model.swift in Sources */,
 				5CA6AC13298799D1004AE124 /* Plan_Do.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

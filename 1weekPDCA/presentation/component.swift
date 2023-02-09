@@ -8,30 +8,28 @@
 import Foundation
 import SwiftUI
 
+
+// TabアイコンとViewを設定
+// 現時点ではText()でモック化
+let tabItems: [TabItem] = [
+    TabItem(image: "graduationcap.fill", view: AnyView(Text("ActTabView()"))),
+    TabItem(image: "square.fill", view: AnyView(Text("PlanDoTabView()"))),
+    TabItem(image: "checkmark.circle.fill", view: AnyView(Text("CheckTabView()")))
+]
+
 // ボトムバーの実装
 struct BottomBar: View {
+    
     var body: some View {
         TabView {
-         // Act画面
-         Text("ActTabView()")
-            .tabItem {
-                Image(systemName: "graduationcap.fill")
-                    .renderingMode(.template)
-                    .foregroundColor(Color("UIColorGray"))
-            }
-         // Plan・Do画面
-         Text("PlanDoTabView()")
-            .tabItem {
-                Image(systemName: "square.fill")
-                    .renderingMode(.template)
-                    .foregroundColor(Color("UIColorGray"))
-            }
-         // Check画面
-         Text("CheckTabView()")
-            .tabItem {
-                Image(systemName: "checkmark.circle.fill")
-                    .renderingMode(.template)
-                    .foregroundColor(Color("UIColorGray"))
+            // `image`をid（識別子）として反復処理を実装
+            ForEach(tabItems, id: \.image) { item in
+                item.view
+                    .tabItem {
+                        Image(systemName: item.image)
+                            .renderingMode(.template)
+                            .foregroundColor(Color("UIColorGray"))
+                    }
             }
         }
     }
