@@ -9,9 +9,7 @@ import Foundation
 import SwiftUI
 
 // TabItems のモデル
-struct TabItem {
+struct BottomBarItem {
     let image: String
     let view: AnyView
-    // デフォルト引数 false を設定
-    var isSelected: Bool = false
 }
