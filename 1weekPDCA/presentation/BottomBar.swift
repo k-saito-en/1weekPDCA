@@ -21,6 +21,9 @@ struct BottomBar: View {
     // タブの選択値と初期値.
     @State private var selected = 0
     
+    // 選択中のアイコンが大きくなっているか
+    @State private var isBig = false
+    
     var body: some View {
         
         ZStack {
@@ -43,21 +46,28 @@ struct BottomBar: View {
                 Spacer(minLength: 0)
                 
                 // タブビュー部分.
-                HStack {
+                HStack (spacing: (UIScreen.main.bounds.width - 100.0) / 3){
                     ForEach(0 ..< 3) { index in
                         Image(systemName: bottomBarItems[index].image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 20, height: 20)
+                            .frame(width: 30, height: 30)
                             .onTapGesture {
-                                self.selected = index
+                                withAnimation(.linear(duration: 0.05)) {
+                                    self.selected = index
+                                }
+                                withAnimation(.spring(response: 0.05, dampingFraction: 0.05, blendDuration: 0.05)) {
+                                            self.isBig = true
+                                        }
                             }
-                            .foregroundColor(self.selected == index ? Color.black : Color.gray)
+                            .foregroundColor(self.selected == index ? Color.uiColorGreen : Color.uiColorGray)
+                            .scaleEffect(self.selected == index && self.isBig ? 1.3 : 1.0)
                     }
                 }
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 50)
                 .padding(.vertical, 10.0)
-                .padding(.horizontal, 20.0)
-                .background(Color.white.clipShape(Capsule()))
+                .padding(.horizontal, 50.0)
+                .background(Color.cardColorGray.clipShape(Capsule()))
                 .shadow(color: Color.black.opacity(0.3), radius: 5, x: -5, y: 5)
             }
         }
