@@ -63,7 +63,7 @@ struct BottomBar: View {
                                 // response : アニメーションの最高点での跳ね返り度合い
                                 // dampingFraction : アニメーションが収束するまでの時間
                                 // blendDuration : アニメーションが続く時間
-                                withAnimation(.spring(response: 0.05, dampingFraction: 0.05, blendDuration: 0.05)) {
+                                withAnimation(.linear(duration: 0.05)) {
                                             self.isBig = true
                                         }
                             }
