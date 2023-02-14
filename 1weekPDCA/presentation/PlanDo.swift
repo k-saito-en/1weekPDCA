@@ -69,9 +69,6 @@ struct CustomProgressBar: View {
     }
 }
 
-
-
-
 struct WeekProgressBarCard: View {
     let today = Date()
     let calendar = Calendar.current
@@ -81,14 +78,8 @@ struct WeekProgressBarCard: View {
         let progress = 0.71 // 現時点ではモック化のために定数に設定
         
         ZStack {
-            
-            Rectangle()
-                .fill(Color.cardColorGray)
-                .cornerRadius(25)
-                .padding(Edge.Set.horizontal, 25)
-                .frame(width: UIScreen.main.bounds.width, height: 110)
-            
             VStack(spacing: 20) {
+                Spacer().frame(height: 7)
                 HStack {
                     let (_, _) = getWeekRange()
                     Text(formatWeekRangeText(weekRange))
@@ -97,23 +88,30 @@ struct WeekProgressBarCard: View {
                         .foregroundColor(Color.uiColorGray)
                     Spacer()
                 }
-                
+
                 HStack {
                     Spacer()
                     CustomProgressBar(progress: progress)
                         .frame(height: 20)// 進捗ごとに色を変える実装にする予定
-                        
+
                     Spacer()
                 }
             }
-//            .background(Color.uiColorGray)
-//            .cornerRadius(10)
             .padding(Edge.Set.horizontal, 50)
-            .frame(width: UIScreen.main.bounds.width, height: 100)
+            .background(
+                GeometryReader { geometry in
+                    Rectangle()
+                        .fill(Color.cardColorGray)
+                        .cornerRadius(25)
+                        .padding(Edge.Set.horizontal, 25)
+                        // 子 View の高さに応じて可変するようにした
+                        .frame(height: geometry.size.height + 20)
+                }
+            )
         }
+        .frame(height: 120) // WeekProgressBarCardの最小の高さ
     }
 }
-
 
 
 struct PlanDoPage_Previews: PreviewProvider {
