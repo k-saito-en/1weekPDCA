@@ -72,46 +72,33 @@ struct CustomProgressBar: View {
 struct WeekProgressBarCard: View {
     let today = Date()
     let calendar = Calendar.current
-
+//    let progress: Double
+    
     var body: some View {
         let weekRange = getWeekRange()
-        let progress = 0.71 // 現時点ではモック化のために定数に設定
+        let progress = 0.71
         
-        ZStack {
-            VStack(spacing: 20) {
-                Spacer().frame(height: 7)
-                HStack {
-                    let (_, _) = getWeekRange()
-                    Text(formatWeekRangeText(weekRange))
-                        .font(.system(size: 20))
-                        .fontWeight(.bold)
-                        .foregroundColor(Color.uiColorGray)
-                    Spacer()
-                }
-
-                HStack {
-                    Spacer()
-                    CustomProgressBar(progress: progress)
-                        .frame(height: 20)// 進捗ごとに色を変える実装にする予定
-
-                    Spacer()
-                }
+        CardView {
+            HStack {
+                Text(formatWeekRangeText(weekRange))
+                    .font(.system(size: 20))
+                    .fontWeight(.bold)
+                    .foregroundColor(Color.uiColorGray)
+                
+                Spacer()
             }
-            .padding(Edge.Set.horizontal, 50)
-            .background(
-                GeometryReader { geometry in
-                    Rectangle()
-                        .fill(Color.cardColorGray)
-                        .cornerRadius(25)
-                        .padding(Edge.Set.horizontal, 25)
-                        // 子 View の高さに応じて可変するようにした
-                        .frame(height: geometry.size.height + 20)
-                }
-            )
+            
+            HStack {
+                Spacer()
+                CustomProgressBar(progress: progress)
+                    .frame(height: 20)
+                Spacer()
+            }
         }
-        .frame(height: 120) // WeekProgressBarCardの最小の高さ
+        .frame(height: 120)
     }
 }
+
 
 
 struct PlanDoPage_Previews: PreviewProvider {
