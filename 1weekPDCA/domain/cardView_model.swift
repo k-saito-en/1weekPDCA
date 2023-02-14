@@ -11,6 +11,7 @@ import SwiftUI
 struct CardView<Content: View>: View {
     let content: Content
 
+    // 渡された View を content に保持させることで body で使えるようにしている
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
@@ -29,6 +30,7 @@ struct CardView<Content: View>: View {
                         .cornerRadius(25)
                         .padding(Edge.Set.horizontal, 25)
                         .frame(height: geometry.size.height + 20)
+                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
                 }
             )
         }
