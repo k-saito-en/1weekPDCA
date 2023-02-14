@@ -34,7 +34,11 @@ func getWeekRange() -> (monday: Date, sunday: Date) {
     return (monday, sundayEndOfDay)
 }
 
-
+// weekRange を引数に、その週の一週間の日付を文字列で返す関数
+func formatWeekRangeText(_ weekRange: (monday: Date, sunday: Date)) -> String {
+    let calendar = Calendar.current
+    return "\(calendar.component(.month, from: weekRange.monday))/\(calendar.component(.day, from: weekRange.monday)) - \(calendar.component(.month, from: weekRange.sunday))/\(calendar.component(.day, from: weekRange.sunday))"
+}
 
 
 
@@ -45,48 +49,52 @@ struct WeekProgressBarCard: View {
     let today = Date()
     let calendar = Calendar.current
 
-
     var body: some View {
+        let weekRange = getWeekRange()
+        let progress = 0.5 // 現時点ではモック化のために0.5に設定
+        
         ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .frame(width: 300, height: 200)
-                .foregroundColor(.white)
-
+            
+            Rectangle()
+                .fill(Color.cardColorGray)
+                .cornerRadius(25)
+                .padding(Edge.Set.horizontal, 25)
+                .frame(width: UIScreen.main.bounds.width, height: 110)
+            
             VStack(spacing: 20) {
                 HStack {
-                    let (monday, sunday) = getWeekRange()
-                    Text("\(calendar.component(.month, from: monday))/\(calendar.component(.day, from: monday)) - \(calendar.component(.month, from: sunday))/\(calendar.component(.day, from: sunday))")
+                    let (_, _) = getWeekRange()
+                    Text(formatWeekRangeText(weekRange))
                         .font(.headline)
                     Spacer()
                 }
-
+                
                 HStack {
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: 250, height: 20)
-                            .foregroundColor(.gray)
-
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: 150, height: 20)
-                            .foregroundColor(.blue)
-                    }
-
+                    ProgressView(value: progress)
+                        .frame(width: 250, height: 20)
+                        .progressViewStyle(LinearProgressViewStyle())
                     Spacer()
                 }
             }
-            .padding()
+//            .background(Color.uiColorGray)
+//            .cornerRadius(10)
+            .padding(Edge.Set.horizontal, 50)
+            .frame(width: UIScreen.main.bounds.width, height: 100)
         }
     }
 }
 
 
+
 struct PlanDoPage_Previews: PreviewProvider {
-    
     static var previews: some View {
-        VStack {
-            // ここに他のViewを配置
-            WeekProgressBarCard()
-            Spacer(minLength: 0)
+        ZStack {
+            Color.backGroundColorGray.ignoresSafeArea() // ここで背景色を指定する
+            VStack {
+                WeekProgressBarCard()
+                Spacer(minLength: 0)
+                // 他のViewを追加する
+            }
         }
     }
 }
