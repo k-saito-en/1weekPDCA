@@ -40,6 +40,22 @@ func formatWeekRangeText(_ weekRange: (monday: Date, sunday: Date)) -> String {
     return "\(calendar.component(.month, from: weekRange.monday))/\(calendar.component(.day, from: weekRange.monday)) - \(calendar.component(.month, from: weekRange.sunday))/\(calendar.component(.day, from: weekRange.sunday))"
 }
 
+// プログレスバーの実装
+struct CustomProgressBar: View {
+    var progress: Double
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Rectangle().frame(width: geometry.size.width, height: 10)
+                    .opacity(0.3)
+                    .foregroundColor(Color.uiColorGray)
+                
+                Rectangle().frame(width: min(CGFloat(self.progress) * geometry.size.width, geometry.size.width), height: 10)
+                    .foregroundColor(Color.uiColorGreen)
+            }.cornerRadius(45.0)
+        }
+    }
+}
 
 
 
@@ -65,14 +81,17 @@ struct WeekProgressBarCard: View {
                 HStack {
                     let (_, _) = getWeekRange()
                     Text(formatWeekRangeText(weekRange))
-                        .font(.headline)
+                        .font(.system(size: 20))
+                        .fontWeight(.bold)
+                        .foregroundColor(Color.uiColorGray)
                     Spacer()
                 }
                 
                 HStack {
-                    ProgressView(value: progress)
-                        .frame(width: 250, height: 20)
-                        .progressViewStyle(LinearProgressViewStyle())
+                    Spacer()
+                    CustomProgressBar(progress: progress)
+                        .frame(height: 20)// 進捗ごとに色を変える実装にする予定
+                        
                     Spacer()
                 }
             }
