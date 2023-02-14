@@ -40,7 +40,7 @@ func formatWeekRangeText(_ weekRange: (monday: Date, sunday: Date)) -> String {
     return "\(calendar.component(.month, from: weekRange.monday))/\(calendar.component(.day, from: weekRange.monday)) - \(calendar.component(.month, from: weekRange.sunday))/\(calendar.component(.day, from: weekRange.sunday))"
 }
 
-// プログレスバーの実装
+// プログレスバーの実装 : Viewに準拠しているので,frame()でサイス指定できるようになった
 struct CustomProgressBar: View {
     var progress: Double
     var body: some View {
@@ -51,12 +51,23 @@ struct CustomProgressBar: View {
                     .foregroundColor(Color.uiColorGray)
                 
                 Rectangle().frame(width: min(CGFloat(self.progress) * geometry.size.width, geometry.size.width), height: 10)
-                    .foregroundColor(Color.uiColorGreen)
+                    .foregroundColor(getBarColor(for: progress))
             }.cornerRadius(45.0)
         }
     }
+    
+    // 進捗状況によってバーの色を変える関数
+    func getBarColor(for progress: Double) -> Color {
+        switch progress {
+        case 0..<0.5:
+            return Color.uiColorRed
+        case 0.5...0.70:
+            return Color.uiColorYellow
+        default:
+            return Color.uiColorGreen
+        }
+    }
 }
-
 
 
 
@@ -67,7 +78,7 @@ struct WeekProgressBarCard: View {
 
     var body: some View {
         let weekRange = getWeekRange()
-        let progress = 0.5 // 現時点ではモック化のために0.5に設定
+        let progress = 0.71 // 現時点ではモック化のために定数に設定
         
         ZStack {
             
