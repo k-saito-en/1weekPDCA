@@ -10,6 +10,83 @@ import SwiftUI
 
 import Foundation
 
+//MARK: プログレスバー・サークル関係
+
+// 色変更ロジックのまとめ
+struct ColorUtils {
+    // プログレスバー・サークルの色変更関数
+    static func getProgressColor(for progress: Double) -> Color {
+        switch progress {
+        case 0..<0.5:
+            return Color.uiColorRed
+        case 0.5...0.70:
+            return Color.uiColorYellow
+        default:
+            return Color.uiColorGreen
+        }
+    }
+}
+
+// プログレスバーの実装 : Viewに準拠しているので,frame()でサイス指定できるようになった
+struct CustomProgressBar: View {
+    var progress: Double
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Rectangle().frame(width: geometry.size.width, height: 10)
+                    .opacity(0.3)
+                    .foregroundColor(Color.uiColorGray)
+                
+                Rectangle().frame(width: min(CGFloat(self.progress) * geometry.size.width, geometry.size.width), height: 10)
+                    .foregroundColor(getBarColor(for: progress))
+            }.cornerRadius(45.0)
+        }
+    }
+    
+    // CustomProgressBarのgetBarColor関数
+    func getBarColor(for progress: Double) -> Color {
+        return ColorUtils.getProgressColor(for: progress)
+    }
+}
+
+// プログレスサークルの実装
+struct customProgressCircle: View {
+    let circleProgress: Double
+    
+    var body: some View {
+        ZStack {
+            // 背景の円
+            Circle()
+                .stroke(lineWidth: 5)
+                .opacity(0.3)
+                .foregroundColor(Color.uiColorGray)
+
+            // 進捗を示す円
+            Circle()
+                .trim(from: 0.0, to: min(circleProgress, 1.0))
+                .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                .foregroundColor(getCircleColor(for: circleProgress))
+                .rotationEffect(Angle(degrees: 270.0))
+
+            // 円形のプログレスバー
+            ProgressView(value: circleProgress)
+                .progressViewStyle(CircularProgressViewStyle())
+                .frame(width: 40, height: 40)
+            
+            // 一回り小さな円
+            Circle()
+                .fill(getCircleColor(for: circleProgress).opacity(0.5))
+                .frame(width: 35, height: 35)
+        }
+    }
+    // customProgressCircleのgetCircleColor関数
+    func getCircleColor(for progress: Double) -> Color {
+        return ColorUtils.getProgressColor(for: progress)
+    }
+}
+
+// MARK: 日付表示の関数関係
+
 // 月曜日の0時0分0秒を返す関数
 func getMondayOfCurrentWeek() -> Date {
     // current プロパティを呼び出して、システム時間に基づくカレンダーインスタンスを取得
@@ -40,34 +117,11 @@ func formatWeekRangeText(_ weekRange: (monday: Date, sunday: Date)) -> String {
     return "\(calendar.component(.month, from: weekRange.monday))/\(calendar.component(.day, from: weekRange.monday)) - \(calendar.component(.month, from: weekRange.sunday))/\(calendar.component(.day, from: weekRange.sunday))"
 }
 
-// プログレスバーの実装 : Viewに準拠しているので,frame()でサイス指定できるようになった
-struct CustomProgressBar: View {
-    var progress: Double
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                Rectangle().frame(width: geometry.size.width, height: 10)
-                    .opacity(0.3)
-                    .foregroundColor(Color.uiColorGray)
-                
-                Rectangle().frame(width: min(CGFloat(self.progress) * geometry.size.width, geometry.size.width), height: 10)
-                    .foregroundColor(getBarColor(for: progress))
-            }.cornerRadius(45.0)
-        }
-    }
-    
-    // 進捗状況によってバーの色を変える関数
-    func getBarColor(for progress: Double) -> Color {
-        switch progress {
-        case 0..<0.5:
-            return Color.uiColorRed
-        case 0.5...0.70:
-            return Color.uiColorYellow
-        default:
-            return Color.uiColorGreen
-        }
-    }
-}
+
+
+
+
+//MARK: UICard 関係
 
 struct WeekProgressBarCard: View {
     let today = Date()
@@ -98,40 +152,11 @@ struct WeekProgressBarCard: View {
     }
 }
 
-// プログレスサークルの実装
-struct ProgressCircle: View {
-    let progress: Double
-    
-    var body: some View {
-        ZStack {
-            // 背景の円
-            Circle()
-                .stroke(lineWidth: 5)
-                .opacity(0.3)
-                .foregroundColor(Color.uiColorGray)
-
-            // 進捗を示す円
-            Circle()
-                .trim(from: 0.0, to: min(progress, 1.0))
-                .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                .foregroundColor(.blue)
-                .rotationEffect(Angle(degrees: 270.0))
-
-            // 円形のプログレスバー
-            ProgressView(value: progress)
-                .progressViewStyle(CircularProgressViewStyle())
-                .frame(width: 40, height: 40)
-        }
-    }
-}
-
 
 struct TaskCard: View {
     let circleProgress = 0.50 // モック化のために定数
     
     var body: some View {
-        let weekRange = getWeekRange()
-        
         CardView {
             HStack {
                 Text("タスクタイトルが入ります")
@@ -141,7 +166,7 @@ struct TaskCard: View {
                 
                 Spacer()
                 
-                ProgressCircle(progress: circleProgress)
+                customProgressCircle(circleProgress: circleProgress)
                     .frame(width: 30, height: 30)
                     .padding(.trailing, 20)
 
@@ -151,9 +176,23 @@ struct TaskCard: View {
     }
 }
 
+//MARK: PlanDo 画面全体の実装
+struct PlanDoView: View {
+    
+    var body: some View {
+        ZStack {
+            Color.backGroundColorGray.ignoresSafeArea() // ここで背景色を指定する
+            VStack {
+                WeekProgressBarCard()
+                TaskCard()
+                Spacer(minLength: 0)
+                // 他のViewを追加する
+            }
+        }
+    }
+}
 
-
-
+//MARK: プレビューの設定
 struct PlanDoPage_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
