@@ -98,9 +98,35 @@ struct WeekProgressBarCard: View {
     }
 }
 
+// プログレスサークルの実装
+struct ProgressCircle: View {
+    let progress: Double
+    
+    var body: some View {
+        ZStack {
+            // 背景の円
+            Circle()
+                .stroke(lineWidth: 5)
+                .opacity(0.3)
+                .foregroundColor(Color.uiColorGray)
+
+            // 進捗を示す円
+            Circle()
+                .trim(from: 0.0, to: min(progress, 1.0))
+                .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                .foregroundColor(.blue)
+                .rotationEffect(Angle(degrees: 270.0))
+
+            // 円形のプログレスバー
+            ProgressView(value: progress)
+                .progressViewStyle(CircularProgressViewStyle())
+                .frame(width: 40, height: 40)
+        }
+    }
+}
+
+
 struct TaskCard: View {
-    let today = Date()
-    let calendar = Calendar.current
     let circleProgress = 0.50 // モック化のために定数
     
     var body: some View {
@@ -108,34 +134,16 @@ struct TaskCard: View {
         
         CardView {
             HStack {
-                Text(formatWeekRangeText(weekRange))
+                Text("タスクタイトルが入ります")
                     .font(.system(size: 20))
                     .fontWeight(.bold)
                     .foregroundColor(Color.uiColorGray)
                 
                 Spacer()
                 
-                // プログレスサークルの実装
-                ZStack {
-                    // 背景の円
-                    Circle()
-                        .stroke(lineWidth: 5)
-                        .opacity(0.3)
-                        .foregroundColor(Color.uiColorGray)
-
-                    // 進捗を示す円
-                    Circle()
-                        .trim(from: 0.0, to: min(circleProgress, 1.0))
-                        .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                        .foregroundColor(.blue)
-                        .rotationEffect(Angle(degrees: 270.0))
-
-                    // 円形のプログレスバー
-                    ProgressView(value: circleProgress)
-                        .progressViewStyle(CircularProgressViewStyle())
-                        .frame(width: 40, height: 40)
-                        .padding(.trailing, 20)
-                }
+                ProgressCircle(progress: circleProgress)
+                    .frame(width: 30, height: 30)
+                    .padding(.trailing, 20)
 
             }
         }
