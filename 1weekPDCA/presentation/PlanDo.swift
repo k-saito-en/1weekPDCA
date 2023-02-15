@@ -72,11 +72,10 @@ struct CustomProgressBar: View {
 struct WeekProgressBarCard: View {
     let today = Date()
     let calendar = Calendar.current
-//    let progress: Double
     
     var body: some View {
         let weekRange = getWeekRange()
-        let progress = 0.71
+        let progress = 0.71 // モック化のために定数
         
         CardView {
             HStack {
@@ -99,6 +98,52 @@ struct WeekProgressBarCard: View {
     }
 }
 
+struct TaskCard: View {
+    let today = Date()
+    let calendar = Calendar.current
+    let circleProgress = 0.50 // モック化のために定数
+    
+    var body: some View {
+        let weekRange = getWeekRange()
+        
+        CardView {
+            HStack {
+                Text(formatWeekRangeText(weekRange))
+                    .font(.system(size: 20))
+                    .fontWeight(.bold)
+                    .foregroundColor(Color.uiColorGray)
+                
+                Spacer()
+                
+                // プログレスサークルの実装
+                ZStack {
+                    // 背景の円
+                    Circle()
+                        .stroke(lineWidth: 5)
+                        .opacity(0.3)
+                        .foregroundColor(Color.uiColorGray)
+
+                    // 進捗を示す円
+                    Circle()
+                        .trim(from: 0.0, to: min(circleProgress, 1.0))
+                        .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                        .foregroundColor(.blue)
+                        .rotationEffect(Angle(degrees: 270.0))
+
+                    // 円形のプログレスバー
+                    ProgressView(value: circleProgress)
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .frame(width: 40, height: 40)
+                        .padding(.trailing, 20)
+                }
+
+            }
+        }
+        .frame(height: 120)
+    }
+}
+
+
 
 
 struct PlanDoPage_Previews: PreviewProvider {
@@ -107,6 +152,7 @@ struct PlanDoPage_Previews: PreviewProvider {
             Color.backGroundColorGray.ignoresSafeArea() // ここで背景色を指定する
             VStack {
                 WeekProgressBarCard()
+                TaskCard()
                 Spacer(minLength: 0)
                 // 他のViewを追加する
             }
