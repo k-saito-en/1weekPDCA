@@ -151,22 +151,40 @@ struct TaskCard: View {
     
     var body: some View {
         CardView {
-            HStack {
-                // 30文字までに制限？
-                TextField("task title", text: $taskTitle, axis: .vertical)
-                    .font(.system(size: 20))
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.uiColorGray)
+            VStack {
+                HStack {
+                    // 30文字までに制限？
+                    TextField("task title", text: $taskTitle, axis: .vertical)
+                        .font(.system(size: 20))
+                        .fontWeight(.bold)
+                        .foregroundColor(Color.uiColorGray)
 
 
+                    
+                    Spacer()
+                    
+                    customProgressCircle(circleProgress: circleProgress)
+                        .frame(width: 30, height: 30)
+                        .padding(.trailing, 20)
                 
-                Spacer()
+                }
+                // 空のViewを追加し、高さを10の隙間を開ける
+                Color.clear.frame(height: 10)
                 
-                customProgressCircle(circleProgress: circleProgress)
-                    .frame(width: 30, height: 30)
-                    .padding(.trailing, 20)
-
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        // ボタンがタップされたときに実行するアクションを指定
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .frame(width: UIScreen.main.bounds.width / 7 * 5, height: 40)
+                            .foregroundColor(Color.uiColorGray).opacity(0.2)
+                            .overlay(Image(systemName: "plus")
+                                .foregroundColor(Color.uiColorGray))
+                    }
+                }
             }
+            .padding(0.0)
         }
         .frame(height: 120)
     }
@@ -180,6 +198,8 @@ struct PlanDoView: View {
             Color.backGroundColorGray.ignoresSafeArea() // ここで背景色を指定する
             VStack {
                 WeekProgressBarCard()
+                // 空のViewを追加し、高さを10の隙間を開ける
+                Color.clear.frame(height: 10)
                 TaskCard()
                 Spacer(minLength: 0)
                 // 他のViewを追加する
@@ -191,14 +211,6 @@ struct PlanDoView: View {
 //MARK: プレビューの設定
 struct PlanDoPage_Previews: PreviewProvider {
     static var previews: some View {
-        ZStack {
-            Color.backGroundColorGray.ignoresSafeArea() // ここで背景色を指定する
-            VStack {
-                WeekProgressBarCard()
-                TaskCard()
-                Spacer(minLength: 0)
-                // 他のViewを追加する
-            }
-        }
+        PlanDoView()
     }
 }

@@ -28,7 +28,7 @@ struct CardView<Content: View>: View {
                     Rectangle()
                         .fill(Color.cardColorGray)
                         .cornerRadius(25)
-                        .padding(Edge.Set.horizontal, 25)
+                        .padding(Edge.Set.horizontal, 15)
                         .frame(height: geometry.size.height + 20)
                         .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
                 }
