@@ -10,9 +10,9 @@ import SwiftUI
 
 //MARK: ボトムバーアイコンの中身
 let bottomBarItems = [
-        BottomBarItem(image: "graduationcap.fill", view: AnyView(ActView())),
-        BottomBarItem(image: "square.fill", view: AnyView(PlanDoView())),
-        BottomBarItem(image: "checkmark.circle.fill", view: AnyView(CheckView()))
+        BottomBarItem(image: "graduationcap.fill", view: AnyView(MockActView())),
+        BottomBarItem(image: "square.fill", view: AnyView(MockPlanDoView())),
+        BottomBarItem(image: "checkmark.circle.fill", view: AnyView(MockCheckView()))
     ]
 
 //MARK: ボトムバーの実装
@@ -95,7 +95,7 @@ struct BottomBar_Previews: PreviewProvider {
 }
 
 //MARK: 以下、タブに連動している画面のモック
-struct ActView: View {
+struct MockActView: View {
     var body: some View {
         Text("Act")
             .font(.largeTitle)
@@ -104,7 +104,7 @@ struct ActView: View {
     }
 }
 
-struct PlanDoView: View {
+struct MockPlanDoView: View {
     var body: some View {
         Text("PlanDo")
             .font(.largeTitle)
@@ -113,7 +113,7 @@ struct PlanDoView: View {
     }
 }
 
-struct CheckView: View {
+struct MockCheckView: View {
     var body: some View {
         Text("Check")
             .font(.largeTitle)
