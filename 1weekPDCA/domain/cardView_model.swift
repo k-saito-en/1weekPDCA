@@ -28,12 +28,12 @@ struct CardView<Content: View>: View {
                     Rectangle()
                         .fill(Color.cardColorGray)
                         .cornerRadius(25)
-                        .padding(Edge.Set.horizontal, 15)
+                        .padding(Edge.Set.horizontal, 25)
                         .frame(height: geometry.size.height + 20)
                         .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
                 }
             )
         }
-        .frame(height: 120)
+        .padding(.vertical, 15.0)
     }
 }

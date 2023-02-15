@@ -148,6 +148,8 @@ struct WeekProgressBarCard: View {
 struct TaskCard: View {
     @State private var taskTitle = ""
     let circleProgress = 0.75 // モック化のために定数
+    @State private var cardHeight: CGFloat = 120 // 初期値を設定
+    
     
     var body: some View {
         CardView {
@@ -158,9 +160,8 @@ struct TaskCard: View {
                         .font(.system(size: 20))
                         .fontWeight(.bold)
                         .foregroundColor(Color.uiColorGray)
+                        .fixedSize(horizontal: false, vertical: true)
 
-
-                    
                     Spacer()
                     
                     customProgressCircle(circleProgress: circleProgress)
@@ -183,10 +184,9 @@ struct TaskCard: View {
                                 .foregroundColor(Color.uiColorGray))
                     }
                 }
+                
             }
-            .padding(0.0)
         }
-        .frame(height: 120)
     }
 }
 
@@ -196,12 +196,9 @@ struct PlanDoView: View {
     var body: some View {
         ZStack {
             Color.backGroundColorGray.ignoresSafeArea() // ここで背景色を指定する
-            VStack {
+            ScrollView {
                 WeekProgressBarCard()
-                // 空のViewを追加し、高さを10の隙間を開ける
-                Color.clear.frame(height: 10)
                 TaskCard()
-                Spacer(minLength: 0)
                 // 他のViewを追加する
             }
         }
