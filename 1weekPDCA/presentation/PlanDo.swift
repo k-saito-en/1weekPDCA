@@ -67,11 +67,6 @@ struct customProgressCircle: View {
                 .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
                 .foregroundColor(getCircleColor(for: circleProgress))
                 .rotationEffect(Angle(degrees: 270.0))
-
-            // 円形のプログレスバー
-            ProgressView(value: circleProgress)
-                .progressViewStyle(CircularProgressViewStyle())
-                .frame(width: 40, height: 40)
             
             // 一回り小さな円
             Circle()
@@ -152,7 +147,7 @@ struct WeekProgressBarCard: View {
 
 struct TaskCard: View {
     @State private var taskTitle = ""
-    let circleProgress = 0.50 // モック化のために定数
+    let circleProgress = 0.75 // モック化のために定数
     
     var body: some View {
         CardView {
