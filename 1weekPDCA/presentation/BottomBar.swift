@@ -11,7 +11,7 @@ import SwiftUI
 //MARK: ボトムバーアイコンの中身
 let bottomBarItems = [
         BottomBarItem(image: "graduationcap.fill", view: AnyView(MockActView())),
-        BottomBarItem(image: "square.fill", view: AnyView(MockPlanDoView())),
+        BottomBarItem(image: "square.fill", view: AnyView(PlanDoView())),
         BottomBarItem(image: "checkmark.circle.fill", view: AnyView(MockCheckView()))
     ]
 

@@ -118,9 +118,6 @@ func formatWeekRangeText(_ weekRange: (monday: Date, sunday: Date)) -> String {
 }
 
 
-
-
-
 //MARK: UICard 関係
 
 struct WeekProgressBarCard: View {
@@ -154,15 +151,19 @@ struct WeekProgressBarCard: View {
 
 
 struct TaskCard: View {
+    @State private var taskTitle = ""
     let circleProgress = 0.50 // モック化のために定数
     
     var body: some View {
         CardView {
             HStack {
-                Text("タスクタイトルが入ります")
+                // 30文字までに制限？
+                TextField("task title", text: $taskTitle)
                     .font(.system(size: 20))
                     .fontWeight(.bold)
                     .foregroundColor(Color.uiColorGray)
+
+
                 
                 Spacer()
                 
