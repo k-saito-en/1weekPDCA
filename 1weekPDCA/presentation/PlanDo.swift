@@ -153,7 +153,7 @@ struct TaskCard: View {
         CardView {
             HStack {
                 // 30文字までに制限？
-                TextField("task title", text: $taskTitle)
+                TextField("task title", text: $taskTitle, axis: .vertical)
                     .font(.system(size: 20))
                     .fontWeight(.bold)
                     .foregroundColor(Color.uiColorGray)
