@@ -49,10 +49,10 @@ struct BottomBar: View {
                 HStack (spacing: (UIScreen.main.bounds.width - 100.0) / 3){
                     ForEach(0 ..< 3) { index in
                         Image(systemName: bottomBarItems[index].image)
-                            // View のサイズ変更を許可
+                        // View のサイズ変更を許可
                             .resizable()
-                            // アスペクト比の設定
-                            // 表示するコンテンツのサイズとレイアウトを設定
+                        // アスペクト比の設定
+                        // 表示するコンテンツのサイズとレイアウトを設定
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 30, height: 30)
                             .onTapGesture {
@@ -60,12 +60,9 @@ struct BottomBar: View {
                                 withAnimation(.linear(duration: 0.05)) {
                                     self.selected = index
                                 }
-                                // response : アニメーションの最高点での跳ね返り度合い
-                                // dampingFraction : アニメーションが収束するまでの時間
-                                // blendDuration : アニメーションが続く時間
                                 withAnimation(.linear(duration: 0.05)) {
-                                            self.isBig = true
-                                        }
+                                    self.isBig = true
+                                }
                             }
                             .foregroundColor(self.selected == index ? Color.uiColorGreen : Color.uiColorGray)
                             .scaleEffect(self.selected == index && self.isBig ? 1.3 : 1.0)
@@ -76,8 +73,10 @@ struct BottomBar: View {
                 .padding(.horizontal, 50.0)
                 .background(Color.cardColorGray.clipShape(Capsule()))
                 .shadow(color: Color.black.opacity(0.3), radius: 5, x: -5, y: 5)
+
             }
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 }
 

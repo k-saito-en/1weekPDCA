@@ -12,6 +12,7 @@ struct _weekPDCAApp: App {
     var body: some Scene {
         WindowGroup {
 //            ContentView()
+            Spacer()
             BottomBar()
         }
     }
