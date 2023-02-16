@@ -32,20 +32,24 @@ struct BottomBar: View {
             Color.backGroundColorGray.ignoresSafeArea()
             
             // メイン画面部分はTabViewで定義.
-            TabView(selection: $selected) {
-                ForEach(0 ..< 3) { index in
-                    bottomBarItems[index].view
-                        .tag(index)
+            VStack {
+                TabView(selection: $selected) {
+                    ForEach(0 ..< 3) { index in
+                        bottomBarItems[index].view
+                            .tag(index)
+                    }
                 }
+                // PageTabスタイルを利用する(インジケータは非表示).
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                
+                Color.clear.frame(height: 65)
             }
-            // PageTabスタイルを利用する(インジケータは非表示).
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             
             VStack {
                 
                 Spacer(minLength: 0)
                 
-                // タブビュー部分.
+                // ボトムバー部分.
                 HStack (spacing: (UIScreen.main.bounds.width - 100.0) / 3){
                     ForEach(0 ..< 3) { index in
                         Image(systemName: bottomBarItems[index].image)
