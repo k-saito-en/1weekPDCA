@@ -115,7 +115,7 @@ func formatWeekRangeText(_ weekRange: (monday: Date, sunday: Date)) -> String {
 
 //MARK: UICard 関係
 
-struct WeekProgressBarCard: View {
+struct WeekProgressBarCardView: View {
     let today = Date()
     let calendar = Calendar.current
     
@@ -144,7 +144,7 @@ struct WeekProgressBarCard: View {
 }
 
 
-struct TaskCard: View {
+struct TaskCardView: View {
     @State private var taskTitle = ""
     @State private var cardHeight: CGFloat = 120 // 初期値を設定
     // ToDoカードの配列　タプルで管理している
@@ -240,21 +240,22 @@ struct TaskCard: View {
     }
 }
 
-
 //MARK: PlanDo 画面全体の実装
 struct PlanDoView: View {
+    
+    @State private var taskCards: [(taskCard: TaskCardView, isDone: Bool)] = []
     
     var body: some View {
         ZStack {
             Color.backGroundColorGray.ignoresSafeArea() // ここで背景色を指定する
             ScrollView {
-                
-                WeekProgressBarCard()
-                
-                TaskCard()
-                
-                
+                WeekProgressBarCardView()
+                ForEach(taskCards.indices, id: \.self) { index in
+                    self.taskCards[index].taskCard
+                }
+                Color.clear.frame(width:15, height: 50)
             }
+
             
             VStack {
                 
@@ -265,25 +266,30 @@ struct PlanDoView: View {
                     Spacer()
                     
                     // 円を重ねてボタンを作る予定
-                    ZStack {
-                        
-                        Image(systemName: "circle.fill")
-                            .resizable()
-                            .frame(width: 80 ,height: 80)
-                            .foregroundColor(Color.uiColorYellow).opacity(0.5)
-                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
-                        
-                        Image(systemName: "circle.fill")
-                            .resizable()
-                            .frame(width: 75 ,height: 75)
-                            .foregroundColor(Color.uiColorYellow)
-                        
-                        Image(systemName: "plus")
+                    Button(action: {
+                        // ボタンがタップされたときの処理
+                        self.taskCards.append((taskCard: TaskCardView(), isDone: false))
+
+                    }) {
+                        ZStack {
+                            Image(systemName: "circle.fill")
+                                .resizable()
+                                .frame(width: 80 ,height: 80)
+                                .foregroundColor(Color.uiColorYellow).opacity(0.5)
+                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+                            
+                            Image(systemName: "circle.fill")
+                                .resizable()
+                                .frame(width: 75 ,height: 75)
+                                .foregroundColor(Color.uiColorYellow)
+                            
+                            Image(systemName: "plus")
                                 .resizable()
                                 .frame(width: 15, height: 15)
                                 .foregroundColor(.white)
-                        
+                        }
                     }
+
                     
                     // 右端から 15p 隙間開ける
                     Color.clear.frame(width:15, height: 4)
@@ -301,3 +307,4 @@ struct PlanDoPage_Previews: PreviewProvider {
         PlanDoView()
     }
 }
+
