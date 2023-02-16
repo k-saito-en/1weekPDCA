@@ -175,19 +175,21 @@ struct TaskCard: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
-                            .foregroundColor(Color.uiColorGray).opacity(0.2)
+                            .foregroundColor(Color.uiColorGreen).opacity(0.3)
                         
-                        TextField("ToDo", text: $taskTitle, axis: .vertical)
-                            .textStyle(for: .body, color: .uiColorWhite)
-                            .frame(width: UIScreen.main.bounds.width / 10 * 6.5)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
+                        VStack {
+                            Color.clear.frame(width:10, height: 4)
+                            
+                            TextField("ToDo", text: $taskTitle, axis: .vertical)
+                                .textStyle(for: .body, color: .uiColorWhite)
+                                .frame(width: UIScreen.main.bounds.width / 10 * 6.5)
+                                .fixedSize(horizontal: false, vertical: true)
 
-                        
+                            Color.clear.frame(width:10, height: 4)
+                        }
                     }
-
-                    
                 }
+                
                 HStack {
                     Spacer()
                     Button(action: {
