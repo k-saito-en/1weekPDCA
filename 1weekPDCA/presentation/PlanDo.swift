@@ -126,9 +126,8 @@ struct WeekProgressBarCard: View {
         CardView {
             HStack {
                 Text(formatWeekRangeText(weekRange))
-                    .font(.system(size: 20))
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.uiColorGray)
+                    .textStyle(for: .title, color: Color.uiColorGray)
+
                 
                 Spacer()
             }
@@ -157,9 +156,7 @@ struct TaskCard: View {
                 HStack {
                     // 30文字までに制限？
                     TextField("task title", text: $taskTitle, axis: .vertical)
-                        .font(.system(size: 20))
-                        .fontWeight(.bold)
-                        .foregroundColor(Color.uiColorGray)
+                        .textStyle(for: .title, color: .uiColorGray)
                         .fixedSize(horizontal: false, vertical: true)
 
                     Spacer()
@@ -174,17 +171,35 @@ struct TaskCard: View {
                 
                 HStack {
                     Spacer()
+                    
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
+                            .foregroundColor(Color.uiColorGray).opacity(0.2)
+                        
+                        TextField("ToDo", text: $taskTitle, axis: .vertical)
+                            .textStyle(for: .body, color: .uiColorWhite)
+                            .frame(width: UIScreen.main.bounds.width / 10 * 6.5)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
+
+                        
+                    }
+
+                    
+                }
+                HStack {
+                    Spacer()
                     Button(action: {
                         // ボタンがタップされたときに実行するアクションを指定
                     }) {
                         RoundedRectangle(cornerRadius: 10)
-                            .frame(width: UIScreen.main.bounds.width / 7 * 5, height: 40)
+                            .frame(width: UIScreen.main.bounds.width / 10 * 7, height: 40)
                             .foregroundColor(Color.uiColorGray).opacity(0.2)
                             .overlay(Image(systemName: "plus")
                                 .foregroundColor(Color.uiColorGray))
                     }
                 }
-                
             }
         }
     }
