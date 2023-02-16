@@ -248,9 +248,48 @@ struct PlanDoView: View {
         ZStack {
             Color.backGroundColorGray.ignoresSafeArea() // ここで背景色を指定する
             ScrollView {
+                
                 WeekProgressBarCard()
+                
                 TaskCard()
-                // 他のViewを追加する
+                
+                
+            }
+            
+            VStack {
+                
+                Spacer()
+                
+                HStack {
+                    
+                    Spacer()
+                    
+                    // 円を重ねてボタンを作る予定
+                    ZStack {
+                        
+                        Image(systemName: "circle.fill")
+                            .resizable()
+                            .frame(width: 80 ,height: 80)
+                            .foregroundColor(Color.uiColorYellow).opacity(0.5)
+                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+                        
+                        Image(systemName: "circle.fill")
+                            .resizable()
+                            .frame(width: 75 ,height: 75)
+                            .foregroundColor(Color.uiColorYellow)
+                        
+                        Image(systemName: "plus")
+                                .resizable()
+                                .frame(width: 15, height: 15)
+                                .foregroundColor(.white)
+                        
+                    }
+                    
+                    // 右端から 15p 隙間開ける
+                    Color.clear.frame(width:15, height: 4)
+                }
+                // ボトムバーから 5p 隙間開ける
+                Color.clear.frame(width:15, height: 5)
             }
         }
     }
