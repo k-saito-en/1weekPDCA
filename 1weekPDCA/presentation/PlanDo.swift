@@ -148,8 +148,9 @@ struct TaskCard: View {
     @State private var taskTitle = ""
     let circleProgress = 0.75 // モック化のために定数
     @State private var cardHeight: CGFloat = 120 // 初期値を設定
-    
-    
+    // 新しいHStackを追加するための@State変数
+    @State private var tasks: [String] = []
+
     var body: some View {
         CardView {
             VStack {
@@ -169,23 +170,34 @@ struct TaskCard: View {
                 // 空のViewを追加し、高さを10の隙間を開ける
                 Color.clear.frame(height: 10)
                 
-                HStack {
-                    Spacer()
-                    
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
-                            .foregroundColor(Color.uiColorGreen).opacity(0.3)
+                // 追加されたHStackを表示する
+                ForEach(tasks.indices, id: \.self) { index in
+                    let taskBinding = Binding<String>(
+                        get: {
+                            tasks[index]
+                        },
+                        set: { newTitle in
+                            tasks[index] = newTitle
+                        }
+                    )
+                    HStack {
+                        Spacer()
                         
-                        VStack {
-                            Color.clear.frame(width:10, height: 4)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
+                                .foregroundColor(Color.uiColorGreen).opacity(0.3)
                             
-                            TextField("ToDo", text: $taskTitle, axis: .vertical)
-                                .textStyle(for: .body, color: .uiColorWhite)
-                                .frame(width: UIScreen.main.bounds.width / 10 * 6.5)
-                                .fixedSize(horizontal: false, vertical: true)
-
-                            Color.clear.frame(width:10, height: 4)
+                            VStack {
+                                Color.clear.frame(width:10, height: 4)
+                                
+                                TextField("ToDo", text: taskBinding, axis: .vertical)
+                                    .textStyle(for: .body, color: .uiColorWhite)
+                                    .frame(width: UIScreen.main.bounds.width / 10 * 6.5)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                
+                                Color.clear.frame(width:10, height: 4)
+                            }
                         }
                     }
                 }
@@ -193,7 +205,8 @@ struct TaskCard: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        // ボタンがタップされたときに実行するアクションを指定
+                        // 新しいToDoカードを追加する
+                        tasks.append("")
                     }) {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(width: UIScreen.main.bounds.width / 10 * 7, height: 40)
