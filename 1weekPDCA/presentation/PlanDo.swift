@@ -148,8 +148,8 @@ struct TaskCard: View {
     @State private var taskTitle = ""
     let circleProgress = 0.75 // モック化のために定数
     @State private var cardHeight: CGFloat = 120 // 初期値を設定
-    // 新しいHStackを追加するための@State変数
-    @State private var tasks: [String] = []
+    // ToDoカードの配列　タプルで管理している
+    @State private var toDos: [(text: String, isDone: Bool)] = []
 
     var body: some View {
         CardView {
@@ -171,13 +171,13 @@ struct TaskCard: View {
                 Color.clear.frame(height: 10)
                 
                 // 追加されたHStackを表示する
-                ForEach(tasks.indices, id: \.self) { index in
+                ForEach(toDos.indices, id: \.self) { index in
                     let taskBinding = Binding<String>(
                         get: {
-                            tasks[index]
+                            toDos[index].text
                         },
-                        set: { newTitle in
-                            tasks[index] = newTitle
+                        set: { newText in
+                            toDos[index].text = newText
                         }
                     )
                     HStack {
@@ -186,17 +186,27 @@ struct TaskCard: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
                                 .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
-                                .foregroundColor(Color.uiColorGreen).opacity(0.3)
+                                .foregroundColor(toDos[index].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
                             
-                            VStack {
-                                Color.clear.frame(width:10, height: 4)
+                            HStack {
+                                // ラジオボタンの実装
+                                Image(systemName: toDos[index].isDone ? "checkmark.circle.fill" : "circle")
+                                    .foregroundColor(toDos[index].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
+                                    .onTapGesture {
+                                            toDos[index].isDone.toggle()
+                                        }
+
                                 
-                                TextField("ToDo", text: taskBinding, axis: .vertical)
-                                    .textStyle(for: .body, color: .uiColorWhite)
-                                    .frame(width: UIScreen.main.bounds.width / 10 * 6.5)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                
-                                Color.clear.frame(width:10, height: 4)
+                                VStack {
+                                    Color.clear.frame(width:10, height: 4)
+                                    
+                                    TextField("ToDo", text: taskBinding, axis: .vertical)
+                                        .textStyle(for: .body, color: .uiColorWhite)
+                                        .frame(width: UIScreen.main.bounds.width / 10 * 6)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                    
+                                    Color.clear.frame(width:10, height: 4)
+                                }
                             }
                         }
                     }
@@ -206,7 +216,7 @@ struct TaskCard: View {
                     Spacer()
                     Button(action: {
                         // 新しいToDoカードを追加する
-                        tasks.append("")
+                        toDos.append((text: "", isDone: false))
                     }) {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(width: UIScreen.main.bounds.width / 10 * 7, height: 40)
@@ -219,6 +229,7 @@ struct TaskCard: View {
         }
     }
 }
+
 
 //MARK: PlanDo 画面全体の実装
 struct PlanDoView: View {
