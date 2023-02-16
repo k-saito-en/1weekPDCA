@@ -146,10 +146,20 @@ struct WeekProgressBarCard: View {
 
 struct TaskCard: View {
     @State private var taskTitle = ""
-    let circleProgress = 0.75 // モック化のために定数
     @State private var cardHeight: CGFloat = 120 // 初期値を設定
     // ToDoカードの配列　タプルで管理している
     @State private var toDos: [(text: String, isDone: Bool)] = []
+    
+    // プログレスサークルの進捗
+    var circleProgress: Double {
+        // toDosがからの場合、0.0で初期化してスコープ外に退出
+        guard !toDos.isEmpty else {
+            return 0.0
+        }
+        let doneCount = Double(toDos.filter { $0.isDone }.count)
+        let totalCount = Double(toDos.count)
+        return doneCount / totalCount
+    }
 
     var body: some View {
         CardView {
