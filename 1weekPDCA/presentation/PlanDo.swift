@@ -11,7 +11,7 @@ import SwiftUI
 
 class TaskCardsManager: ObservableObject {
     
-    @Published var taskCards = [(taskCard: TaskCardView, isDone: Bool)]()
+    @Published var taskCards = [(taskCard: TaskCardView, isDone: Bool, doneCount: Double, todoCount: Double)]()
 }
 
 
@@ -123,19 +123,19 @@ func formatWeekRangeText(_ weekRange: (monday: Date, sunday: Date)) -> String {
 struct WeekProgressBarCardView: View {
     @EnvironmentObject var taskCardsManager: TaskCardsManager
     
-    var count: Int {
-        taskCardsManager.taskCards.count
+    var totalDoneCount: Double {
+        taskCardsManager.taskCards.map { $0.doneCount }.reduce(0, +)
     }
     
-    var doneCount: Int {
-        taskCardsManager.taskCards.filter { $0.isDone }.count
+    var totalTodoCount: Double {
+        taskCardsManager.taskCards.map { $0.todoCount }.reduce(0, +)
     }
     
     var progress: Double {
-        if count == 0 {
+        if totalTodoCount == 0 {
             return 0.0
         }
-        return Double(doneCount) / Double(count)
+        return totalDoneCount / totalTodoCount
     }
     
     let today = Date()
@@ -154,7 +154,7 @@ struct WeekProgressBarCardView: View {
             
             HStack {
                 Spacer()
-                CustomProgressBar(progress: progress)
+                CustomProgressBar(progress: totalDoneCount / totalTodoCount)
                     .frame(height: 20)
                 Spacer()
             }
@@ -162,6 +162,7 @@ struct WeekProgressBarCardView: View {
         .frame(height: 120)
     }
 }
+
 
 
 
@@ -192,6 +193,8 @@ struct TaskCardView: View, Equatable {
                 } else {
                     taskCardsManager.taskCards[index].isDone = false
                 }
+                taskCardsManager.taskCards[index].doneCount = Double(todos.filter { $0.isDone }.count)
+                taskCardsManager.taskCards[index].todoCount = Double(todos.count)
             }
         }
 
@@ -256,7 +259,8 @@ struct TaskCardView: View, Equatable {
                                     .foregroundColor(todos[index].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
                                     .onTapGesture {
                                             todos[index].isDone.toggle()
-                                        print(taskCardsManager.taskCards.filter { $0.isDone == true }.count)
+                                        print(taskCardsManager.taskCards.reduce(0.0) { $0 + $1.doneCount })
+
                                         }
 
                                 
@@ -317,7 +321,7 @@ struct PlanDoView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        self.taskCardsManager.taskCards.append((taskCard: TaskCardView(id: UUID(), isTaskDone: self.newTaskCardIsTaskDone), isDone: self.newTaskCardIsTaskDone))
+                        self.taskCardsManager.taskCards.append((taskCard: TaskCardView(id: UUID(), isTaskDone: self.newTaskCardIsTaskDone), isDone: self.newTaskCardIsTaskDone, doneCount: 0.0, todoCount: 0.0))
                     }) {
                         ZStack {
                             Image(systemName: "circle.fill")
