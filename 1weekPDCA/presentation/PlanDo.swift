@@ -8,8 +8,6 @@
 import Foundation
 import SwiftUI
 
-import Foundation
-
 
 class TaskCardsManager: ObservableObject {
     
@@ -46,12 +44,11 @@ struct CustomProgressBar: View {
                     .foregroundColor(Color.uiColorGray)
                 
                 Rectangle().frame(width: min(CGFloat(self.progress) * geometry.size.width, geometry.size.width), height: 10)
-                    .foregroundColor(getBarColor(for: progress))
+                    .foregroundColor(getBarColor(for: self.progress))
             }.cornerRadius(45.0)
         }
     }
     
-    // CustomProgressBarのgetBarColor関数
     func getBarColor(for progress: Double) -> Color {
         return ColorUtils.getProgressColor(for: progress)
     }
@@ -124,25 +121,35 @@ func formatWeekRangeText(_ weekRange: (monday: Date, sunday: Date)) -> String {
 //MARK: UICard 関係
 
 struct WeekProgressBarCardView: View {
+    @EnvironmentObject var taskCardsManager: TaskCardsManager
+    
+    @State private var progress: Double = 0.0
+    
+    var count: Int {
+        taskCardsManager.taskCards.count
+    }
+    
+    var doneCount: Int {
+        taskCardsManager.taskCards.filter { $0.isDone }.count
+    }
+    
     let today = Date()
     let calendar = Calendar.current
     
     var body: some View {
         let weekRange = getWeekRange()
-        let weekProgress = 0.71 // モック化のために定数
         
         CardView {
             HStack {
                 Text(formatWeekRangeText(weekRange))
                     .textStyle(for: .title, color: Color.uiColorGray)
 
-                
                 Spacer()
             }
             
             HStack {
                 Spacer()
-                CustomProgressBar(progress: weekProgress)
+                CustomProgressBar(progress: progress)
                     .frame(height: 20)
                 Spacer()
             }
@@ -152,26 +159,39 @@ struct WeekProgressBarCardView: View {
 }
 
 
-struct TaskCardView: View {
+
+
+
+struct TaskCardView: View, Equatable {
+    let id: UUID
+    
+    static func == (lhs: TaskCardView, rhs: TaskCardView) -> Bool {
+        // `id`が一致する場合にはtrueを返す
+        return lhs.id == rhs.id
+    }
+    
     @EnvironmentObject var taskCardsManager: TaskCardsManager
     
     @State private var taskTitle = ""
     @State private var cardHeight: CGFloat = 120 // 初期値を設定
     // ToDoカードの配列　タプルで管理している
     @State private var todos: [(text: String, isDone: Bool)] = [] {
-        didSet {
-            let doneCount = Double(todos.filter { $0.isDone }.count)
-            let totalCount = Double(todos.count)
-            let progress = doneCount / totalCount
+            didSet {
+                let doneCount = Double(todos.filter { $0.isDone }.count)
+                let totalCount = Double(todos.count)
+                let progress = doneCount / totalCount
 
-            if progress == 1.0 {
-                isTaskDone = true
-            } else {
-                isTaskDone = false
+                if progress == 1.0 {
+                    taskCardsManager.taskCards[index].isDone = true
+                } else {
+                    taskCardsManager.taskCards[index].isDone = false
+                }
             }
-            print(isTaskDone)
         }
-    }
+
+        var index: Int {
+            taskCardsManager.taskCards.firstIndex { $0.taskCard == self }!
+        }
 
     
     @State var isTaskDone: Bool = false
@@ -230,6 +250,7 @@ struct TaskCardView: View {
                                     .foregroundColor(todos[index].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
                                     .onTapGesture {
                                             todos[index].isDone.toggle()
+                                        print(taskCardsManager.taskCards.filter { $0.isDone == true }.count)
                                         }
 
                                 
@@ -290,7 +311,7 @@ struct PlanDoView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        self.taskCardsManager.taskCards.append((taskCard: TaskCardView(isTaskDone: self.newTaskCardIsTaskDone), isDone: self.newTaskCardIsTaskDone))
+                        self.taskCardsManager.taskCards.append((taskCard: TaskCardView(id: UUID(), isTaskDone: self.newTaskCardIsTaskDone), isDone: self.newTaskCardIsTaskDone))
                     }) {
                         ZStack {
                             Image(systemName: "circle.fill")
