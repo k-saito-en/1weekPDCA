@@ -10,6 +10,14 @@ import SwiftUI
 
 import Foundation
 
+
+class TaskCardsManager: ObservableObject {
+    
+    @Published var taskCards = [(taskCard: TaskCardView, isDone: Bool)]()
+}
+
+
+
 //MARK: プログレスバー・サークル関係
 
 // 色変更ロジックのまとめ
@@ -121,7 +129,7 @@ struct WeekProgressBarCardView: View {
     
     var body: some View {
         let weekRange = getWeekRange()
-        let progress = 0.71 // モック化のために定数
+        let weekProgress = 0.71 // モック化のために定数
         
         CardView {
             HStack {
@@ -134,7 +142,7 @@ struct WeekProgressBarCardView: View {
             
             HStack {
                 Spacer()
-                CustomProgressBar(progress: progress)
+                CustomProgressBar(progress: weekProgress)
                     .frame(height: 20)
                 Spacer()
             }
@@ -145,20 +153,38 @@ struct WeekProgressBarCardView: View {
 
 
 struct TaskCardView: View {
+    @EnvironmentObject var taskCardsManager: TaskCardsManager
+    
     @State private var taskTitle = ""
     @State private var cardHeight: CGFloat = 120 // 初期値を設定
     // ToDoカードの配列　タプルで管理している
-    @State private var toDos: [(text: String, isDone: Bool)] = []
+    @State private var todos: [(text: String, isDone: Bool)] = [] {
+        didSet {
+            let doneCount = Double(todos.filter { $0.isDone }.count)
+            let totalCount = Double(todos.count)
+            let progress = doneCount / totalCount
+
+            if progress == 1.0 {
+                isTaskDone = true
+            } else {
+                isTaskDone = false
+            }
+            print(isTaskDone)
+        }
+    }
+
     
-    // プログレスサークルの進捗
+    @State var isTaskDone: Bool = false
+    
+
     var circleProgress: Double {
-        // toDosがからの場合、0.0で初期化してスコープ外に退出
-        guard !toDos.isEmpty else {
+        guard !todos.isEmpty else {
             return 0.0
         }
-        let doneCount = Double(toDos.filter { $0.isDone }.count)
-        let totalCount = Double(toDos.count)
-        return doneCount / totalCount
+        let doneCount = Double(todos.filter { $0.isDone }.count)
+        let totalCount = Double(todos.count)
+        let progress = doneCount / totalCount
+        return progress
     }
 
     var body: some View {
@@ -181,13 +207,13 @@ struct TaskCardView: View {
                 Color.clear.frame(height: 10)
                 
                 // 追加されたHStackを表示する
-                ForEach(toDos.indices, id: \.self) { index in
+                ForEach(todos.indices, id: \.self) { index in
                     let taskBinding = Binding<String>(
                         get: {
-                            toDos[index].text
+                            todos[index].text
                         },
                         set: { newText in
-                            toDos[index].text = newText
+                            todos[index].text = newText
                         }
                     )
                     HStack {
@@ -196,14 +222,14 @@ struct TaskCardView: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
                                 .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
-                                .foregroundColor(toDos[index].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
+                                .foregroundColor(todos[index].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
                             
                             HStack {
                                 // ラジオボタンの実装
-                                Image(systemName: toDos[index].isDone ? "checkmark.circle.fill" : "circle")
-                                    .foregroundColor(toDos[index].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
+                                Image(systemName: todos[index].isDone ? "checkmark.circle.fill" : "circle")
+                                    .foregroundColor(todos[index].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
                                     .onTapGesture {
-                                            toDos[index].isDone.toggle()
+                                            todos[index].isDone.toggle()
                                         }
 
                                 
@@ -226,7 +252,7 @@ struct TaskCardView: View {
                     Spacer()
                     Button(action: {
                         // 新しいToDoカードを追加する
-                        toDos.append((text: "", isDone: false))
+                        todos.append((text: "", isDone: false))
                     }) {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(width: UIScreen.main.bounds.width / 10 * 7, height: 40)
@@ -243,33 +269,28 @@ struct TaskCardView: View {
 //MARK: PlanDo 画面全体の実装
 struct PlanDoView: View {
     
-    @State private var taskCards: [(taskCard: TaskCardView, isDone: Bool)] = []
+    @StateObject var taskCardsManager = TaskCardsManager()
+    @State private var newTaskCardIsTaskDone = false
     
     var body: some View {
         ZStack {
-            Color.backGroundColorGray.ignoresSafeArea() // ここで背景色を指定する
+            Color.backGroundColorGray.ignoresSafeArea()
             ScrollView {
-                WeekProgressBarCardView()
-                ForEach(taskCards.indices, id: \.self) { index in
-                    self.taskCards[index].taskCard
+                WeekProgressBarCardView().environmentObject(taskCardsManager)
+                ForEach(taskCardsManager.taskCards.indices, id: \.self) { index in
+                    self.taskCardsManager.taskCards[index].taskCard
+                        .environmentObject(self.taskCardsManager)
                 }
+
                 Color.clear.frame(width:15, height: 50)
             }
 
-            
             VStack {
-                
                 Spacer()
-                
                 HStack {
-                    
                     Spacer()
-                    
-                    // 円を重ねてボタンを作る予定
                     Button(action: {
-                        // ボタンがタップされたときの処理
-                        self.taskCards.append((taskCard: TaskCardView(), isDone: false))
-
+                        self.taskCardsManager.taskCards.append((taskCard: TaskCardView(isTaskDone: self.newTaskCardIsTaskDone), isDone: self.newTaskCardIsTaskDone))
                     }) {
                         ZStack {
                             Image(systemName: "circle.fill")
@@ -290,16 +311,17 @@ struct PlanDoView: View {
                         }
                     }
 
-                    
-                    // 右端から 15p 隙間開ける
                     Color.clear.frame(width:15, height: 4)
                 }
-                // ボトムバーから 5p 隙間開ける
+
                 Color.clear.frame(width:15, height: 5)
             }
         }
+        .environmentObject(taskCardsManager)
     }
 }
+
+
 
 //MARK: プレビューの設定
 struct PlanDoPage_Previews: PreviewProvider {
