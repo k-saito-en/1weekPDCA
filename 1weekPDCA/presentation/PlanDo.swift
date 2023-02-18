@@ -11,7 +11,13 @@ import SwiftUI
 
 class TaskCardsManager: ObservableObject {
     
-    @Published var taskCards = [(taskCard: TaskCardView, isDone: Bool, doneCount: Double, todoCount: Double)]()
+    @Published var taskCardsData = [
+        (
+            taskCard: TaskCardView,
+            doneCount: Double,
+            todoCount: Double
+        )
+    ]()
 }
 
 
@@ -124,11 +130,11 @@ struct WeekProgressBarCardView: View {
     @EnvironmentObject var taskCardsManager: TaskCardsManager
     
     var totalDoneCount: Double {
-        taskCardsManager.taskCards.map { $0.doneCount }.reduce(0, +)
+        taskCardsManager.taskCardsData.map { $0.doneCount }.reduce(0, +)
     }
     
     var totalTodoCount: Double {
-        taskCardsManager.taskCards.map { $0.todoCount }.reduce(0, +)
+        taskCardsManager.taskCardsData.map { $0.todoCount }.reduce(0, +)
     }
     
     var progress: Double {
@@ -188,22 +194,14 @@ struct TaskCardView: View, Equatable {
                 let totalCount = Double(todos.count)
                 let progress = doneCount / totalCount
 
-                if progress == 1.0 {
-                    taskCardsManager.taskCards[index].isDone = true
-                } else {
-                    taskCardsManager.taskCards[index].isDone = false
-                }
-                taskCardsManager.taskCards[index].doneCount = Double(todos.filter { $0.isDone }.count)
-                taskCardsManager.taskCards[index].todoCount = Double(todos.count)
+                taskCardsManager.taskCardsData[index].doneCount = Double(todos.filter { $0.isDone }.count)
+                taskCardsManager.taskCardsData[index].todoCount = Double(todos.count)
             }
         }
 
         var index: Int {
-            taskCardsManager.taskCards.firstIndex { $0.taskCard == self }!
+            taskCardsManager.taskCardsData.firstIndex { $0.taskCard == self }!
         }
-
-    
-    @State var isTaskDone: Bool = false
     
 
     var circleProgress: Double {
@@ -259,7 +257,7 @@ struct TaskCardView: View, Equatable {
                                     .foregroundColor(todos[index].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
                                     .onTapGesture {
                                             todos[index].isDone.toggle()
-                                        print(taskCardsManager.taskCards.reduce(0.0) { $0 + $1.doneCount })
+                                        print(taskCardsManager.taskCardsData.reduce(0.0) { $0 + $1.doneCount })
 
                                         }
 
@@ -308,8 +306,8 @@ struct PlanDoView: View {
             Color.backGroundColorGray.ignoresSafeArea()
             ScrollView {
                 WeekProgressBarCardView().environmentObject(taskCardsManager)
-                ForEach(taskCardsManager.taskCards.indices, id: \.self) { index in
-                    self.taskCardsManager.taskCards[index].taskCard
+                ForEach(taskCardsManager.taskCardsData.indices, id: \.self) { index in
+                    self.taskCardsManager.taskCardsData[index].taskCard
                         .environmentObject(self.taskCardsManager)
                 }
 
@@ -321,7 +319,7 @@ struct PlanDoView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        self.taskCardsManager.taskCards.append((taskCard: TaskCardView(id: UUID(), isTaskDone: self.newTaskCardIsTaskDone), isDone: self.newTaskCardIsTaskDone, doneCount: 0.0, todoCount: 0.0))
+                        self.taskCardsManager.taskCardsData.append((taskCard: TaskCardView(id: UUID()), doneCount: 0.0, todoCount: 0.0))
                     }) {
                         ZStack {
                             Image(systemName: "circle.fill")
