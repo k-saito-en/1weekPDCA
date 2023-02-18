@@ -160,8 +160,10 @@ struct WeekProgressBarCardView: View {
             
             HStack {
                 Spacer()
-                CustomProgressBar(progress: totalDoneCount / totalTodoCount)
+                let progressBarUseCase = ProgressBarUseCase()
+                CustomProgressBar(task: Task(taskName: "Calculate WeekProgressBar", currentProgress: totalDoneCount, totalProgress: totalTodoCount), progressBarUseCase: progressBarUseCase)
                     .frame(height: 20)
+
                 Spacer()
             }
         }
@@ -192,7 +194,7 @@ struct TaskCardView: View, Equatable {
             didSet {
                 let doneCount = Double(todos.filter { $0.isDone }.count)
                 let totalCount = Double(todos.count)
-                let progress = doneCount / totalCount
+                _ = doneCount / totalCount
 
                 taskCardsManager.taskCardsData[index].doneCount = Double(todos.filter { $0.isDone }.count)
                 taskCardsManager.taskCardsData[index].todoCount = Double(todos.count)
@@ -353,9 +355,9 @@ struct PlanDoView: View {
 
 
 //MARK: プレビューの設定
-struct PlanDoPage_Previews: PreviewProvider {
-    static var previews: some View {
-        PlanDoView()
-    }
-}
+//struct PlanDoPage_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PlanDoView()
+//    }
+//}
 

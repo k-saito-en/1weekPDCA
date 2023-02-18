@@ -10,14 +10,14 @@ import SwiftUI
 
 struct CustomProgressBar: View {
     var task: Task
-    var progressBarUseCase: ProgressBarUseCase
+    var progressBarUseCase: ProgressBarUseCaseProtocol
     
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Rectangle().frame(width: geometry.size.width, height: 10)
                     .opacity(0.3)
-                    .foregroundColor(Color.uiColorGray)
+                    .foregroundColor(Color.gray)
                 
                 Rectangle().frame(width: min(CGFloat(progressBarUseCase.calculateProgress(for: task).progress) * geometry.size.width, geometry.size.width), height: 10)
                     .foregroundColor(progressBarUseCase.calculateProgress(for: task).getBarColor())
@@ -25,6 +25,7 @@ struct CustomProgressBar: View {
         }
     }
 }
+
 
 
 

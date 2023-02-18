@@ -8,11 +8,11 @@
 import Foundation
 import SwiftUI
 
-protocol ProgressBarUseCase {
+protocol ProgressBarUseCaseProtocol {
     func calculateProgress(for task: Task) -> BarProgress
 }
 
-class ProgressBarUseCaseImpl: ProgressBarUseCase {
+class ProgressBarUseCase: ProgressBarUseCaseProtocol {
     func calculateProgress(for task: Task) -> BarProgress {
         // ビジネスルールに基づいた進捗状況を計算する
         let progressValue = task.currentProgress / task.totalProgress
