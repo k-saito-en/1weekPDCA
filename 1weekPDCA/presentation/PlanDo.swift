@@ -123,14 +123,19 @@ func formatWeekRangeText(_ weekRange: (monday: Date, sunday: Date)) -> String {
 struct WeekProgressBarCardView: View {
     @EnvironmentObject var taskCardsManager: TaskCardsManager
     
-    @State private var progress: Double = 0.0
-    
     var count: Int {
         taskCardsManager.taskCards.count
     }
     
     var doneCount: Int {
         taskCardsManager.taskCards.filter { $0.isDone }.count
+    }
+    
+    var progress: Double {
+        if count == 0 {
+            return 0.0
+        }
+        return Double(doneCount) / Double(count)
     }
     
     let today = Date()
@@ -157,6 +162,7 @@ struct WeekProgressBarCardView: View {
         .frame(height: 120)
     }
 }
+
 
 
 
