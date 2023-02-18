@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		5C24155B299A2DCE00259CEB /* PlanDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C24155A299A2DCE00259CEB /* PlanDo.swift */; };
+		5C32274229A124EC00498F2D /* CustomProgressBar_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32274129A124EC00498F2D /* CustomProgressBar_View.swift */; };
+		5C32274429A12A4600498F2D /* Task_Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32274329A12A4600498F2D /* Task_Model.swift */; };
+		5C32274829A12B4F00498F2D /* BarProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32274729A12B4F00498F2D /* BarProgress.swift */; };
+		5C32274B29A12BAA00498F2D /* ProgressBarUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32274A29A12BAA00498F2D /* ProgressBarUseCase.swift */; };
 		5C4B8CED2994ADE100B6348E /* tabBar_model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4B8CEC2994ADE100B6348E /* tabBar_model.swift */; };
 		5C4B8CF02994CE4800B6348E /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4B8CEF2994CE4800B6348E /* ColorExtension.swift */; };
 		5C62FE7029922A640046A41F /* BottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C62FE6F29922A640046A41F /* BottomBar.swift */; };
@@ -48,6 +52,10 @@
 		360C89A90F466F1B3063CE05 /* Pods_1weekPDCA_1weekPDCAUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_1weekPDCA_1weekPDCAUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D63D9445BED265BCCE36233 /* Pods-1weekPDCA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-1weekPDCA.release.xcconfig"; path = "Target Support Files/Pods-1weekPDCA/Pods-1weekPDCA.release.xcconfig"; sourceTree = "<group>"; };
 		5C24155A299A2DCE00259CEB /* PlanDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDo.swift; sourceTree = "<group>"; };
+		5C32274129A124EC00498F2D /* CustomProgressBar_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressBar_View.swift; sourceTree = "<group>"; };
+		5C32274329A12A4600498F2D /* Task_Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task_Model.swift; sourceTree = "<group>"; };
+		5C32274729A12B4F00498F2D /* BarProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarProgress.swift; sourceTree = "<group>"; };
+		5C32274A29A12BAA00498F2D /* ProgressBarUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarUseCase.swift; sourceTree = "<group>"; };
 		5C4B8CEC2994ADE100B6348E /* tabBar_model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tabBar_model.swift; sourceTree = "<group>"; };
 		5C4B8CEF2994CE4800B6348E /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		5C62FE6F29922A640046A41F /* BottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBar.swift; sourceTree = "<group>"; };
@@ -98,6 +106,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C32274529A12AF500498F2D /* PlanDo */ = {
+			isa = PBXGroup;
+			children = (
+				5C32274129A124EC00498F2D /* CustomProgressBar_View.swift */,
+			);
+			path = PlanDo;
+			sourceTree = "<group>";
+		};
+		5C32274629A12B1D00498F2D /* PlanDo */ = {
+			isa = PBXGroup;
+			children = (
+				5C32274329A12A4600498F2D /* Task_Model.swift */,
+				5C32274729A12B4F00498F2D /* BarProgress.swift */,
+			);
+			path = PlanDo;
+			sourceTree = "<group>";
+		};
+		5C32274929A12B8600498F2D /* PlanDo */ = {
+			isa = PBXGroup;
+			children = (
+				5C32274A29A12BAA00498F2D /* ProgressBarUseCase.swift */,
+			);
+			path = PlanDo;
+			sourceTree = "<group>";
+		};
 		5C4B8CEE2994CE1F00B6348E /* utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +150,7 @@
 		5C86E3742987A0CB00AB639E /* application */ = {
 			isa = PBXGroup;
 			children = (
+				5C32274929A12B8600498F2D /* PlanDo */,
 			);
 			path = application;
 			sourceTree = "<group>";
@@ -124,6 +158,7 @@
 		5C86E3752987A0E200AB639E /* domain */ = {
 			isa = PBXGroup;
 			children = (
+				5C32274629A12B1D00498F2D /* PlanDo */,
 				5C4B8CEC2994ADE100B6348E /* tabBar_model.swift */,
 				5C68C426299B63C8005FE6E2 /* cardView_model.swift */,
 			);
@@ -133,6 +168,7 @@
 		5C86E3762987A11100AB639E /* presentation */ = {
 			isa = PBXGroup;
 			children = (
+				5C32274529A12AF500498F2D /* PlanDo */,
 				5CA6AC12298799D1004AE124 /* Main.swift */,
 				5C62FE6F29922A640046A41F /* BottomBar.swift */,
 				5C24155A299A2DCE00259CEB /* PlanDo.swift */,
@@ -463,13 +499,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C32274829A12B4F00498F2D /* BarProgress.swift in Sources */,
 				5C4B8CF02994CE4800B6348E /* ColorExtension.swift in Sources */,
 				5CA6AC15298799D1004AE124 /* ContentView.swift in Sources */,
 				5C62FE7229922EE70046A41F /* textStyle.swift in Sources */,
 				5C24155B299A2DCE00259CEB /* PlanDo.swift in Sources */,
 				5C68C427299B63C8005FE6E2 /* cardView_model.swift in Sources */,
+				5C32274B29A12BAA00498F2D /* ProgressBarUseCase.swift in Sources */,
 				5C62FE7029922A640046A41F /* BottomBar.swift in Sources */,
+				5C32274429A12A4600498F2D /* Task_Model.swift in Sources */,
 				5C4B8CED2994ADE100B6348E /* tabBar_model.swift in Sources */,
+				5C32274229A124EC00498F2D /* CustomProgressBar_View.swift in Sources */,
 				5CA6AC13298799D1004AE124 /* Main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -40,25 +40,25 @@ struct ColorUtils {
 }
 
 // プログレスバーの実装 : Viewに準拠しているので,frame()でサイス指定できるようになった
-struct CustomProgressBar: View {
-    var progress: Double
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                Rectangle().frame(width: geometry.size.width, height: 10)
-                    .opacity(0.3)
-                    .foregroundColor(Color.uiColorGray)
-                
-                Rectangle().frame(width: min(CGFloat(self.progress) * geometry.size.width, geometry.size.width), height: 10)
-                    .foregroundColor(getBarColor(for: self.progress))
-            }.cornerRadius(45.0)
-        }
-    }
-    
-    func getBarColor(for progress: Double) -> Color {
-        return ColorUtils.getProgressColor(for: progress)
-    }
-}
+//struct CustomProgressBar: View {
+//    var progress: Double
+//    var body: some View {
+//        GeometryReader { geometry in
+//            ZStack(alignment: .leading) {
+//                Rectangle().frame(width: geometry.size.width, height: 10)
+//                    .opacity(0.3)
+//                    .foregroundColor(Color.uiColorGray)
+//                
+//                Rectangle().frame(width: min(CGFloat(self.progress) * geometry.size.width, geometry.size.width), height: 10)
+//                    .foregroundColor(getBarColor(for: self.progress))
+//            }.cornerRadius(45.0)
+//        }
+//    }
+//    
+//    func getBarColor(for progress: Double) -> Color {
+//        return ColorUtils.getProgressColor(for: progress)
+//    }
+//}
 
 // プログレスサークルの実装
 struct customProgressCircle: View {
