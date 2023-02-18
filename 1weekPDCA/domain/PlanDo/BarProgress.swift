@@ -13,6 +13,6 @@ struct BarProgress {
     
     func getBarColor() -> Color {
         // ビジネスルールに基づいたバーの色を返す
-        return ColorUtils.getProgressColor(for: progress)
+        return ProgressColorUtils.getProgressColor(for: progress)
     }
 }
