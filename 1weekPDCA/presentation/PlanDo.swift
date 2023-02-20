@@ -105,14 +105,14 @@ struct TaskCardView: View {
                 
                 // 追加されたHStackを表示する
                 ForEach(taskCardManager.taskCardData[taskIndex].todoData.indices, id: \.self) { todoIndex in
-                    let todoBinding = Binding<String>(
-                        get: {
-                            taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText
-                        },
-                        set: { newTodoText in
-                            taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText = newTodoText
-                        }
-                    )
+//                        let todoBinding = Binding<String>(
+//                            get: {
+//                                taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText
+//                            },
+//                            set: { newTodoText in
+//                                taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText = newTodoText
+//                            }
+//                        )
                     // todo カードの実装
                     HStack {
                         Spacer()
@@ -138,7 +138,7 @@ struct TaskCardView: View {
                                 VStack {
                                     Color.clear.frame(width:10, height: 4)
                                     
-                                    TextField("ToDo", text: todoBinding, axis: .vertical)
+                                    TextField("ToDo", text: $taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText, axis: .vertical)
                                         .textStyle(for: .body, color: .uiColorWhite)
                                         .frame(width: UIScreen.main.bounds.width / 10 * 6)
                                         .fixedSize(horizontal: false, vertical: true)
@@ -148,10 +148,18 @@ struct TaskCardView: View {
                             }
                         }
                     }
+                    .gesture(DragGesture()
+                        .onEnded { value in
+                            if value.translation.width < -100 {
+                                // Do something when swiped left
+                                print("Swiped left!")
+                            } else if value.translation.width > 100 {
+                                taskCardManager.taskCardData[taskIndex].todoData.remove(at: todoIndex)
+                                print("Swiped right!")
+                            }
+                        })
                 }
-                .onDelete { offsets in
-                    taskCardManager.taskCardData[taskIndex].todoData.remove(atOffsets: offsets)
-                }
+                
                 
                 HStack {
                     Spacer()
