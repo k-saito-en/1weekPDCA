@@ -10,7 +10,7 @@ import SwiftUI
 
 // プログレスサークルの実装
 struct customProgressCircle: View {
-    let circleProgress: Double
+    var circleProgress: Double
     
     var body: some View {
         ZStack {
@@ -24,17 +24,13 @@ struct customProgressCircle: View {
             Circle()
                 .trim(from: 0.0, to: min(circleProgress, 1.0))
                 .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                .foregroundColor(getCircleColor(for: circleProgress))
+                .foregroundColor(getProgressColor(progress: circleProgress))
                 .rotationEffect(Angle(degrees: 270.0))
             
             // 一回り小さな円
             Circle()
-                .fill(getCircleColor(for: circleProgress).opacity(0.5))
+                .fill(getProgressColor(progress: circleProgress).opacity(0.5))
                 .frame(width: 35, height: 35)
         }
-    }
-    // customProgressCircleのgetCircleColor関数
-    func getCircleColor(for progress: Double) -> Color {
-        return ProgressColorUtils.getProgressColor(for: progress)
     }
 }

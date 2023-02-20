@@ -13,7 +13,6 @@ class TaskCardManager: ObservableObject{
     
     @Published var taskCardData = [
         (
-//            id: UUID,
             taskTitle: String,
             todoData: [(todoText: String, isDone: Bool)]
         )
@@ -69,22 +68,16 @@ struct WeekProgressBarCardView: View {
 struct TaskCardView: View {
     @EnvironmentObject var taskCardManager: TaskCardManager
     
-//    var taskTitle: String
     var taskIndex: Int
-//    var todoList: [(todoText: String, isDone: Bool)]
-    
-    @State private var cardHeight: CGFloat = 120 // 初期値を設定
-    
     
     init(index: Int) {
             self.taskIndex = index
         }
     
+    @State private var cardHeight: CGFloat = 120 // 初期値を設定
+    
 
     var circleProgress: Double {
-        guard taskCardManager.taskCardData[taskIndex].todoData.isEmpty else {
-            return 0.0
-        }
         let doneCount = Double(taskCardManager.taskCardData[taskIndex].todoData.filter { $0.isDone }.count)
         let totalCount = Double(taskCardManager.taskCardData[taskIndex].todoData.count)
         let progress = doneCount / totalCount
@@ -120,6 +113,7 @@ struct TaskCardView: View {
                             taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText = newTodoText
                         }
                     )
+                    // todo カードの実装
                     HStack {
                         Spacer()
                         
@@ -154,6 +148,9 @@ struct TaskCardView: View {
                             }
                         }
                     }
+                }
+                .onDelete { offsets in
+                    taskCardManager.taskCardData[taskIndex].todoData.remove(atOffsets: offsets)
                 }
                 
                 HStack {

@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 // アプリケーション層
-func getBarColor(progress: Double) -> Color {
+func getProgressColor(progress: Double) -> Color {
     if progress < 0.3 {
         return .uiColorRed
     } else if progress < 0.7 {
@@ -31,7 +31,7 @@ struct CustomProgressBar: View {
                     .foregroundColor(Color.gray)
                 
                 Rectangle().frame(width: min(CGFloat(progress) * geometry.size.width, geometry.size.width), height: 10)
-                    .foregroundColor(getBarColor(progress: progress))
+                    .foregroundColor(getProgressColor(progress: progress))
             }.cornerRadius(45.0)
         }
     }
