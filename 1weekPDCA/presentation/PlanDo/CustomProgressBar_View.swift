@@ -8,9 +8,20 @@
 import Foundation
 import SwiftUI
 
+// アプリケーション層
+func getBarColor(progress: Double) -> Color {
+    if progress < 0.3 {
+        return .uiColorRed
+    } else if progress < 0.7 {
+        return .uiColorYellow
+    } else {
+        return .uiColorGreen
+    }
+}
+    
+// プレゼンテーション層
 struct CustomProgressBar: View {
-    var task: Task
-    var progressBarUseCase: ProgressBarUseCaseProtocol
+    var progress: Double
     
     var body: some View {
         GeometryReader { geometry in
@@ -19,12 +30,13 @@ struct CustomProgressBar: View {
                     .opacity(0.3)
                     .foregroundColor(Color.gray)
                 
-                Rectangle().frame(width: min(CGFloat(progressBarUseCase.calculateProgress(for: task).progress) * geometry.size.width, geometry.size.width), height: 10)
-                    .foregroundColor(progressBarUseCase.calculateProgress(for: task).getBarColor())
+                Rectangle().frame(width: min(CGFloat(progress) * geometry.size.width, geometry.size.width), height: 10)
+                    .foregroundColor(getBarColor(progress: progress))
             }.cornerRadius(45.0)
         }
     }
 }
+
 
 
 

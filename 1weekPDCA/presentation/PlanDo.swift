@@ -8,64 +8,36 @@
 import Foundation
 import SwiftUI
 
-
-class TaskCardsManager: ObservableObject,TaskCardsManagerProtocol {
+// ドメイン層
+class TaskCardManager: ObservableObject{
     
-    @Published var taskCardsData = [
+    @Published var taskCardData = [
         (
-            taskCard: TaskCardView,
-            doneCount: Double,
-            todoCount: Double
+//            id: UUID,
+            taskTitle: String,
+            todoData: [(todoText: String, isDone: Bool)]
         )
     ]()
-    
-    func getTotalDoneCount() -> Double {
-        return taskCardsData.map { $0.doneCount }.reduce(0, +)
-    }
-    
-    func getTotalTodoCount() -> Double {
-        return taskCardsData.map { $0.todoCount }.reduce(0, +)
-    }
-    
-    func getProgress() -> Double {
-        let totalDoneCount = getTotalDoneCount()
-        let totalTodoCount = getTotalTodoCount()
-        if totalTodoCount == 0 {
-            return 0.0
-        }
-        return totalDoneCount / totalTodoCount
-    }
-    
-    func updateTaskCardData(cardIndex: Int, doneCount: Double, totalCount: Double) {
-        taskCardsData[cardIndex].doneCount = doneCount
-        taskCardsData[cardIndex].todoCount = totalCount
-    }
-    
-    func getIndex(for id: UUID) -> Int? {
-        return taskCardsData.firstIndex(where: { $0.taskCard.id == id })
-    }
 }
 
 // アプリケーション層
-protocol TaskCardsManagerProtocol {
-    func getTotalDoneCount() -> Double
-    func getTotalTodoCount() -> Double
-    func getProgress() -> Double
+func calculateWeekProgress(_ taskCardData: [(taskTitle: String, todoData: [(todoText: String, isDone: Bool)])]) -> Double {
+    let completedTasks = taskCardData.reduce(0) { count, card in
+        count + card.todoData.filter { $0.isDone }.count}
+    return Double(completedTasks) / Double(taskCardData.reduce(0) { $0 + $1.todoData.count })
 }
+
 
 //　プレゼンテーション層
 
 struct WeekProgressBarCardView: View {
-    @EnvironmentObject var taskCardsManager: TaskCardsManager
+    @EnvironmentObject var taskCardManager: TaskCardManager
     
     let today = Date()
     let calendar = Calendar.current
     
     var body: some View {
-        let totalDoneCount = taskCardsManager.getTotalDoneCount()
-        let totalTodoCount = taskCardsManager.getTotalTodoCount()
-        let progress = taskCardsManager.getProgress()
-        
+        let weekProgress = calculateWeekProgress(taskCardManager.taskCardData)
         let weekRange = getWeekRange()
         
         CardView {
@@ -78,8 +50,8 @@ struct WeekProgressBarCardView: View {
             
             HStack {
                 Spacer()
-                let progressBarUseCase = ProgressBarUseCase()
-                CustomProgressBar(task: Task(taskName: "Calculate WeekProgressBar", currentProgress: totalDoneCount, totalProgress: totalTodoCount), progressBarUseCase: progressBarUseCase)
+                
+                CustomProgressBar(progress: weekProgress)
                     .frame(height: 20)
                 
                 Spacer()
@@ -90,90 +62,33 @@ struct WeekProgressBarCardView: View {
 }
 
 // アプリケーション層
-func == (lhs: TaskCardView, rhs: TaskCardView) -> Bool {
-    // `id`が一致する場合にはtrueを返す
-    return lhs.id == rhs.id
-}
 
-func updateTaskCardData(todos: [(text: String, isDone: Bool)], index: Int, taskCardsManager: TaskCardsManager) {
-    let doneCount = Double(todos.filter { $0.isDone }.count)
-    let totalCount = Double(todos.count)
-    taskCardsManager.updateTaskCardData(cardIndex: index, doneCount: doneCount, totalCount: totalCount)
-}
 
-func calculateCircleProgress(todos: [(text: String, isDone: Bool)]) -> Double {
-    guard !todos.isEmpty else {
-        return 0.0
-    }
-    let doneCount = Double(todos.filter { $0.isDone }.count)
-    let totalCount = Double(todos.count)
-    let progress = doneCount / totalCount
-    return progress
-}
 
-struct TaskCardView: View, Equatable {
+// プレゼンテーション層
+struct TaskCardView: View {
+    @EnvironmentObject var taskCardManager: TaskCardManager
     
+//    var taskTitle: String
+    var taskIndex: Int
+//    var todoList: [(todoText: String, isDone: Bool)]
     
-    @EnvironmentObject var taskCardsManager: TaskCardsManager
-    
-    @State private var taskTitle = ""
     @State private var cardHeight: CGFloat = 120 // 初期値を設定
-    // ToDoカードの配列　タプルで管理している
-    @State private var todos: [(text: String, isDone: Bool)] = [] {
-        didSet {
-            updateTaskCardData(todos: todos, index: index, taskCardsManager: taskCardsManager)
-        }
-    }
-    let id: UUID
-    var index: Int {
-        taskCardsManager.getIndex(for: id)!
-    }
     
+    
+    init(index: Int) {
+            self.taskIndex = index
+        }
+    
+
     var circleProgress: Double {
-        calculateCircleProgress(todos: todos)
-    }
-    
-    func taskCardView(for index: Int) -> some View {
-        let taskBinding = Binding<String>(
-            get: {
-                todos[index].text
-            },
-            set: { newText in
-                todos[index].text = newText
-            }
-        )
-        return HStack {
-            Spacer()
-            
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
-                    .foregroundColor(todos[index].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
-                
-                HStack {
-                    // ラジオボタンの実装
-                    Image(systemName: todos[index].isDone ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(todos[index].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
-                        .onTapGesture {
-                            todos[index].isDone.toggle()
-                            print(taskCardsManager.taskCardsData.reduce(0.0) { $0 + $1.doneCount })
-                            
-                        }
-                    
-                    
-                    VStack {
-                        Color.clear.frame(width:10, height: 4)
-                        
-                        TextField("ToDo", text: taskBinding, axis: .vertical)
-                            .textStyle(for: .body, color: .uiColorWhite)
-                            .frame(width: UIScreen.main.bounds.width / 10 * 6)
-                            .fixedSize(horizontal: false, vertical: true)
-                        
-                        Color.clear.frame(width:10, height: 4)
-                    }
-                }
-            }
+        guard taskCardManager.taskCardData[taskIndex].todoData.isEmpty else {
+            return 0.0
         }
+        let doneCount = Double(taskCardManager.taskCardData[taskIndex].todoData.filter { $0.isDone }.count)
+        let totalCount = Double(taskCardManager.taskCardData[taskIndex].todoData.count)
+        let progress = doneCount / totalCount
+        return progress
     }
 
     var body: some View {
@@ -181,7 +96,7 @@ struct TaskCardView: View, Equatable {
             VStack {
                 HStack {
                     // 30文字までに制限？
-                    TextField("task title", text: $taskTitle, axis: .vertical)
+                    TextField("task title", text: $taskCardManager.taskCardData[taskIndex].taskTitle, axis: .vertical)
                         .textStyle(for: .title, color: .uiColorGray)
                         .fixedSize(horizontal: false, vertical: true)
 
@@ -196,15 +111,56 @@ struct TaskCardView: View, Equatable {
                 Color.clear.frame(height: 10)
                 
                 // 追加されたHStackを表示する
-                ForEach(todos.indices, id: \.self) { index in
-                    taskCardView(for: index)
+                ForEach(taskCardManager.taskCardData[taskIndex].todoData.indices, id: \.self) { todoIndex in
+                    let todoBinding = Binding<String>(
+                        get: {
+                            taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText
+                        },
+                        set: { newTodoText in
+                            taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText = newTodoText
+                        }
+                    )
+                    HStack {
+                        Spacer()
+                        
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
+                                .foregroundColor(taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
+                            
+                            HStack {
+                                // ラジオボタンの実装
+                                Image(systemName: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone ? "checkmark.circle.fill" : "circle")
+                                    .foregroundColor(taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2))
+                                    .onTapGesture {
+                                        taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone.toggle()
+                                        // 動作確認用
+                                        print(taskCardManager.taskCardData.reduce(0) { count, card in
+                                            count + card.todoData.filter { $0.isDone }.count})
+
+                                        }
+
+                                
+                                VStack {
+                                    Color.clear.frame(width:10, height: 4)
+                                    
+                                    TextField("ToDo", text: todoBinding, axis: .vertical)
+                                        .textStyle(for: .body, color: .uiColorWhite)
+                                        .frame(width: UIScreen.main.bounds.width / 10 * 6)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                    
+                                    Color.clear.frame(width:10, height: 4)
+                                }
+                            }
+                        }
+                    }
                 }
                 
                 HStack {
                     Spacer()
                     Button(action: {
                         // 新しいToDoカードを追加する
-                        todos.append((text: "", isDone: false))
+                        taskCardManager.taskCardData[taskIndex].todoData.append((todoText: "", isDone: false))
                     }) {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(width: UIScreen.main.bounds.width / 10 * 7, height: 40)
@@ -222,17 +178,16 @@ struct TaskCardView: View, Equatable {
 //MARK: PlanDo 画面全体の実装
 struct PlanDoView: View {
     
-    @StateObject var taskCardsManager = TaskCardsManager()
+    @StateObject var taskCardManager = TaskCardManager()
     @State private var newTaskCardIsTaskDone = false
     
     var body: some View {
         ZStack {
             Color.backGroundColorGray.ignoresSafeArea()
             ScrollView {
-                WeekProgressBarCardView().environmentObject(taskCardsManager)
-                ForEach(taskCardsManager.taskCardsData.indices, id: \.self) { index in
-                    self.taskCardsManager.taskCardsData[index].taskCard
-                        .environmentObject(self.taskCardsManager)
+                WeekProgressBarCardView().environmentObject(taskCardManager)
+                ForEach(self.taskCardManager.taskCardData.indices, id: \.self) { index in
+                    TaskCardView(index: index)
                 }
                 
                 Color.clear.frame(width:15, height: 50)
@@ -243,7 +198,7 @@ struct PlanDoView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        self.taskCardsManager.taskCardsData.append((taskCard: TaskCardView(id: UUID()), doneCount: 0.0, todoCount: 0.0))
+                        self.taskCardManager.taskCardData.append((taskTitle: "", [(todoText: "", isDone: false)]))
                     }) {
                         ZStack {
                             Image(systemName: "circle.fill")
@@ -270,7 +225,7 @@ struct PlanDoView: View {
                 Color.clear.frame(width:15, height: 5)
             }
         }
-        .environmentObject(taskCardsManager)
+        .environmentObject(taskCardManager)
     }
 }
 
