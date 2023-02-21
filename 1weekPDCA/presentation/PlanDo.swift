@@ -119,94 +119,122 @@ struct TaskCardListView: View {
     @EnvironmentObject var taskCardManager: TaskCardManager
     
     var body: some View {
-        ForEach(taskCardManager.taskCardData.indices, id: \.self) { index in
-            CardView {
-                VStack {
-                    HStack {
-                        // 30文字までに制限？
-                        TextField("task title", text: $taskCardManager.taskCardData[index].taskTitle, axis: .vertical)
-                            .textStyle(for: .title, color: .uiColorGray)
-                            .fixedSize(horizontal: false, vertical: true)
-
-                        Spacer()
-                        
-                        customProgressCircle(circleProgress: caluculateCircleProgress(index: index, taskCardManager: taskCardManager))
-                            .frame(width: 30, height: 30)
-                            .padding(.trailing, 20)
-                    
-                    }
-                    // 空のViewを追加し、高さを10の隙間を開ける
-                    Color.clear.frame(height: 10)
-                    
-                    // 追加された todo カードを表示する
-                    ForEach(taskCardManager.taskCardData[index].todoData.indices, id: \.self) { todoIndex in
-                        // todo カードの実装
+        if taskCardManager.taskCardData.isEmpty {
+            
+            NoTaskView()
+                
+        } else {
+            ForEach(taskCardManager.taskCardData.indices, id: \.self) { index in
+                CardView {
+                    VStack {
                         HStack {
+                            // 30文字までに制限？
+                            TextField("task title", text: $taskCardManager.taskCardData[index].taskTitle, axis: .vertical)
+                                .textStyle(for: .title, color: .uiColorGray)
+                                .fixedSize(horizontal: false, vertical: true)
+                            
                             Spacer()
                             
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
-                                    .foregroundColor(getIsDoneColor(for: taskCardManager.taskCardData[index].todoData[todoIndex].isDone))
+                            customProgressCircle(circleProgress: caluculateCircleProgress(index: index, taskCardManager: taskCardManager))
+                                .frame(width: 30, height: 30)
+                                .padding(.trailing, 20)
+                            
+                        }
+                        // 空のViewを追加し、高さを10の隙間を開ける
+                        Color.clear.frame(height: 10)
+                        
+                        // 追加された todo カードを表示する
+                        ForEach(taskCardManager.taskCardData[index].todoData.indices, id: \.self) { todoIndex in
+                            // todo カードの実装
+                            HStack {
+                                Spacer()
                                 
-                                HStack {
-                                    // ラジオボタンの実装
-                                    Image(systemName: taskCardManager.taskCardData[index].todoData[todoIndex].isDone ? "checkmark.circle.fill" : "circle")
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
                                         .foregroundColor(getIsDoneColor(for: taskCardManager.taskCardData[index].todoData[todoIndex].isDone))
-                                        .onTapGesture {
+                                    
+                                    HStack {
+                                        // ラジオボタンの実装
+                                        Image(systemName: taskCardManager.taskCardData[index].todoData[todoIndex].isDone ? "checkmark.circle.fill" : "circle")
+                                            .foregroundColor(getIsDoneColor(for: taskCardManager.taskCardData[index].todoData[todoIndex].isDone))
+                                            .onTapGesture {
                                                 toggleTodoDoneState(for: index, todoIndex: todoIndex, in: taskCardManager)
                                                 // 動作確認用
                                                 print(taskCardManager.taskCardData.reduce(0) { count, card in
                                                     count + card.todoData.filter { $0.isDone }.count})
                                             }
-
-                                    
-                                    VStack {
-                                        Color.clear.frame(width:10, height: 4)
                                         
-                                        TextField("ToDo", text: $taskCardManager.taskCardData[index].todoData[todoIndex].todoText, axis: .vertical)
-                                            .textStyle(for: .body, color: .uiColorWhite)
-                                            .frame(width: UIScreen.main.bounds.width / 10 * 6)
-                                            .fixedSize(horizontal: false, vertical: true)
                                         
-                                        Color.clear.frame(width:10, height: 4)
+                                        VStack {
+                                            Color.clear.frame(width:10, height: 4)
+                                            
+                                            TextField("ToDo", text: $taskCardManager.taskCardData[index].todoData[todoIndex].todoText, axis: .vertical)
+                                                .textStyle(for: .body, color: .uiColorWhite)
+                                                .frame(width: UIScreen.main.bounds.width / 10 * 6)
+                                                .fixedSize(horizontal: false, vertical: true)
+                                            
+                                            Color.clear.frame(width:10, height: 4)
+                                        }
                                     }
                                 }
                             }
+                            
+                            // スワイプで todo を削除
+                            .gesture(DragGesture()
+                                .onEnded { value in
+                                    taskCardManager.deleteTodo(index: index, todoIndex: todoIndex, value: value)
+                                })
                         }
                         
-                        // スワイプで todo を削除
-                        .gesture(DragGesture()
-                            .onEnded { value in
-                                taskCardManager.deleteTodo(index: index, todoIndex: todoIndex, value: value)
-                            })
-                    }
-                    
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            // 新しいToDoカードを追加する
-                            taskCardManager.appendTodo(index: index)
-                        }) {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(width: UIScreen.main.bounds.width / 10 * 7, height: 40)
-                                .foregroundColor(Color.uiColorGray).opacity(0.2)
-                                .overlay(Image(systemName: "plus")
-                                    .foregroundColor(Color.uiColorGray))
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                // 新しいToDoカードを追加する
+                                taskCardManager.appendTodo(index: index)
+                            }) {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .frame(width: UIScreen.main.bounds.width / 10 * 7, height: 40)
+                                    .foregroundColor(Color.uiColorGray).opacity(0.2)
+                                    .overlay(Image(systemName: "plus")
+                                        .foregroundColor(Color.uiColorGray))
+                            }
                         }
                     }
                 }
+                // スワイプで task を削除
+                .gesture(DragGesture()
+                    .onEnded { value in
+                        taskCardManager.deleteTask(index: index, value: value)
+                    }
+                )
+                
             }
-            // スワイプで task を削除
-            .gesture(DragGesture()
-                .onEnded { value in
-                    taskCardManager.deleteTask(index: index, value: value)
-                }
-            )
-
         }
     }
 }
+
+// プレゼンテーション層
+struct NoTaskView: View {
+    var body: some View {
+        VStack {
+            Spacer(minLength: 100)
+            
+            Image("robot_image")
+                .renderingMode(.original).opacity(0.3)
+                .frame(width: UIScreen.main.bounds.width / 10 * 7, height: UIScreen.main.bounds.width / 10 * 7)
+            
+            Color.clear.frame(width:15, height: 40)
+            
+            Text("Make a plan!!")
+                .textStyle(for: .progressCircle, color: Color.uiColorGray)
+            
+            Spacer()
+        }
+        .ignoresSafeArea()
+    }
+}
+
 
     
 //MARK: PlanDo 画面全体の実装
