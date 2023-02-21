@@ -67,6 +67,8 @@ struct customProgressCircle: View {
 struct WeekProgressBarCardView: View {
     @EnvironmentObject var taskCardManager: TaskCardManager
     
+    let dateTimeUtils = DateTimeUtils()
+    
     let caluculateProgressUtils = CalculateProgressUtils()
     
     let today = Date()
@@ -74,14 +76,17 @@ struct WeekProgressBarCardView: View {
     
     var body: some View {
         let weekProgress = caluculateProgressUtils.calculateWeekProgress(taskCardManager.taskCardData)
-        let weekRange = getWeekRange()
+        let weekRange = dateTimeUtils.getWeekRange()
         
         CardView {
             HStack {
-                Text(formatWeekRangeText(weekRange))
+                Text(dateTimeUtils.formatWeekRangeText(weekRange))
                     .textStyle(for: .title, color: Color.uiColorGray)
                 
                 Spacer()
+                
+                Text("\(dateTimeUtils.daysLeftInYear()) days left")
+                    .textStyle(for: .title, color: Color.uiColorGray)
             }
             
             HStack {
