@@ -33,10 +33,13 @@ struct BottomBar: View {
             
             // メイン画面部分はTabViewで定義.
             VStack {
+                
+                Color.clear.frame(height: 15)
+                
                 TabView(selection: $selected) {
                     ForEach(0 ..< 3) { index in
                         bottomBarItems[index].view
-                            .tag(index)
+                            .tag(index).ignoresSafeArea()
                     }
                 }
                 // PageTabスタイルを利用する(インジケータは非表示).
@@ -77,10 +80,16 @@ struct BottomBar: View {
                 .padding(.horizontal, 50.0)
                 .background(Color.cardColorGray.clipShape(Capsule()))
                 .shadow(color: Color.black.opacity(0.3), radius: 5, x: -5, y: 5)
+                
+                Color.clear.frame(height: 30)
 
             }
         }
-        .ignoresSafeArea(.keyboard, edges: .bottom)
+        .frame(
+                        width: UIScreen.main.bounds.width ,
+                        height: UIScreen.main.bounds.height
+                    )
+        .ignoresSafeArea(.keyboard)
     }
 }
 

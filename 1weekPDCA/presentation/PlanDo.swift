@@ -283,9 +283,10 @@ struct PlanDoView: View {
                     Color.clear.frame(width:15, height: 4)
                 }
                 
-                Color.clear.frame(width:15, height: 5)
+                Color.clear.frame(width:15, height: 40)
             }
         }
+        .ignoresSafeArea()
         .environmentObject(taskCardManager)
     }
 }
