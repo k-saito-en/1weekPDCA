@@ -9,9 +9,9 @@ import Foundation
 import SwiftUI
 
 // 色変更ロジックのまとめ
-struct ProgressColorUtils {
+struct ColorUtils {
     // プログレスバー・サークルの色変更関数
-    static func getProgressColor(for progress: Double) -> Color {
+    func getProgressColor(for progress: Double) -> Color {
         switch progress {
         case 0..<0.5:
             return Color.uiColorRed
@@ -20,5 +20,9 @@ struct ProgressColorUtils {
         default:
             return Color.uiColorGreen
         }
+    }
+    
+    func getIsDoneColor(for isDone: Bool) -> Color {
+        return isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2)
     }
 }

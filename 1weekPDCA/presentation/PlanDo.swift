@@ -8,68 +8,72 @@
 import Foundation
 import SwiftUI
 
-// ドメイン層
-class TaskCardManager: ObservableObject{
+//MARK: コンポーネント
+
+// プログレスバーの実装
+struct CustomProgressBar: View {
     
-    @Published var taskCardData = [
-        (
-            taskTitle: String,
-            todoData: [(todoText: String, isDone: Bool)]
-        )
-    ]()
+    let colorUtils = ColorUtils()
     
-    func appendTodo(index: Int) {
-        taskCardData[index].todoData.append((todoText: "", isDone: false))
-    }
+    var progress: Double
     
-    func appendTask() {
-        taskCardData.append((taskTitle: "", [(todoText: "", isDone: false)]))
-    }
-    
-    func deleteTodo(index: Int, todoIndex: Int, value: DragGesture.Value) {
-        if value.translation.width < -100 {
-            taskCardData[index].todoData.remove(at: todoIndex)
-            print("Swiped left!")
-        } else if value.translation.width > 100 {
-            taskCardData[index].todoData.remove(at: todoIndex)
-            print("Swiped right!")
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Rectangle().frame(width: geometry.size.width, height: 10)
+                    .opacity(0.3)
+                    .foregroundColor(Color.gray)
+                
+                Rectangle().frame(width: min(CGFloat(progress) * geometry.size.width, geometry.size.width), height: 10)
+                    .foregroundColor(colorUtils.getProgressColor(for: progress))
+            }.cornerRadius(45.0)
         }
     }
+}
+
+// プログレスサークルの実装
+struct customProgressCircle: View {
     
-    func deleteTask(index: Int, value: DragGesture.Value) {
-        if value.translation.width < -100 {
-            taskCardData.remove(at: index)
-            print("Swiped left!")
-        } else if value.translation.width > 100 {
-            taskCardData.remove(at: index)
-            print("Swiped right!")
+    let colorUtils = ColorUtils()
+    
+    var circleProgress: Double
+    
+    var body: some View {
+        ZStack {
+            // 背景の円
+            Circle()
+                .stroke(lineWidth: 5)
+                .opacity(0.3)
+                .foregroundColor(Color.uiColorGray)
+
+            // 進捗を示す円
+            Circle()
+                .trim(from: 0.0, to: min(circleProgress, 1.0))
+                .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                .foregroundColor(colorUtils.getProgressColor(for: circleProgress))
+                .rotationEffect(Angle(degrees: 270.0))
+            
+            // 一回り小さな円
+            Circle()
+                .fill(colorUtils.getProgressColor(for: circleProgress).opacity(0.5))
+                .frame(width: 35, height: 35)
         }
     }
-
-
 }
 
-// アプリケーション層
-func calculateWeekProgress(_ taskCardData: [(taskTitle: String, todoData: [(todoText: String, isDone: Bool)])]) -> Double {
-    let completedTasks = taskCardData.reduce(0) { count, card in
-        count + card.todoData.filter { $0.isDone }.count
-    }
-    let totalCount = taskCardData.reduce(0) { $0 + $1.todoData.count }
-    return totalCount > 0 ? Double(completedTasks) / Double(totalCount) : 0.0
-}
+//MARK: UIカードの実装
 
-
-
-//　プレゼンテーション層
-
+// 全体の進捗表示、日付表示のカード
 struct WeekProgressBarCardView: View {
     @EnvironmentObject var taskCardManager: TaskCardManager
+    
+    let caluculateProgressUtils = CalculateProgressUtils()
     
     let today = Date()
     let calendar = Calendar.current
     
     var body: some View {
-        let weekProgress = calculateWeekProgress(taskCardManager.taskCardData)
+        let weekProgress = caluculateProgressUtils.calculateWeekProgress(taskCardManager.taskCardData)
         let weekRange = getWeekRange()
         
         CardView {
@@ -93,30 +97,13 @@ struct WeekProgressBarCardView: View {
     }
 }
 
-// アプリケーション層
-func getIsDoneColor(for isDone: Bool) -> Color {
-    return isDone ? Color.uiColorGreen.opacity(0.3) : Color.uiColorGray.opacity(0.2)
-}
-
-func toggleTodoDoneState(for index: Int, todoIndex: Int, in taskCardManager: TaskCardManager) {
-    taskCardManager.taskCardData[index].todoData[todoIndex].isDone.toggle()
-}
-
-func caluculateCircleProgress(index: Int, taskCardManager: TaskCardManager) -> Double {
-    let doneCount = Double(taskCardManager.taskCardData[index].todoData.filter { $0.isDone }.count)
-    let totalCount = Double(max(1, taskCardManager.taskCardData[index].todoData.count))
-    let progress = doneCount / totalCount
-    return progress
-}
-
-
-
-
-
-// プレゼンテーション層
+// タスク表示・todo表示のカード
 struct TaskCardListView: View {
     
     @EnvironmentObject var taskCardManager: TaskCardManager
+    
+    let colorUtils = ColorUtils()
+    let caluculateProgressUtils = CalculateProgressUtils()
     
     var body: some View {
         if taskCardManager.taskCardData.isEmpty {
@@ -135,7 +122,7 @@ struct TaskCardListView: View {
                             
                             Spacer()
                             
-                            customProgressCircle(circleProgress: caluculateCircleProgress(index: index, taskCardManager: taskCardManager))
+                            customProgressCircle(circleProgress: caluculateProgressUtils.caluculateCircleProgress(index: index, taskCardManager: taskCardManager))
                                 .frame(width: 30, height: 30)
                                 .padding(.trailing, 20)
                             
@@ -152,14 +139,14 @@ struct TaskCardListView: View {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
-                                        .foregroundColor(getIsDoneColor(for: taskCardManager.taskCardData[index].todoData[todoIndex].isDone))
+                                        .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[index].todoData[todoIndex].isDone))
                                     
                                     HStack {
                                         // ラジオボタンの実装
                                         Image(systemName: taskCardManager.taskCardData[index].todoData[todoIndex].isDone ? "checkmark.circle.fill" : "circle")
-                                            .foregroundColor(getIsDoneColor(for: taskCardManager.taskCardData[index].todoData[todoIndex].isDone))
+                                            .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[index].todoData[todoIndex].isDone))
                                             .onTapGesture {
-                                                toggleTodoDoneState(for: index, todoIndex: todoIndex, in: taskCardManager)
+                                                taskCardManager.toggleTodoDoneState(for: index, todoIndex: todoIndex)
                                                 // 動作確認用
                                                 print(taskCardManager.taskCardData.reduce(0) { count, card in
                                                     count + card.todoData.filter { $0.isDone }.count})
@@ -214,11 +201,11 @@ struct TaskCardListView: View {
     }
 }
 
-// プレゼンテーション層
+// 画面上にタスクカードがない場合のUI表示
 struct NoTaskView: View {
     var body: some View {
         VStack {
-            Spacer(minLength: 100)
+            Spacer(minLength: 70)
             
             Image("robot_image")
                 .renderingMode(.original).opacity(0.3)
@@ -238,6 +225,7 @@ struct NoTaskView: View {
 
     
 //MARK: PlanDo 画面全体の実装
+
 struct PlanDoView: View {
     
     @StateObject var taskCardManager = TaskCardManager()
