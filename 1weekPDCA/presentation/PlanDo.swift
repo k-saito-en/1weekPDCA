@@ -52,9 +52,12 @@ class TaskCardManager: ObservableObject{
 // アプリケーション層
 func calculateWeekProgress(_ taskCardData: [(taskTitle: String, todoData: [(todoText: String, isDone: Bool)])]) -> Double {
     let completedTasks = taskCardData.reduce(0) { count, card in
-        count + card.todoData.filter { $0.isDone }.count}
-    return Double(completedTasks) / Double(taskCardData.reduce(0) { $0 + $1.todoData.count })
+        count + card.todoData.filter { $0.isDone }.count
+    }
+    let totalCount = taskCardData.reduce(0) { $0 + $1.todoData.count }
+    return totalCount > 0 ? Double(completedTasks) / Double(totalCount) : 0.0
 }
+
 
 
 //　プレゼンテーション層
@@ -101,10 +104,11 @@ func toggleTodoDoneState(for index: Int, todoIndex: Int, in taskCardManager: Tas
 
 func caluculateCircleProgress(index: Int, taskCardManager: TaskCardManager) -> Double {
     let doneCount = Double(taskCardManager.taskCardData[index].todoData.filter { $0.isDone }.count)
-    let totalCount = Double(taskCardManager.taskCardData[index].todoData.count)
+    let totalCount = Double(max(1, taskCardManager.taskCardData[index].todoData.count))
     let progress = doneCount / totalCount
     return progress
 }
+
 
 
 
