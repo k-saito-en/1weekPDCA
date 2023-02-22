@@ -34,7 +34,7 @@ struct BottomBar: View {
             // メイン画面部分はTabViewで定義.
             VStack {
                 
-                Color.clear.frame(height: 15)
+                Color.clear.frame(height: 20)
                 
                 TabView(selection: $selected) {
                     ForEach(0 ..< 3) { index in
