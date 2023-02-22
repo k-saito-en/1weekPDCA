@@ -10,9 +10,9 @@ import SwiftUI
 
 //MARK: ボトムバーアイコンの中身
 let bottomBarItems = [
-        BottomBarItem(image: "graduationcap.fill", view: AnyView(ActView())),
+        BottomBarItem(image: "graduationcap.fill", view: AnyView(MockActView())),
         BottomBarItem(image: "square.fill", view: AnyView(PlanDoView())),
-        BottomBarItem(image: "checkmark.circle.fill", view: AnyView(CheckView()))
+        BottomBarItem(image: "checkmark.circle.fill", view: AnyView(MockCheckView()))
     ]
 
 //MARK: ボトムバーの実装
@@ -32,27 +32,34 @@ struct BottomBar: View {
             Color.backGroundColorGray.ignoresSafeArea()
             
             // メイン画面部分はTabViewで定義.
-            TabView(selection: $selected) {
-                ForEach(0 ..< 3) { index in
-                    bottomBarItems[index].view
-                        .tag(index)
+            VStack {
+                
+                Color.clear.frame(height: 20)
+                
+                TabView(selection: $selected) {
+                    ForEach(0 ..< 3) { index in
+                        bottomBarItems[index].view
+                            .tag(index).ignoresSafeArea()
+                    }
                 }
+                // PageTabスタイルを利用する(インジケータは非表示).
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                
+                Color.clear.frame(height: 65)
             }
-            // PageTabスタイルを利用する(インジケータは非表示).
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             
             VStack {
                 
                 Spacer(minLength: 0)
                 
-                // タブビュー部分.
+                // ボトムバー部分.
                 HStack (spacing: (UIScreen.main.bounds.width - 100.0) / 3){
                     ForEach(0 ..< 3) { index in
                         Image(systemName: bottomBarItems[index].image)
-                            // View のサイズ変更を許可
+                        // View のサイズ変更を許可
                             .resizable()
-                            // アスペクト比の設定
-                            // 表示するコンテンツのサイズとレイアウトを設定
+                        // アスペクト比の設定
+                        // 表示するコンテンツのサイズとレイアウトを設定
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 30, height: 30)
                             .onTapGesture {
@@ -60,12 +67,9 @@ struct BottomBar: View {
                                 withAnimation(.linear(duration: 0.05)) {
                                     self.selected = index
                                 }
-                                // response : アニメーションの最高点での跳ね返り度合い
-                                // dampingFraction : アニメーションが収束するまでの時間
-                                // blendDuration : アニメーションが続く時間
                                 withAnimation(.linear(duration: 0.05)) {
-                                            self.isBig = true
-                                        }
+                                    self.isBig = true
+                                }
                             }
                             .foregroundColor(self.selected == index ? Color.uiColorGreen : Color.uiColorGray)
                             .scaleEffect(self.selected == index && self.isBig ? 1.3 : 1.0)
@@ -76,8 +80,16 @@ struct BottomBar: View {
                 .padding(.horizontal, 50.0)
                 .background(Color.cardColorGray.clipShape(Capsule()))
                 .shadow(color: Color.black.opacity(0.3), radius: 5, x: -5, y: 5)
+                
+                Color.clear.frame(height: 30)
+
             }
         }
+        .frame(
+                        width: UIScreen.main.bounds.width ,
+                        height: UIScreen.main.bounds.height
+                    )
+        .ignoresSafeArea(.keyboard)
     }
 }
 
@@ -95,7 +107,7 @@ struct BottomBar_Previews: PreviewProvider {
 }
 
 //MARK: 以下、タブに連動している画面のモック
-struct ActView: View {
+struct MockActView: View {
     var body: some View {
         Text("Act")
             .font(.largeTitle)
@@ -104,7 +116,7 @@ struct ActView: View {
     }
 }
 
-struct PlanDoView: View {
+struct MockPlanDoView: View {
     var body: some View {
         Text("PlanDo")
             .font(.largeTitle)
@@ -113,7 +125,7 @@ struct PlanDoView: View {
     }
 }
 
-struct CheckView: View {
+struct MockCheckView: View {
     var body: some View {
         Text("Check")
             .font(.largeTitle)
