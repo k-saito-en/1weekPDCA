@@ -6,5 +6,7 @@
 //
 
 import XCTest
+import ViewInspector
+
 @testable import _weekPDCA
 
