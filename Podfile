@@ -6,6 +6,7 @@ target '1weekPDCA' do
   use_frameworks!
 
 pod 'Firebase/Firestore'
+pod 'ViewInspector'
 
   # Pods for 1weekPDCA
 
