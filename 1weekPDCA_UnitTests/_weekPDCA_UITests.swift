@@ -113,4 +113,77 @@ class CustomProgressCircleTests: XCTestCase {
     
 }
 
+// テスト用の関数群
+struct testFunctions {
+    
+    func getMondayDateString() -> String {
+        let calendar = Calendar.current
+        let today = Date()
+        let weekday = calendar.component(.weekday, from: today)
+        var mondayComponents = DateComponents()
+        if weekday == 2 { // 月曜日
+            mondayComponents = calendar.dateComponents([.year, .month, .day], from: today)
+        } else {
+            let weekStartDate = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: today))!
+            mondayComponents.weekday = 2 // 月曜日
+            mondayComponents.weekOfYear = calendar.component(.weekOfYear, from: weekStartDate)
+            mondayComponents.yearForWeekOfYear = calendar.component(.yearForWeekOfYear, from: weekStartDate)
+        }
+        let monday = calendar.date(from: mondayComponents)!
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M/d"
+        return formatter.string(from: monday)
+    }
+    
+    func getNextSunday() -> String {
+        let calendar = Calendar.current
+        let today = Date()
+        let sunday = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: today))!
+        let nextSunday = calendar.date(byAdding: .day, value: 7, to: sunday)!
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "M/d"
+        return dateFormatter.string(from: nextSunday)
+    }
+    
+    func remainingDaysOfYear() -> String {
+        let calendar = Calendar.current
+        let today = Date()
+        let year = calendar.component(.year, from: today)
+        let endOfYear = calendar.date(from: DateComponents(year: year, month: 12, day: 31))!
+        let daysRemaining = calendar.dateComponents([.day], from: today, to: endOfYear).day!
+        return "\(daysRemaining)"
+    }
 
+    
+}
+
+
+class WeekProgressBarCardViewTests: XCTestCase {
+    
+    let taskCardManager = TaskCardManager()
+    
+    func testWeekRangeText() throws {
+        
+        let testFunctions = testFunctions()
+        
+        let weekProgressBarCardView = WeekProgressBarCardView().environmentObject(taskCardManager)
+        
+        // まずは存在確認
+        let sut = try weekProgressBarCardView.inspect().find(CardView<AnyView>.self).zStack().vStack(0).tupleView(1).hStack(0).text(0)
+        
+        XCTAssertEqual(try sut.string(), "\(testFunctions.getMondayDateString()) - \(testFunctions.getNextSunday())")
+        
+    }
+    
+    func daysLeftInYearText() throws {
+        
+        let testFunctions = testFunctions()
+        
+        let weekProgressBarCardView = WeekProgressBarCardView().environmentObject(taskCardManager)
+        
+        let sut = try weekProgressBarCardView.inspect().find(CardView<AnyView>.self).zStack().vStack(0).tupleView(1).hStack(0).text(1)
+        
+        XCTAssertEqual(try sut.string(), "\(testFunctions.remainingDaysOfYear()) days left")
+        
+    }
+}

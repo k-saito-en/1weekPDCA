@@ -41,13 +41,13 @@ struct DateTimeUtils {
     }
     
     // 今年の残りの日数を返す関数
-    func daysLeftInYear() -> Int {
+    func daysLeftInYear() -> String {
         let calendar = Calendar.current
-        let now = Date()
-        let endOfYear = calendar.date(bySetting: .month, value: 12, of: now)!
-            .addingTimeInterval(24 * 60 * 60) // 12月31日の翌日の0時に設定
-        let daysLeft = calendar.dateComponents([.day], from: now, to: endOfYear).day!
-        return daysLeft
+        let today = Date()
+        let year = calendar.component(.year, from: today)
+        let endOfYear = calendar.date(from: DateComponents(year: year, month: 12, day: 31))!
+        let daysRemaining = calendar.dateComponents([.day], from: today, to: endOfYear).day!
+        return "\(daysRemaining)"
     }
     
     // 今年の日数を返す関数
