@@ -45,14 +45,13 @@ class BottomBarTests: XCTestCase {
 
 class CustomProgressBarTests: XCTestCase {
     
-    let colorUtils = ColorUtils()
-    
     func testCustomProgressBarBackGroundColor() throws {
-        // set the initial progress value
+
         let progressBar = CustomProgressBar(progress: 0.5)
         
         // プログレスバーの背景色をテスト
         let backGroundSut = try progressBar.inspect().geometryReader().zStack().shape(0)
+        
         XCTAssertEqual(try backGroundSut.foregroundColor(), Color.gray)
 
     }
@@ -68,13 +67,50 @@ class CustomProgressBarTests: XCTestCase {
         ]
         
         for testCase in testCases {
+            
             let progressBar = CustomProgressBar(progress: testCase.progress)
+            
             let sut = try progressBar.inspect().geometryReader().zStack().shape(1)
+            
             XCTAssertEqual(try sut.foregroundColor(), testCase.expectedColor)
         }
     }
     
 }
 
+class CustomProgressCircleTests: XCTestCase {
+    
+    func testCustomProgressCircleBackGroundColor() throws{
+        
+        let progressCircle = customProgressCircle(circleProgress: 0.5)
+        
+        let backGroundSut = try progressCircle.inspect().zStack().shape(0)
+        
+        XCTAssertEqual(try backGroundSut.foregroundColor(), Color.uiColorGray)
+        
+    }
+    
+    func testCustomProgressCircleProgressColor() throws {
+        
+        // テストケースをタプルで管理
+        let testCases: [(progress: Double, expectedColor: Color)] = [
+            (0.49, Color.uiColorRed),
+            (0.69, Color.uiColorYellow),
+            (0.70, Color.uiColorGreen)
+        ]
+        
+        for testCase in testCases {
+            
+            let progressCircle = customProgressCircle(circleProgress: testCase.progress)
+            
+            let sut = try progressCircle.inspect().zStack().shape(1)
+            
+            XCTAssertEqual(try sut.foregroundColor(), testCase.expectedColor)
+        }
+    }
+    
+    // 内円の色テスト追加しなきゃ
+    
+}
 
 
