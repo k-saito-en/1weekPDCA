@@ -15,7 +15,7 @@ struct ColorUtils {
         switch progress {
         case 0..<0.5:
             return Color.uiColorRed
-        case 0.5...0.70:
+        case 0.5...0.69:
             return Color.uiColorYellow
         default:
             return Color.uiColorGreen

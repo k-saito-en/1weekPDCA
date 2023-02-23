@@ -21,6 +21,7 @@
 		5CA6AC1A298799D5004AE124 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CA6AC19298799D5004AE124 /* Preview Assets.xcassets */; };
 		5CBAF8FD29A4982F0019FC5C /* TaskCardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBAF8FC29A4982F0019FC5C /* TaskCardManager.swift */; };
 		5CBAF8FF29A499090019FC5C /* CalculateProgressUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBAF8FE29A499090019FC5C /* CalculateProgressUtils.swift */; };
+		5CDAF58229A7087C00A9D289 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 5CDAF58129A7087C00A9D289 /* ViewInspector */; };
 		F7E21F7ECC8A88DCE682F3B1 /* Pods_1weekPDCA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E491695012959E3D3B9CC5E /* Pods_1weekPDCA.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +45,7 @@
 		5C32275C29A14DE600498F2D /* DateTimeUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeUtils.swift; sourceTree = "<group>"; };
 		5C4B8CEC2994ADE100B6348E /* TabBar_model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar_model.swift; sourceTree = "<group>"; };
 		5C4B8CEF2994CE4800B6348E /* ColorStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorStyle.swift; sourceTree = "<group>"; };
-		5C5EC4A129A640D8006D5D65 /* 1weekPDCA_UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 1weekPDCA_UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C5EC4A129A640D8006D5D65 /* 1weekPDCA_UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 1weekPDCA_UnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C5EC4A329A640D8006D5D65 /* _weekPDCA_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _weekPDCA_UITests.swift; sourceTree = "<group>"; };
 		5C62FE6F29922A640046A41F /* BottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBar.swift; sourceTree = "<group>"; };
 		5C62FE7129922EE70046A41F /* TextStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
@@ -67,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CDAF58229A7087C00A9D289 /* ViewInspector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,12 +83,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5C5EC4A229A640D8006D5D65 /* 1weekPDCA_UITests */ = {
+		5C5EC4A229A640D8006D5D65 /* 1weekPDCA_UnitTests */ = {
 			isa = PBXGroup;
 			children = (
 				5C5EC4A329A640D8006D5D65 /* _weekPDCA_UITests.swift */,
 			);
-			path = 1weekPDCA_UITests;
+			path = 1weekPDCA_UnitTests;
 			sourceTree = "<group>";
 		};
 		5C62FE6E2992299E0046A41F /* infrastructure */ = {
@@ -131,7 +133,7 @@
 			children = (
 				5CA6AC16298799D5004AE124 /* Assets.xcassets */,
 				5CA6AC11298799D1004AE124 /* 1weekPDCA */,
-				5C5EC4A229A640D8006D5D65 /* 1weekPDCA_UITests */,
+				5C5EC4A229A640D8006D5D65 /* 1weekPDCA_UnitTests */,
 				5CA6AC10298799D1004AE124 /* Products */,
 				C5CAE08D6D12F750F9755C61 /* Pods */,
 				6BE6DD9A39A778B02EF972B6 /* Frameworks */,
@@ -142,7 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				5CA6AC0F298799D1004AE124 /* 1weekPDCA.app */,
-				5C5EC4A129A640D8006D5D65 /* 1weekPDCA_UITests.xctest */,
+				5C5EC4A129A640D8006D5D65 /* 1weekPDCA_UnitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -203,9 +205,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5C5EC4A029A640D8006D5D65 /* 1weekPDCA_UITests */ = {
+		5C5EC4A029A640D8006D5D65 /* 1weekPDCA_UnitTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5C5EC4A729A640D8006D5D65 /* Build configuration list for PBXNativeTarget "1weekPDCA_UITests" */;
+			buildConfigurationList = 5C5EC4A729A640D8006D5D65 /* Build configuration list for PBXNativeTarget "1weekPDCA_UnitTests" */;
 			buildPhases = (
 				5C5EC49D29A640D8006D5D65 /* Sources */,
 				5C5EC49E29A640D8006D5D65 /* Frameworks */,
@@ -216,9 +218,12 @@
 			dependencies = (
 				5C5EC4A629A640D8006D5D65 /* PBXTargetDependency */,
 			);
-			name = 1weekPDCA_UITests;
+			name = 1weekPDCA_UnitTests;
+			packageProductDependencies = (
+				5CDAF58129A7087C00A9D289 /* ViewInspector */,
+			);
 			productName = 1weekPDCA_UITests;
-			productReference = 5C5EC4A129A640D8006D5D65 /* 1weekPDCA_UITests.xctest */;
+			productReference = 5C5EC4A129A640D8006D5D65 /* 1weekPDCA_UnitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		5CA6AC0E298799D1004AE124 /* 1weekPDCA */ = {
@@ -268,12 +273,15 @@
 				Base,
 			);
 			mainGroup = 5CA6AC06298799D1004AE124;
+			packageReferences = (
+				5CDAF58029A7087C00A9D289 /* XCRemoteSwiftPackageReference "ViewInspector" */,
+			);
 			productRefGroup = 5CA6AC10298799D1004AE124 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				5CA6AC0E298799D1004AE124 /* 1weekPDCA */,
-				5C5EC4A029A640D8006D5D65 /* 1weekPDCA_UITests */,
+				5C5EC4A029A640D8006D5D65 /* 1weekPDCA_UnitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -592,7 +600,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5C5EC4A729A640D8006D5D65 /* Build configuration list for PBXNativeTarget "1weekPDCA_UITests" */ = {
+		5C5EC4A729A640D8006D5D65 /* Build configuration list for PBXNativeTarget "1weekPDCA_UnitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5C5EC4A829A640D8006D5D65 /* Debug */,
@@ -620,6 +628,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5CDAF58029A7087C00A9D289 /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nalexn/ViewInspector";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.5;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5CDAF58129A7087C00A9D289 /* ViewInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CDAF58029A7087C00A9D289 /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			productName = ViewInspector;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5CA6AC07298799D1004AE124 /* Project object */;
 }
