@@ -11,7 +11,7 @@ import SwiftUI
 
 @testable import _weekPDCA
 
-
+//MARK: ボトムバー
 class BottomBarTests: XCTestCase {
     
     // ボトムバーが存在するか
@@ -43,6 +43,7 @@ class BottomBarTests: XCTestCase {
     
 }
 
+//MARK: プログレスバー
 class CustomProgressBarTests: XCTestCase {
     
     func testCustomProgressBarBackGroundColor() throws {
@@ -78,6 +79,7 @@ class CustomProgressBarTests: XCTestCase {
     
 }
 
+//MARK: プログレスサークル
 class CustomProgressCircleTests: XCTestCase {
     
     func testCustomProgressCircleBackGroundColor() throws{
@@ -113,7 +115,144 @@ class CustomProgressCircleTests: XCTestCase {
     
 }
 
-// テスト用の関数群
+//MARK: 日付表示カード
+class WeekProgressBarCardViewTests: XCTestCase {
+    
+    let taskCardManager = TaskCardManager()
+    
+    func testWeekRangeText() throws {
+        
+        let testFunctions = testFunctions()
+        
+        let weekProgressBarCardView = WeekProgressBarCardView().environmentObject(taskCardManager)
+        
+        // まずは存在確認
+        let sut = try weekProgressBarCardView.inspect().find(CardView<AnyView>.self).zStack().vStack(0).tupleView(1).hStack(0).text(0)
+        
+        XCTAssertEqual(try sut.string(), "\(testFunctions.getMondayDateString()) - \(testFunctions.getNextSunday())")
+        
+    }
+    
+    func daysLeftInYearText() throws {
+        
+        let testFunctions = testFunctions()
+        
+        let weekProgressBarCardView = WeekProgressBarCardView().environmentObject(taskCardManager)
+        
+        let sut = try weekProgressBarCardView.inspect().find(CardView<AnyView>.self).zStack().vStack(0).tupleView(1).hStack(0).text(1)
+        
+        XCTAssertEqual(try sut.string(), "\(testFunctions.remainingDaysOfYear()) days left")
+        
+    }
+    
+}
+
+//MARK: task カード
+
+class TaskCardListViewTests: XCTestCase {
+    
+    let taskCardManager = TaskCardManager()
+
+    // タスクが存在しない場合の画面表示をテスト
+    func testNoTaskViewIsDisplayedWhenThereAreNoTasks() throws {
+        // NoTaskViewが表示されるかどうかをテストする
+        let taskCardView = TaskCardListView().environmentObject(taskCardManager)
+        
+        // 画像表示があるかどうか
+        _ = try taskCardView.inspect().find(NoTaskView.self).vStack().image(1)
+        
+        // テキスト表示があるかどうか
+        _ = try taskCardView.inspect().find(NoTaskView.self).vStack().text(3)
+    }
+    
+    
+    // タスクが存在する場合の画面表示をテスト
+    func testAppendTask() throws {
+        
+        // タスク追加動作をはさむ
+        taskCardManager.appendTask()
+        let taskCardView = TaskCardListView().environmentObject(taskCardManager)
+
+        
+        let sut = try taskCardView.inspect().findAll(CardView<AnyView>.self)
+
+        
+        XCTAssertEqual(sut.count, taskCardManager.taskCardData.count)
+        
+    }
+    
+    // todo 追加されているかテスト
+    func testAppendTodo() throws {
+        
+        // todo 追加動作をはさむ
+        taskCardManager.appendTask()
+        taskCardManager.appendTodo(index: 0)
+        let taskCardView = TaskCardListView().environmentObject(taskCardManager)
+
+        
+        let sut = try taskCardView.inspect().forEach(0).find(CardView<AnyView>.self).zStack().vStack(0).vStack(1).forEach(2)
+
+        
+        XCTAssertEqual(sut.count, taskCardManager.taskCardData[0].todoData.count)
+        
+    }
+    
+    // task が削除されているかテスト
+    func testDeleteTask() throws {
+            
+        // task を 3 回追加
+        for _ in 0 ... 3 {
+            taskCardManager.appendTask()
+        }
+        
+        // task カードを右にドラッグした際のジェスチャー情報をスタブ化
+        let dummyValue = DragGesture.Value(
+            time: Date().addingTimeInterval(-0.5),
+            location: .init(x: 20.0, y: 0),
+            startLocation: .zero,
+            velocity: .zero
+        )
+
+        taskCardManager.deleteTask(index: 0, value: dummyValue)
+        
+        let taskCardView = TaskCardListView().environmentObject(taskCardManager)
+        let taskCards = try taskCardView.inspect().forEach(0)
+        
+        XCTAssertEqual(taskCards.count, taskCardManager.taskCardData.count)
+    }
+
+    // todo が削除されているかテスト
+    func testDeleteTodo() throws {
+        
+        // task カードを追加
+        taskCardManager.appendTask()
+        
+        // todo を 5 回追加
+        for _ in 0 ... 5 {
+            taskCardManager.appendTodo(index: 0 )
+        }
+        
+        // task カードを右にドラッグした際のジェスチャー情報をスタブ化
+        let dummyValue = DragGesture.Value(
+            time: Date().addingTimeInterval(-0.5),
+            location: .init(x: 20.0, y: 0),
+            startLocation: .zero,
+            velocity: .zero
+        )
+        
+        taskCardManager.deleteTodo(index: 0, todoIndex: 1, value: dummyValue)
+        
+        let taskCardView = TaskCardListView().environmentObject(taskCardManager)
+        let todoCards = try taskCardView.inspect().forEach(0).find(CardView<AnyView>.self).zStack().vStack(0).vStack(1).forEach(2)
+        
+        XCTAssertEqual(todoCards.count, taskCardManager.taskCardData[0].todoData.count)
+        
+    }
+
+}
+
+
+//MARK: テスト用の関数群
 struct testFunctions {
     
     func getMondayDateString() -> String {
@@ -155,35 +294,4 @@ struct testFunctions {
     }
 
     
-}
-
-
-class WeekProgressBarCardViewTests: XCTestCase {
-    
-    let taskCardManager = TaskCardManager()
-    
-    func testWeekRangeText() throws {
-        
-        let testFunctions = testFunctions()
-        
-        let weekProgressBarCardView = WeekProgressBarCardView().environmentObject(taskCardManager)
-        
-        // まずは存在確認
-        let sut = try weekProgressBarCardView.inspect().find(CardView<AnyView>.self).zStack().vStack(0).tupleView(1).hStack(0).text(0)
-        
-        XCTAssertEqual(try sut.string(), "\(testFunctions.getMondayDateString()) - \(testFunctions.getNextSunday())")
-        
-    }
-    
-    func daysLeftInYearText() throws {
-        
-        let testFunctions = testFunctions()
-        
-        let weekProgressBarCardView = WeekProgressBarCardView().environmentObject(taskCardManager)
-        
-        let sut = try weekProgressBarCardView.inspect().find(CardView<AnyView>.self).zStack().vStack(0).tupleView(1).hStack(0).text(1)
-        
-        XCTAssertEqual(try sut.string(), "\(testFunctions.remainingDaysOfYear()) days left")
-        
-    }
 }
