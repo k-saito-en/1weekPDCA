@@ -1,0 +1,35 @@
+name: 1weekPDCA_Build&Test
+
+# main develop どちらかに push pullreqest がされた際に起動
+on:
+  push:
+    branches: [ "main" , "develop" ]
+  pull_request:
+    branches: [ "main" , "develop" ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    # リポジトリ内のすべてのファイルをアクションの実行環境にダウンロード
+    - uses: actions/checkout@v3
+    # プロジェクトの依存関係をインストール
+    - name: Install dependencies
+    # | は改行を含むコマンドを記入する際に使う
+      run: |
+        gem install cocoapods
+        pod install
+    - name: Build
+      run: swift build -v
+    - name: Run tests
+      run: swift test -v
+    - name: Generate Xcode project
+      run: swift package generate-xcodeproj
+    - name: Open Xcode project
+      run: open 1weekPDCA.xcodeproj
+#     - name: Run SwiftUI tests
+#       run: xcodebuild -project MyApp.xcodeproj -scheme MyApp -destination 'platform=iOS Simulator,name=iPhone 12' -quiet test
+
+
