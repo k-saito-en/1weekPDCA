@@ -30,6 +30,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install Dependencies
+        run: |
+         gem install cocoapods
+         pod install
+
       - name: Test
         run: xcodebuild test -project 1weekPDCA.xcodeproj/ -scheme 1weekPDCA -resultBundlePath TestResults -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 14"
-        
