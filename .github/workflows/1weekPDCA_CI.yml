@@ -34,6 +34,6 @@ jobs:
     - name: Build and test
       run: |
         xcodebuild \
-          -scheme MyScheme \
+          -scheme 1weekPDCA \
           -destination 'platform=iOS Simulator,name=iPhone 14' \
           clean build test
