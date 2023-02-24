@@ -1,13 +1,13 @@
 //
-//  _weekPDCAUITests.swift
-//  1weekPDCAUITests
+//  _weekPDCA_UITests.swift
+//  1weekPDCA_UITests
 //
-//  Created by 齊藤虎太郎 on 2023/01/30.
+//  Created by 齊藤虎太郎 on 2023/02/22.
 //
 
 import XCTest
 
-final class _weekPDCAUITests: XCTestCase {
+final class _weekPDCA_UITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

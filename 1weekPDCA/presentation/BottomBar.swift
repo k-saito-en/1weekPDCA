@@ -10,19 +10,19 @@ import SwiftUI
 
 //MARK: ボトムバーアイコンの中身
 let bottomBarItems = [
-        BottomBarItem(image: "graduationcap.fill", view: AnyView(MockActView())),
-        BottomBarItem(image: "square.fill", view: AnyView(PlanDoView())),
-        BottomBarItem(image: "checkmark.circle.fill", view: AnyView(MockCheckView()))
-    ]
+    BottomBarItem(image: "graduationcap.fill", view: AnyView(MockActView())),
+    BottomBarItem(image: "square.fill", view: AnyView(PlanDoView())),
+    BottomBarItem(image: "checkmark.circle.fill", view: AnyView(MockCheckView()))
+]
 
 //MARK: ボトムバーの実装
 struct BottomBar: View {
     
     // タブの選択値と初期値.
-    @State private var selected = 0
+    @State internal var selected = 0
     
     // 選択中のアイコンが大きくなっているか
-    @State private var isBig = false
+    @State internal var isBig = false
     
     var body: some View {
         
@@ -82,13 +82,13 @@ struct BottomBar: View {
                 .shadow(color: Color.black.opacity(0.3), radius: 5, x: -5, y: 5)
                 
                 Color.clear.frame(height: 30)
-
+                
             }
         }
         .frame(
-                        width: UIScreen.main.bounds.width ,
-                        height: UIScreen.main.bounds.height
-                    )
+            width: UIScreen.main.bounds.width ,
+            height: UIScreen.main.bounds.height
+        )
         .ignoresSafeArea(.keyboard)
     }
 }
@@ -116,14 +116,14 @@ struct MockActView: View {
     }
 }
 
-struct MockPlanDoView: View {
-    var body: some View {
-        Text("PlanDo")
-            .font(.largeTitle)
-            .fontWeight(.heavy)
-            .foregroundColor(.green)
-    }
-}
+//struct MockPlanDoView: View {
+//    var body: some View {
+//        Text("PlanDo")
+//            .font(.largeTitle)
+//            .fontWeight(.heavy)
+//            .foregroundColor(.green)
+//    }
+//}
 
 struct MockCheckView: View {
     var body: some View {

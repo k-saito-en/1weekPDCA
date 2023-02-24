@@ -1,13 +1,13 @@
 //
-//  _weekPDCAUITestsLaunchTests.swift
-//  1weekPDCAUITests
+//  _weekPDCA_UITestsLaunchTests.swift
+//  1weekPDCA_UITests
 //
-//  Created by 齊藤虎太郎 on 2023/01/30.
+//  Created by 齊藤虎太郎 on 2023/02/22.
 //
 
 import XCTest
 
-final class _weekPDCAUITestsLaunchTests: XCTestCase {
+final class _weekPDCA_UITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
