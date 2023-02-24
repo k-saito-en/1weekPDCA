@@ -5,18 +5,14 @@ target '1weekPDCA' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-pod 'Firebase/Firestore'
-pod 'ViewInspector'
 
   # Pods for 1weekPDCA
 
-  target '1weekPDCATests' do
+  target '1weekPDCA_UnitTests' do
     inherit! :search_paths
     # Pods for testing
   end
 
-  target '1weekPDCAUITests' do
-    # Pods for testing
-  end
+  
 
 end
