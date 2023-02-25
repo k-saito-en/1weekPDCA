@@ -19,18 +19,26 @@ on:
       - main
       - develop
       - feature/**
-      
-  workflow_dispatch:
 
 # 複数のジョブを定義する
 # 各ジョブはそれぞれまったく別々の環境で実行される
 
 jobs:
   build:
-    runs-on: macOS-latest
-
+    name: Build and Test default scheme using iPhone
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Test
-        run: xcodebuild test -project 1weekPDCA.xcworkspace/ -scheme 1weekPDCA -resultBundlePath TestResults -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 14"
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Force Xcode 14
+        run: sudo xcode-select -switch /Applications/Xcode_14.2.app
+      - name: iOS build setup
+        run: >-
+          xcodebuild test 1weekPDCA.xcworkspace
+          -scheme 1weekPDCA -destination 'platform=iOS Simulator,name=iPhone
+          14'
+      - name: testing ... iPhone 11
+        run: >-
+          xcodebuild test 1weekPDCA.xcworkspace
+          -scheme 1weekPDCA -destination 'platform=iOS Simulator,name=iPhone
+          14'
