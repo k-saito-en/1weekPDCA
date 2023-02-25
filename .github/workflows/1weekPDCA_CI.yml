@@ -1,26 +1,41 @@
 # This workflow will build a Swift project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
 
+# ワークフローの名前を定義
 name: 1weekPDCA_CI
 
+# トリガーを定義
 on:
+
+  # pull request が開かれた時
   pull_request:
     types:
       - opened
       - synchronize
+      
+  # main, develop, featureで始まるブランチ, いずれかに push された時
   push:
     branches:
       - main
       - develop
       - feature/**
+      
 # キャッシュの設定
 env:
   CACHE_NAME: cache-pod
+  
+# 実行内容を定義
 jobs:
-  build:
+
+  # job にはそれぞれに名前がつけられる
+  RunTestonIphone:
+  
     # ランナーの種類を指定する
     runs-on: macos-latest
+    
+    # job の中の工程を定義
     steps:
+    
       # キャッシュからPodライブラリを取得する
       - name: Cache dependencies
         uses: actions/cache@v2
@@ -28,23 +43,31 @@ jobs:
         with:
           path: Podfile.lock
           key: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ hashFiles('**/Podfile.lock') }}
+          
       # リポジトリを取得する
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        
       # Xcode 14を適用する
       - name: Force Xcode 14
         run: sudo xcode-select -switch /Applications/Xcode_14.2.app
+        
       # CocoaPodsをインストールする
       - name: Install CocoaPods
         run: gem install cocoapods -v 1.11.2
+        
       # インストールしたPodライブラリをキャッシュに保存する
       - name: Cache dependencies
         uses: actions/cache@v2
+        
+        # マーケットブレイスで提供されているパッケージを使用
         with:
           path: ~/Library/Caches/CocoaPods
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
           restore-keys: |
            ${{ runner.os }}-pods-
+      
+      # .xcworkspace を作成
       - name: Install Dependencies
         run: |
          pod install
