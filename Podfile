@@ -5,8 +5,6 @@ target '1weekPDCA' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-pod 'Firebase/Firestore'
-
   # Pods for 1weekPDCA
 
   target '1weekPDCATests' do

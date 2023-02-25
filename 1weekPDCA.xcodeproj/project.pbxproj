@@ -41,8 +41,6 @@
 		136F24161732E7EECCA00C16 /* Pods-1weekPDCATests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-1weekPDCATests.release.xcconfig"; path = "Target Support Files/Pods-1weekPDCATests/Pods-1weekPDCATests.release.xcconfig"; sourceTree = "<group>"; };
 		360C89A90F466F1B3063CE05 /* Pods_1weekPDCA_1weekPDCAUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_1weekPDCA_1weekPDCAUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D63D9445BED265BCCE36233 /* Pods-1weekPDCA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-1weekPDCA.release.xcconfig"; path = "Target Support Files/Pods-1weekPDCA/Pods-1weekPDCA.release.xcconfig"; sourceTree = "<group>"; };
-		5C07B2A929AA0F0C00DBED93 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
-		5C07B2AA29AA0FA400DBED93 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		5CA6AC0F298799D1004AE124 /* 1weekPDCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 1weekPDCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CA6AC12298799D1004AE124 /* login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = login.swift; sourceTree = "<group>"; };
 		5CA6AC14298799D1004AE124 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -113,8 +111,6 @@
 		5CA6AC06298799D1004AE124 = {
 			isa = PBXGroup;
 			children = (
-				5C07B2AA29AA0FA400DBED93 /* Production.xcconfig */,
-				5C07B2A929AA0F0C00DBED93 /* Development.xcconfig */,
 				5CA6AC11298799D1004AE124 /* 1weekPDCA */,
 				5CA6AC22298799D5004AE124 /* 1weekPDCATests */,
 				5CA6AC2C298799D5004AE124 /* 1weekPDCAUITests */,
@@ -206,7 +202,6 @@
 				5CA6AC0B298799D1004AE124 /* Sources */,
 				5CA6AC0C298799D1004AE124 /* Frameworks */,
 				5CA6AC0D298799D1004AE124 /* Resources */,
-				D2FBB5D268D117C567836ECC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -244,7 +239,6 @@
 				5CA6AC25298799D5004AE124 /* Sources */,
 				5CA6AC26298799D5004AE124 /* Frameworks */,
 				5CA6AC27298799D5004AE124 /* Resources */,
-				69F0735CFE3C494B8303D35F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -348,23 +342,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		69F0735CFE3C494B8303D35F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-1weekPDCA-1weekPDCAUITests/Pods-1weekPDCA-1weekPDCAUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-1weekPDCA-1weekPDCAUITests/Pods-1weekPDCA-1weekPDCAUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-1weekPDCA-1weekPDCAUITests/Pods-1weekPDCA-1weekPDCAUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		C8B6C0C7B56E1E97D4EBDFB5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -385,23 +362,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D2FBB5D268D117C567836ECC /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-1weekPDCA/Pods-1weekPDCA-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-1weekPDCA/Pods-1weekPDCA-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-1weekPDCA/Pods-1weekPDCA-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E5668DFF39675B2B0C90468B /* [CP] Check Pods Manifest.lock */ = {
@@ -587,7 +547,7 @@
 		};
 		5CA6AC34298799D5004AE124 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5C07B2A929AA0F0C00DBED93 /* Development.xcconfig */;
+			baseConfigurationReference = F9FD94932A614A4D48A7E067 /* Pods-1weekPDCA.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -597,7 +557,7 @@
 				DEVELOPMENT_TEAM = K8B9SC8BT3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_NAME)";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -618,7 +578,7 @@
 		};
 		5CA6AC35298799D5004AE124 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5C07B2AA29AA0FA400DBED93 /* Production.xcconfig */;
+			baseConfigurationReference = 3D63D9445BED265BCCE36233 /* Pods-1weekPDCA.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -628,7 +588,6 @@
 				DEVELOPMENT_TEAM = K8B9SC8BT3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_NAME)";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -649,7 +608,7 @@
 		};
 		5CA6AC37298799D5004AE124 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5C07B2A929AA0F0C00DBED93 /* Development.xcconfig */;
+			baseConfigurationReference = E55A53642C0FD13C5F2E06A5 /* Pods-1weekPDCATests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -670,7 +629,7 @@
 		};
 		5CA6AC38298799D5004AE124 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5C07B2AA29AA0FA400DBED93 /* Production.xcconfig */;
+			baseConfigurationReference = 136F24161732E7EECCA00C16 /* Pods-1weekPDCATests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -691,7 +650,7 @@
 		};
 		5CA6AC3A298799D5004AE124 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5C07B2A929AA0F0C00DBED93 /* Development.xcconfig */;
+			baseConfigurationReference = 0B637DC2E66FE9E2794BBF9B /* Pods-1weekPDCA-1weekPDCAUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -710,7 +669,7 @@
 		};
 		5CA6AC3B298799D5004AE124 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5C07B2AA29AA0FA400DBED93 /* Production.xcconfig */;
+			baseConfigurationReference = C1CF9F19683F51CBDD78888F /* Pods-1weekPDCA-1weekPDCAUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

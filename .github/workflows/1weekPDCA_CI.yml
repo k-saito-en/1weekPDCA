@@ -34,6 +34,6 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_14.2.app
       - name: iOS test
         run: >-
-          xcodebuild test -project 1weekPDCA.xcodeproj
-          -scheme 1weekPDCA -destination 'platform=iOS Simulator,name=iPhone
-          14'
+      xcodebuild test -worcspace 1weekPDCA.xcworkspace
+      -scheme 1weekPDCA
+
