@@ -38,15 +38,20 @@ jobs:
       - name: Install CocoaPods
         run: gem install cocoapods -v 1.11.2
       # インストールしたPodライブラリをキャッシュに保存する
-      - name: Save dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/Library/Caches/CocoaPods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+           ${{ runner.os }}-pods-
+      - name: Install Dependencies
         run: |
-          mkdir -p ~/Library/Caches/CocoaPods
-          cp -a Pods ~/Library/Caches/CocoaPods
-      # ライブラリをインストールする
-      - name: Install pods
-        run: |
-          pod install
+         pod install
+         if [ -d "Pods" ]; then
+          cp -rf Pods ~/Library/Caches/CocoaPods/
+         fi
+
       # テストを実行する
       - name: Run tests
         run: |
