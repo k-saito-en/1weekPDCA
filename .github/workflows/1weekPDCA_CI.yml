@@ -24,12 +24,13 @@ on:
 
 # 複数のジョブを定義する
 # 各ジョブはそれぞれまったく別々の環境で実行される
+
 jobs:
   build:
-
     runs-on: macos-latest
-
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Build
-      run: xcodebuild -workspace 1weekPDCA.xcworkspace -scheme 1weekPDCA -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14' build test | xcpretty
+      run: swift build -v
+    - name: Run tests
+      run: swift test -v
