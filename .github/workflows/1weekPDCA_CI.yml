@@ -34,6 +34,5 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_14.2.app
       - name: iOS test
         run: >-
-      xcodebuild test -worcspace 1weekPDCA.xcworkspace
-      -scheme 1weekPDCA
+          xcodebuild test -worcspace 1weekPDCA.xcworkspace-scheme 1weekPDCA
 
