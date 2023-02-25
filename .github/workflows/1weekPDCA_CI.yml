@@ -13,18 +13,45 @@ on:
       - main
       - develop
       - feature/**
-
+# キャッシュの設定
+env:
+  CACHE_NAME: cache-pod
 jobs:
   build:
-    name: Build and Test default scheme using iPhone
+    # ランナーの種類を指定する
     runs-on: macos-latest
     steps:
+      # キャッシュからPodライブラリを取得する
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: Podfile.lock
+          key: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ hashFiles('**/Podfile.lock') }}
+      # リポジトリを取得する
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
+      # Xcode 14を適用する
       - name: Force Xcode 14
         run: sudo xcode-select -switch /Applications/Xcode_14.2.app
-      - name: iOS test
-        run: >-
+      # CocoaPodsをインストールする
+      - name: Install CocoaPods
+        run: gem install cocoapods -v 1.11.2
+      # インストールしたPodライブラリをキャッシュに保存する
+      - name: Save dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/Library/Caches/CocoaPods
+          cp -a Pods ~/Library/Caches/CocoaPods
+      # ライブラリをインストールする
+      - name: Install pods
+        run: |
+          pod install
+      # テストを実行する
+      - name: Run tests
+        run: |
           xcodebuild test -workspace 1weekPDCA.xcworkspace -scheme 1weekPDCA -destination 'platform=iOS Simulator,name=iPhone 14'
+
+
 
 
