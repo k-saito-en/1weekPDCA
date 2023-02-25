@@ -32,13 +32,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Force Xcode 14
         run: sudo xcode-select -switch /Applications/Xcode_14.2.app
-      - name: iOS build setup
+      - name: iOS test
         run: >-
-          xcodebuild test -workspace 1weekPDCA.xcworkspace
-          -scheme 1weekPDCA -destination 'platform=iOS Simulator,name=iPhone
-          14'
-      - name: testing ... iPhone 11
-        run: >-
-          xcodebuild test -workspace 1weekPDCA.xcworkspace
+          xcodebuild test -project 1weekPDCA.xcodeproj
           -scheme 1weekPDCA -destination 'platform=iOS Simulator,name=iPhone
           14'
