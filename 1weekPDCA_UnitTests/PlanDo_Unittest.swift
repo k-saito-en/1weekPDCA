@@ -255,6 +255,7 @@ class TaskCardListViewTests: XCTestCase {
 //MARK: テスト用の関数群
 struct testFunctions {
     
+    // 前の月曜日の日付を取得
     func getMondayDateString() -> String {
         let calendar = Calendar.current
         let today = Date()
@@ -274,6 +275,7 @@ struct testFunctions {
         return formatter.string(from: monday)
     }
     
+    // 次の日曜日の日付を取得
     func getNextSunday() -> String {
         let calendar = Calendar.current
         let today = Date()
@@ -284,6 +286,7 @@ struct testFunctions {
         return dateFormatter.string(from: nextSunday)
     }
     
+    // その年の残りの日数を取得
     func remainingDaysOfYear() -> String {
         let calendar = Calendar.current
         let today = Date()
