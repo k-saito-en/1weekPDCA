@@ -34,11 +34,11 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_14.2.app
       - name: iOS build setup
         run: >-
-          xcodebuild test -workspace ${GITHUB_WORKSPACE}//1weekPDCA.xcworkspace
+          xcodebuild test -workspace 1weekPDCA.xcodeproj
           -scheme 1weekPDCA -destination 'platform=iOS Simulator,name=iPhone
           14'
       - name: testing ... iPhone 11
         run: >-
-          xcodebuild test -workspace ${GITHUB_WORKSPACE}//1weekPDCA.xcworkspace
+          xcodebuild test -workspace 1weekPDCA.xcodeproj
           -scheme 1weekPDCA -destination 'platform=iOS Simulator,name=iPhone
           14'
