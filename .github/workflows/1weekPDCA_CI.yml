@@ -13,27 +13,34 @@ on:
       - opened
       - synchronize
       
-  # main or develop ブランチに push された時
+  # main or develop or feature~ ブランチに push された時
   push:
     branches:
       - main
       - develop
+      - feature/**
       
   workflow_dispatch:
 
 # 複数のジョブを定義する
 # 各ジョブはそれぞれまったく別々の環境で実行される
 jobs:
-  build:
-    runs-on: macOS-latest
-
+  buildAndTest:
+    # 最新のmacOSでテストする
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+    # Github Actions の仮想環境にキャッシュして Cocoapods を毎回インストールしなくていいようにする
+    - uses: actions/cache@v2
+      with:
+        path: Pods
+        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pods-
+    - name: CocoaPod Install
+      run: pod install
+    - name: Build
+      run: xcodebuild -workspace 1weekPDCA.xcworkspace -scheme 1weekPDCA -configuration Release -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14'
+    - name: Test
+      run: xcodebuild -workspace 1weekPDCA.xcworkspace -scheme 1weekPDCA -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14' test
 
-      - name: Install Dependencies
-        run: |
-         gem install cocoapods
-         pod install
-
-      - name: Test
-        run: xcodebuild test -project 1weekPDCA.xcodeproj/ -scheme 1weekPDCA -resultBundlePath TestResults -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 14"
