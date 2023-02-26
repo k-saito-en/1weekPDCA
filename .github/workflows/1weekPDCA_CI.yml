@@ -13,10 +13,9 @@ on:
       - opened
       - synchronize
       
-  # main, develop, featureで始まるブランチ, いずれかに push された時
+  # develop, featureで始まるブランチ, いずれかに push された時
   push:
     branches:
-      - main
       - develop
       
 # キャッシュの設定
