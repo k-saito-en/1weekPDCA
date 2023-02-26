@@ -1,4 +1,6 @@
+[![1weekPDCA_CI](https://github.com/k-saito-en/1weekPDCA/actions/workflows/1weekPDCA_CI.yml/badge.svg)](https://github.com/k-saito-en/1weekPDCA/actions/workflows/1weekPDCA_CI.yml) 
 
+<img alt="GitHub issues" src="https://img.shields.io/github/issues/k-saito-en/1weekPDCA"> <img alt="GitHub" src="https://img.shields.io/github/license/k-saito-en/1weekPDCA">
 
 ![1weekPDCA_README](https://user-images.githubusercontent.com/111550856/221393945-ee5fa6cd-49a5-4266-9a74-5842946ea1d3.png)
 
