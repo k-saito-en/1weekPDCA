@@ -66,6 +66,12 @@ PDCAサイクルに則って目標を大目標、中目標、小目標と分け�
   - タスクカード・Todoラベル は左右のスワイプで削除することができる。
   - 長押しからのドラッグで要素の入れ替えができる(実装中)
 
+## ▼ Check 画面
+  - ComingSoon...
+
+## ▼ Act 画面
+  - ComingSoon...
+
 # 参考文献リスト
 - [[1] 医療の質改善の概念と手法 ―PDCA，six sigmaなど](https://www.jstage.jst.go.jp/article/naika/105/12/105_2353/_pdf)
 - [[2] PDCAサイクルが目標達成へのカギ？導入例と社員教育方法について](https://www.niziiro.jp/article/260)
