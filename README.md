@@ -5,21 +5,27 @@
 # 1weekPDCA
 ## ▼ 🤔 What? これは何?
 
-このアプリは、目標を大目標・中目標・小目標と階層化することによって達成確率が上がるというアルゴリズムに基づき、自己実現の手助けをするアプリです。
-
-目標を大目標・中目標・小目標と分けると達成しやすくなる理由は以下の通りです。
+このアプリは、**PDCAサイクル** と **目標を大目標・中目標・小目標と階層化することによって達成確率が上がるというアルゴリズム** に基づき、自己実現の手助けをするアプリです。
 
 > 大目標は最終的に達成したいことであり、中目標は大目標を達成するために必要なことであり、小目標は中目標を達成するために具体的に行うことです。このように目標を階層化することで、自分が何をすべきか明確になります。
-- 小目標は短期的で具体的なものであるため、達成感や自信が得られやすく、モチベーションが高まります [[1]](https://motojukucho.com/2021/09/26/aim-setting/)。また、小目標の進捗状況を確認することで、自分の学習効果や問題点を把握しやすくなります。
-- 中目標は大目標に近づくための段階的なものであるため、大きな挑戦でも諦めずに取り組むことができます [[1]](https://motojukucho.com/2021/09/26/aim-setting/)。また、中目標を達成することで、自分の能力や努力が認められる可能性が高まります。
-- 大目標は長期的で抽象的なものであるため、自分の価値観や意義感に基づいて設定されます [[2]](https://www.jstage.jst.go.jp/article/cjpt/2014/0/2014_1198/_pdf/-char/ja)。このように自己関連性の高い目標は、学習方略（計画・管理・評価）の使用や学習行動（時間・努力・質）の向上につながります [[3]](https://www.jstage.jst.go.jp/article/jjep/58/3/58_3_348/_pdf/-char/ja)。
+
+> PDCAサイクルとは、計画（Plan）、実行（Do）、評価（Check）、改善（Action）の4つのステップを繰り返すことで、業務や目標の達成に向けて効率的に改善していくマネジメント手法です
+
+
+PDCAサイクルに則って目標を大目標、中目標、小目標と分けると、以下のようなメリットがあります。
+
+- 大目標を中期的・長期的な視点で設定し、中目標や小目標を短期的な視点で設定することで、具体的かつ達成可能な計画を立てることができます[[3]](https://ic.repo.nii.ac.jp/?action=repository_action_common_download&item_id=351&item_no=1&attribute_id=22&file_no=1)。
+
+
+- 中目標や小目標は大目標に対する進捗度や達成度を測る指標として活用できます[[3]](https://ic.repo.nii.ac.jp/?action=repository_action_common_download&item_id=351&item_no=1&attribute_id=22&file_no=1)。実行した結果を評価し、改善点や課題を明確にすることができます[[1]](https://www.jstage.jst.go.jp/article/naika/105/12/105_2353/_pdf),[[2]](https://www.niziiro.jp/article/260)。
+
+
+- 小さな成功体験を積み重ねることで、モチベーションや自信を高めることができます[[2]](https://www.niziiro.jp/article/260)。また、失敗や挫折に対しても柔軟に対応し、学びのチャンスと捉えることができます
 
 ▶︎ 参考文献
-- [[1]: 【実例あり】中学生の成績はたった3つの目標設定でグンと伸ばせる！. (2021年9月26日). 元塾長ブログ. https://motojukucho.com/2021/09/26/aim-setting/](https://motojukucho.com/2021/09/26/aim-setting/)
-
-- [[2]: 水野智子 (2014). 学生が持つ達成目標の違いによる学習方略の使用. 日本教育工学会論文誌, 38(0), 1198-1207.](https://www.jstage.jst.go.jp/article/cjpt/2014/0/2014_1198/_pdf/-char/ja)
-
-- [[3]: 光浪睦美 (2016). 達成動機と目標志向性が学習行動に及ぼす影響. 日本教育心理学会誌, 58(3), 348-360.](https://www.jstage.jst.go.jp/article/jjep/58/3/58_3_348/_pdf/-char/ja)
+- [[1] 医療の質改善の概念と手法 ―PDCA，six sigmaなど](https://www.jstage.jst.go.jp/article/naika/105/12/105_2353/_pdf)
+- [[2] PDCAサイクルが目標達成へのカギ？導入例と社員教育方法について](https://www.niziiro.jp/article/260)
+- [[3] PDCAサイクルにより得た学生の教育効果](https://ic.repo.nii.ac.jp/?action=repository_action_common_download&item_id=351&item_no=1&attribute_id=22&file_no=1)
 
 ## ▼ 🤓 Why? どうして作ろうと思ったの?
 
@@ -36,8 +42,6 @@
   
   現に、本アプリの開発の中でどんなにつまづいても、最終的には**全て**実現に至っており、一切の妥協は許しません。
 
-# 現時点での画面実装イメージ(figma)
-|ログイン画面|振り返り画面|今週の目標画面|
-|---------|---------|-----------|
-|![215425809-e3bd31f0-7e8d-43f2-b7ed-5f00abc377f1](https://user-images.githubusercontent.com/111550856/216218055-1b00b3f2-97d2-4e62-a9e7-b820a3c132ef.png)| ![216215792-8cc39164-c684-4921-b105-cc1ec48313d4](https://user-images.githubusercontent.com/111550856/216217731-05cbc643-1ed8-44e0-ac9b-b3d6de2e2b3f.png) |![215692338-95367f7a-5422-4f87-b8ef-53cfba04969e](https://user-images.githubusercontent.com/111550856/216217942-fb087b74-3266-4196-a9f3-90b6a62bdb5c.png)|
+# 📱 画面イメージ
 
+|PlanDo 画面|Check 画面|Act 画面
