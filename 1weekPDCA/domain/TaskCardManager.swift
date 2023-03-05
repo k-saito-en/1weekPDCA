@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import RealmSwift
 
 // PlanDo 画面の表示状況を管理
 // リポジトリパターンの DB からデータコピー、変更されたデータを保持する役割
@@ -52,4 +53,23 @@ class TaskCardManager: ObservableObject{
     }
 
 
+}
+
+// MARK: エンティティ定義
+final class TaskCardData: Object, Identifiable {
+    
+    @Persisted(primaryKey: true) var taskId = UUID().uuidString // id
+    
+    @Persisted var taskTitle: String = ""
+    @Persisted var todoData: RealmSwift.List<TodoData> // リレーション設定
+}
+
+final class TodoData: Object, Identifiable {
+    
+    @Persisted(primaryKey: true) var taskId = UUID().uuidString // id
+    
+    @Persisted var todoTitle: String = ""
+    @Persisted var isDone: Bool = false
+    
+    @Persisted(originProperty: "todoData") var TaskCardData: LinkingObjects<TaskCardData> //リレーション設定
 }
