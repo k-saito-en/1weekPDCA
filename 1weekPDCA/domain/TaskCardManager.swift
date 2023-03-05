@@ -90,4 +90,65 @@ final class TodoData: Object, Identifiable {
         }
 }
 
-
+final class RealmDataBaseManager {
+    
+    let realm = try! Realm() // Realmインスタンスを生成
+    
+    // TaskCardDataのCRUDメソッド
+    
+    // 全てのTaskCardDataを取得する
+    func getAllTaskCards() -> Results<TaskCardData> {
+        return realm.objects(TaskCardData.self)
+    }
+    
+    // 新しいTaskCardDataを追加する
+    func addTaskCard(taskCardData: TaskCardData) {
+        try! realm.write {
+            realm.add(taskCardData)
+        }
+    }
+    
+    // 既存のTaskCardDataを更新する
+    func updateTaskCard(taskCardData: TaskCardData, with newTaskTitle: String) {
+        try! realm.write {
+            taskCardData.taskTitle = newTaskTitle
+        }
+    }
+    
+    // 既存のTaskCardDataを削除する
+    func deleteTaskCard(taskCardData: TaskCardData) {
+        try! realm.write {
+            realm.delete(taskCardData)
+        }
+    }
+    
+    // TodoDataのCRUDメソッド
+    
+    // 新しいTodoDataを追加する
+    func addTodoData(todoData: TodoData, to taskCardData: TaskCardData) {
+        try! realm.write {
+            taskCardData.todoData.append(todoData)
+        }
+    }
+    
+    // 既存のTodoDataを更新する
+    func updateTodoData(todoData: TodoData, with newTodoTitle: String) {
+        try! realm.write {
+            todoData.todoTitle = newTodoTitle
+        }
+    }
+    
+    // TodoDataのisDoneを更新する
+    func updateTodoDoneState(todoData: TodoData, isDone: Bool) {
+        try! realm.write {
+            todoData.isDone = isDone
+        }
+    }
+    
+    // 既存のTodoDataを削除する
+    func deleteTodoData(todoData: TodoData) {
+        try! realm.write {
+            realm.delete(todoData)
+        }
+    }
+}
