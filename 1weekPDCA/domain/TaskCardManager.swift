@@ -62,6 +62,14 @@ final class TaskCardData: Object, Identifiable {
     
     @Persisted var taskTitle: String = ""
     @Persisted var todoData: RealmSwift.List<TodoData> // リレーション設定
+    
+    // プロパティを設定
+    convenience init(taskTitle: String, todoData: [TodoData] = []) {
+            self.init()
+            self.taskTitle = taskTitle
+            self.todoData = .init()
+            self.todoData.append(objectsIn: todoData)
+        }
 }
 
 final class TodoData: Object, Identifiable {
@@ -72,4 +80,14 @@ final class TodoData: Object, Identifiable {
     @Persisted var isDone: Bool = false
     
     @Persisted(originProperty: "todoData") var TaskCardData: LinkingObjects<TaskCardData> //リレーション設定
+    
+    // プロパティを設定
+    convenience init(todoTitle: String, isDone: Bool = false) {
+        
+            self.init()
+            self.todoTitle = todoTitle
+            self.isDone = isDone
+        }
 }
+
+
