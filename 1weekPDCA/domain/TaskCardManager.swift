@@ -51,6 +51,18 @@ class TaskCardManager: ObservableObject{
     func toggleTodoDoneState(for index: Int, todoIndex: Int) {
         taskCardData[index].todoData[todoIndex].isDone.toggle()
     }
+    
+    // DB の状態を taskCardData に反映する関数
+    func reloadTaskCardData() {
+        
+        let realmDataBaseManager = RealmDataBaseManager()
+        
+        // taskCardData を初期化
+        taskCardData.removeAll()
+        
+        // DB を taskCardData に反映して View を更新
+        taskCardData = realmDataBaseManager.getAllTaskCards()
+    }
 
 
 }
@@ -97,9 +109,24 @@ final class RealmDataBaseManager {
     // TaskCardDataのCRUDメソッド
     
     // 全てのTaskCardDataを取得する
-    func getAllTaskCards() -> Results<TaskCardData> {
-        return realm.objects(TaskCardData.self)
+    func getAllTaskCards() -> [(taskTitle: String, todoData: [(todoText: String, isDone: Bool)])] {
+        // 配列の要素をタプル型で定義する
+        var result: [(taskTitle: String, todoData: [(todoText: String, isDone: Bool)])] = []
+
+        // 全てのTaskCardDataを取得する
+        let taskCards = realm.objects(TaskCardData.self)
+
+        // 各TaskCardDataのtodoDataを変換し、配列に追加する
+        for taskCard in taskCards {
+            let todos = taskCard.todoData.map { (todo) -> (todoText: String, isDone: Bool) in
+                return (todoText: todo.todoTitle, isDone: todo.isDone)
+            }
+            result.append((taskTitle: taskCard.taskTitle, todoData: Array(todos)))
+        }
+        
+        return result
     }
+
     
     // 新しいTaskCardDataを追加する
     func addTaskCard(taskCardData: TaskCardData) {
