@@ -105,7 +105,7 @@ final class TodoData: Object, Identifiable {
 
 final class RealmDataBaseManager {
     
-    @EnvironmentObject var taskCardManager: TaskCardManager
+//    @EnvironmentObject var taskCardManager: TaskCardManager
     
     let realm = try! Realm() // Realmインスタンスを生成
     
@@ -137,7 +137,7 @@ final class RealmDataBaseManager {
     }
     
     // 新しいTaskCardDataを追加する
-    func addTaskCard() {
+    func addTaskCard(taskCardManager: TaskCardManager) {
         let newTaskCardData = TaskCardData()
         try! realm.write {
             realm.add(newTaskCardData)
@@ -149,7 +149,7 @@ final class RealmDataBaseManager {
 
     
     // 既存のTaskCardDataを更新する
-    func updateTaskTitle(taskCardId: String, with newTaskTitle: String) {
+    func updateTaskTitle(taskCardId: String, with newTaskTitle: String, taskCardManager: TaskCardManager) {
         
         // ID が一致する要素がなかった場合処理を中断する
         guard let taskCardData = realm.object(ofType: TaskCardData.self, forPrimaryKey: taskCardId) else {
@@ -165,23 +165,39 @@ final class RealmDataBaseManager {
     }
     
     // 既存のTaskCardDataを削除する
-    func deleteTaskCard(taskCardId: String) {
-        guard let taskCardData = realm.object(ofType: TaskCardData.self, forPrimaryKey: taskCardId) else {
-            return
-        }
-        
-        try! realm.write {
-            realm.delete(taskCardData)
+    func deleteTaskCard(taskId: String, value: DragGesture.Value, taskCardManager: TaskCardManager) {
+        if value.translation.width < -100 {
+            guard let taskCardData = realm.object(ofType: TaskCardData.self, forPrimaryKey: taskId) else {
+                return
+            }
             
-            // 状態を更新する
-            taskCardManager.reloadTaskCardData()
+            try! realm.write {
+                realm.delete(taskCardData)
+                
+                // 状態を更新する
+                taskCardManager.reloadTaskCardData()
+            }
+            print("Swiped left!")
+        } else if value.translation.width > 100 {
+            guard let taskCardData = realm.object(ofType: TaskCardData.self, forPrimaryKey: taskId) else {
+                return
+            }
+            
+            try! realm.write {
+                realm.delete(taskCardData)
+                
+                // 状態を更新する
+                taskCardManager.reloadTaskCardData()
+            }
+            print("Swiped right!")
         }
     }
+
     
     // TodoDataのCRUDメソッド
     
     // 新しいTodoDataを追加する
-    func addTodoData(taskId: String) {
+    func addTodoData(taskId: String, taskCardManager: TaskCardManager) {
         guard let taskCardData = realm.object(ofType: TaskCardData.self, forPrimaryKey: taskId) else {
             return
         }
@@ -197,7 +213,7 @@ final class RealmDataBaseManager {
     }
 
     // 既存のTodoDataを更新する
-    func updateTodoText(todoId: String, with newTodoTitle: String) {
+    func updateTodoText(todoId: String, with newTodoTitle: String, taskCardManager: TaskCardManager) {
         guard let todoData = realm.object(ofType: TodoData.self, forPrimaryKey: todoId) else {
             return
         }
@@ -211,7 +227,7 @@ final class RealmDataBaseManager {
     }
     
     // TodoDataのisDoneを更新する
-    func toggleTodoDoneState(todoId: String) {
+    func toggleTodoDoneState(todoId: String, taskCardManager: TaskCardManager) {
         guard let todoData = realm.object(ofType: TodoData.self, forPrimaryKey: todoId) else {
             return
         }
@@ -225,16 +241,33 @@ final class RealmDataBaseManager {
 
     
     // 既存のTodoDataを削除する
-    func deleteTodoData(todoId: String) {
-        guard let todoData = realm.object(ofType: TodoData.self, forPrimaryKey: todoId) else {
-            return
-        }
-        
-        try! realm.write {
-            realm.delete(todoData)
+    func deleteTodoCard(todoId: String, value: DragGesture.Value, taskCardManager: TaskCardManager) {
+        if value.translation.width < -100 {
+            guard let todoData = realm.object(ofType: TodoData.self, forPrimaryKey: todoId) else {
+                return
+            }
             
-            // 状態を更新する
-            taskCardManager.reloadTaskCardData()
+            try! realm.write {
+                realm.delete(todoData)
+                
+                // 状態を更新する
+                taskCardManager.reloadTaskCardData()
+            }
+            print("Swiped left!")
+        } else if value.translation.width > 100 {
+            guard let todoData = realm.object(ofType: TodoData.self, forPrimaryKey: todoId) else {
+                return
+            }
+            
+            try! realm.write {
+                realm.delete(todoData)
+                
+                // 状態を更新する
+                taskCardManager.reloadTaskCardData()
+            }
+            print("Swiped right!")
         }
     }
+    
+    
 }

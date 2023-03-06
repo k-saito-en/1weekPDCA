@@ -146,7 +146,8 @@ struct TaskCardListView: View {
                                 // TextFieldが編集モードではなくなったときに DB へ保存し状態更新
                                 realmDataBaseManager.updateTaskTitle(
                                     taskCardId: taskCardManager.taskCardData[taskIndex].taskId,
-                                    with: taskCardManager.taskCardData[taskIndex].taskTitle
+                                    with: taskCardManager.taskCardData[taskIndex].taskTitle,
+                                    taskCardManager: taskCardManager
                                 )
                             }
                         }
@@ -171,7 +172,8 @@ struct TaskCardListView: View {
                                             .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone))
                                             .onTapGesture {
                                                 realmDataBaseManager.toggleTodoDoneState(
-                                                    todoId: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoId
+                                                    todoId: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoId,
+                                                    taskCardManager: taskCardManager
                                                 )
                                             }
                                         
@@ -192,7 +194,7 @@ struct TaskCardListView: View {
                                                 // TextFieldが編集モードではなくなったときに DB へ保存し状態更新
                                                 realmDataBaseManager.updateTodoText(
                                                     todoId: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoId,
-                                                    with: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText
+                                                    with: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText, taskCardManager: taskCardManager
                                                 )
                                             }
                                         }
@@ -203,7 +205,11 @@ struct TaskCardListView: View {
                             // スワイプで todo を削除
                             .gesture(DragGesture()
                                 .onEnded { value in
-                                    taskCardManager.deleteTodo(index: taskIndex, todoIndex: todoIndex, value: value)
+                                    realmDataBaseManager.deleteTodoCard(
+                                        todoId: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoId,
+                                        value: value,
+                                        taskCardManager: taskCardManager
+                                    )
                                 })
                         }
                         
@@ -212,7 +218,8 @@ struct TaskCardListView: View {
                             Button(action: {
                                 // 新しいToDoカードを追加する
                                 realmDataBaseManager.addTodoData(
-                                    taskId: taskCardManager.taskCardData[taskIndex].taskId
+                                    taskId: taskCardManager.taskCardData[taskIndex].taskId,
+                                    taskCardManager: taskCardManager
                                 )
                             }) {
                                 RoundedRectangle(cornerRadius: 10)
@@ -227,7 +234,11 @@ struct TaskCardListView: View {
                 // スワイプで task を削除
                 .gesture(DragGesture()
                     .onEnded { value in
-                        taskCardManager.deleteTask(index: taskIndex, value: value)
+                        realmDataBaseManager.deleteTaskCard(
+                            taskId: taskCardManager.taskCardData[taskIndex].taskId,
+                            value: value,
+                            taskCardManager: taskCardManager
+                        )
                     }
                 )
                 
@@ -289,7 +300,7 @@ struct PlanDoView: View {
                     Spacer()
                     // task を追加
                     Button(action: {
-                        realmdataBaseManager.addTaskCard()
+                        realmdataBaseManager.addTaskCard(taskCardManager: taskCardManager)
                     }) {
                         ZStack {
                             Image(systemName: "circle.fill")
