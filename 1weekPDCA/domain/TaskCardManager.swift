@@ -15,18 +15,19 @@ class TaskCardManager: ObservableObject{
     
     @Published var taskCardData = [
         (
+            taskId: String,
             taskTitle: String,
-            todoData: [(todoText: String, isDone: Bool)]
+            todoData: [(todoId: String, todoText: String, isDone: Bool)]
         )
     ]()
     
-    func appendTodo(index: Int) {
-        taskCardData[index].todoData.append((todoText: "", isDone: false))
-    }
-    
-    func appendTask() {
-        taskCardData.append((taskTitle: "", [(todoText: "", isDone: false)]))
-    }
+//    func appendTodo(index: Int) {
+//        taskCardData[index].todoData.append((todoText: "", isDone: false))
+//    }
+//
+//    func appendTask() {
+//        taskCardData.append((taskTitle: "", [(todoText: "", isDone: false)]))
+//    }
     
     func deleteTodo(index: Int, todoIndex: Int, value: DragGesture.Value) {
         if value.translation.width < -100 {
@@ -86,7 +87,7 @@ final class TaskCardData: Object, Identifiable {
 
 final class TodoData: Object, Identifiable {
     
-    @Persisted(primaryKey: true) var taskId = UUID().uuidString // id
+    @Persisted(primaryKey: true) var todoId = UUID().uuidString // id
     
     @Persisted var todoTitle: String = ""
     @Persisted var isDone: Bool = false
@@ -111,24 +112,29 @@ final class RealmDataBaseManager {
     // TaskCardDataのCRUDメソッド
     
     // 全てのTaskCardDataを取得する
-    func getAllTaskCards() -> [(taskTitle: String, todoData: [(todoText: String, isDone: Bool)])] {
+    func getAllTaskCards() -> [(taskId: String, taskTitle: String, todoData: [(todoId: String, todoText: String, isDone: Bool)])] {
         // 配列の要素をタプル型で定義する
-        var result: [(taskTitle: String, todoData: [(todoText: String, isDone: Bool)])] = []
-
+        var result: [(taskId: String, taskTitle: String, todoData: [(todoId: String, todoText: String, isDone: Bool)])] = []
+        
         // 全てのTaskCardDataを取得する
         let taskCards = realm.objects(TaskCardData.self)
-
-        // 各TaskCardDataのtodoDataを変換し、配列に追加する
+        
+        // 各TaskCardDataごとに処理を行う
         for taskCard in taskCards {
-            let todos = taskCard.todoData.map { (todo) -> (todoText: String, isDone: Bool) in
-                return (todoText: todo.todoTitle, isDone: todo.isDone)
+            let taskId = taskCard.taskId
+            let taskTitle = taskCard.taskTitle
+            var todos: [(todoId: String, todoText: String, isDone: Bool)] = []
+            
+            // 各TaskCardDataのtodoDataを変換し、配列に追加する
+            for todo in taskCard.todoData {
+                todos.append((todoId: todo.todoId, todoText: todo.todoTitle, isDone: todo.isDone))
             }
-            result.append((taskTitle: taskCard.taskTitle, todoData: Array(todos)))
+            
+            result.append((taskId: taskId, taskTitle: taskTitle, todoData: todos))
         }
         
         return result
     }
-
     
     // 新しいTaskCardDataを追加する
     func addTaskCard(taskCardData: TaskCardData) {

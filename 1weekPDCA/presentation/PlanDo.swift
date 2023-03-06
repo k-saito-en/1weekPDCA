@@ -75,7 +75,7 @@ struct WeekProgressBarCardView: View {
     let calendar = Calendar.current
     
     var body: some View {
-        let weekProgress = caluculateProgressUtils.calculateWeekProgress(taskCardManager.taskCardData)
+        let weekProgress = caluculateProgressUtils.calculateWeekProgress(taskCardData: taskCardManager.taskCardData)
         let weekRange = dateTimeUtils.getWeekRange()
         
         CardView {
@@ -107,8 +107,12 @@ struct TaskCardListView: View {
     
     @EnvironmentObject var taskCardManager: TaskCardManager
     
+    // TextField が編集中かどうかを管理
+    @FocusState private var isTextFieldFocused: Bool
+    
     let colorUtils = ColorUtils()
     let caluculateProgressUtils = CalculateProgressUtils()
+    let realmDataBaseManager = RealmDataBaseManager()
     
     var body: some View {
         if taskCardManager.taskCardData.isEmpty {
@@ -121,9 +125,14 @@ struct TaskCardListView: View {
                     VStack {
                         HStack {
                             // 30文字までに制限？
-                            TextField("task title", text: $taskCardManager.taskCardData[index].taskTitle, axis: .vertical)
-                                .textStyle(for: .title, color: .uiColorGray)
-                                .fixedSize(horizontal: false, vertical: true)
+                            TextField(
+                                "task title",
+                                text: $taskCardManager.taskCardData[index].taskTitle,
+                                axis: .vertical
+                            )
+                            .textStyle(for: .title, color: .uiColorGray)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .focused($isTextFieldFocused)
                             
                             Spacer()
                             
@@ -132,6 +141,12 @@ struct TaskCardListView: View {
                                 .padding(.trailing, 20)
                             
                         }
+                        .onChange(of: isTextFieldFocused) { isFocused in
+                                    if !isFocused {
+                                        // TextFieldが編集モードではなくなったときに DB へ保存し状態更新
+                                        print("aaa")
+                                    }
+                                }
                         // 空のViewを追加し、高さを10の隙間を開ける
                         Color.clear.frame(height: 10)
                         
@@ -183,7 +198,7 @@ struct TaskCardListView: View {
                             Spacer()
                             Button(action: {
                                 // 新しいToDoカードを追加する
-                                taskCardManager.appendTodo(index: index)
+//                                taskCardManager.appendTodo(index: index)
                             }) {
                                 RoundedRectangle(cornerRadius: 10)
                                     .frame(width: UIScreen.main.bounds.width / 10 * 7, height: 40)
@@ -259,7 +274,7 @@ struct PlanDoView: View {
                     Spacer()
                     // task を追加
                     Button(action: {
-                        self.taskCardManager.appendTask()
+//                        self.taskCardManager.appendTask()
                     }) {
                         ZStack {
                             Image(systemName: "circle.fill")

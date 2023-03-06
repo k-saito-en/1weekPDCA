@@ -11,7 +11,7 @@ import SwiftUI
 struct CalculateProgressUtils {
     
     // プログレスバーの進捗計算
-    func calculateWeekProgress(_ taskCardData: [(taskTitle: String, todoData: [(todoText: String, isDone: Bool)])]) -> Double {
+    func calculateWeekProgress(taskCardData: [(taskId: String, taskTitle: String, todoData: [(todoId: String, todoText: String, isDone: Bool)])]) -> Double {
         let completedTasks = taskCardData.reduce(0) { count, card in
             count + card.todoData.filter { $0.isDone }.count
         }
