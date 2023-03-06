@@ -147,7 +147,7 @@ final class RealmDataBaseManager {
     }
     
     // 既存のTaskCardDataを更新する
-    func updateTaskCard(taskCardId: String, with newTaskTitle: String) {
+    func updateTaskTitle(taskCardId: String, with newTaskTitle: String) {
         
         // ID が一致する要素がなかった場合処理を中断する
         guard let taskCardData = realm.object(ofType: TaskCardData.self, forPrimaryKey: taskCardId) else {
@@ -189,7 +189,7 @@ final class RealmDataBaseManager {
     }
     
     // 既存のTodoDataを更新する
-    func updateTodoData(todoId: String, with newTodoTitle: String) {
+    func updateTodoText(todoId: String, with newTodoTitle: String) {
         guard let todoData = realm.object(ofType: TodoData.self, forPrimaryKey: todoId) else {
             return
         }

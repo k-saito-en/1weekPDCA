@@ -120,14 +120,14 @@ struct TaskCardListView: View {
             NoTaskView()
                 
         } else {
-            ForEach(taskCardManager.taskCardData.indices, id: \.self) { index in
+            ForEach(taskCardManager.taskCardData.indices, id: \.self) { taskIndex in
                 CardView {
                     VStack {
                         HStack {
                             // 30文字までに制限？
                             TextField(
                                 "task title",
-                                text: $taskCardManager.taskCardData[index].taskTitle,
+                                text: $taskCardManager.taskCardData[taskIndex].taskTitle,
                                 axis: .vertical
                             )
                             .textStyle(for: .title, color: .uiColorGray)
@@ -136,22 +136,26 @@ struct TaskCardListView: View {
                             
                             Spacer()
                             
-                            customProgressCircle(circleProgress: caluculateProgressUtils.caluculateCircleProgress(index: index, taskCardManager: taskCardManager))
+                            customProgressCircle(circleProgress: caluculateProgressUtils.caluculateCircleProgress(index: taskIndex, taskCardManager: taskCardManager))
                                 .frame(width: 30, height: 30)
                                 .padding(.trailing, 20)
                             
                         }
                         .onChange(of: isTextFieldFocused) { isFocused in
-                                    if !isFocused {
-                                        // TextFieldが編集モードではなくなったときに DB へ保存し状態更新
-                                        print("aaa")
-                                    }
-                                }
+                            if !isFocused {
+                                // TextFieldが編集モードではなくなったときに DB へ保存し状態更新
+                                realmDataBaseManager.updateTaskTitle(
+                                    taskCardId: taskCardManager.taskCardData[taskIndex].taskId,
+                                    with: taskCardManager.taskCardData[taskIndex].taskTitle
+                                )
+                            }
+                        }
+                        
                         // 空のViewを追加し、高さを10の隙間を開ける
                         Color.clear.frame(height: 10)
                         
                         // 追加された todo カードを表示する
-                        ForEach(taskCardManager.taskCardData[index].todoData.indices, id: \.self) { todoIndex in
+                        ForEach(taskCardManager.taskCardData[taskIndex].todoData.indices, id: \.self) { todoIndex in
                             // todo カードの実装
                             HStack {
                                 Spacer()
@@ -159,14 +163,14 @@ struct TaskCardListView: View {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
-                                        .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[index].todoData[todoIndex].isDone))
+                                        .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone))
                                     
                                     HStack {
                                         // ラジオボタンの実装
-                                        Image(systemName: taskCardManager.taskCardData[index].todoData[todoIndex].isDone ? "checkmark.circle.fill" : "circle")
-                                            .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[index].todoData[todoIndex].isDone))
+                                        Image(systemName: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone ? "checkmark.circle.fill" : "circle")
+                                            .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone))
                                             .onTapGesture {
-                                                taskCardManager.toggleTodoDoneState(for: index, todoIndex: todoIndex)
+                                                taskCardManager.toggleTodoDoneState(for: taskIndex, todoIndex: todoIndex)
                                                 // 動作確認用
                                                 print(taskCardManager.taskCardData.reduce(0) { count, card in
                                                     count + card.todoData.filter { $0.isDone }.count})
@@ -176,12 +180,22 @@ struct TaskCardListView: View {
                                         VStack {
                                             Color.clear.frame(width:10, height: 4)
                                             
-                                            TextField("ToDo", text: $taskCardManager.taskCardData[index].todoData[todoIndex].todoText, axis: .vertical)
+                                            TextField("ToDo", text: $taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText, axis: .vertical)
                                                 .textStyle(for: .body, color: .uiColorWhite)
                                                 .frame(width: UIScreen.main.bounds.width / 10 * 6)
                                                 .fixedSize(horizontal: false, vertical: true)
+                                                .focused($isTextFieldFocused)
                                             
                                             Color.clear.frame(width:10, height: 4)
+                                        }
+                                        .onChange(of: isTextFieldFocused) { isFocused in
+                                            if !isFocused {
+                                                // TextFieldが編集モードではなくなったときに DB へ保存し状態更新
+                                                realmDataBaseManager.updateTodoText(
+                                                    todoId: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoId,
+                                                    with: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText
+                                                )
+                                            }
                                         }
                                     }
                                 }
@@ -190,7 +204,7 @@ struct TaskCardListView: View {
                             // スワイプで todo を削除
                             .gesture(DragGesture()
                                 .onEnded { value in
-                                    taskCardManager.deleteTodo(index: index, todoIndex: todoIndex, value: value)
+                                    taskCardManager.deleteTodo(index: taskIndex, todoIndex: todoIndex, value: value)
                                 })
                         }
                         
@@ -212,7 +226,7 @@ struct TaskCardListView: View {
                 // スワイプで task を削除
                 .gesture(DragGesture()
                     .onEnded { value in
-                        taskCardManager.deleteTask(index: index, value: value)
+                        taskCardManager.deleteTask(index: taskIndex, value: value)
                     }
                 )
                 
