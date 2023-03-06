@@ -203,18 +203,18 @@ final class RealmDataBaseManager {
     }
     
     // TodoDataのisDoneを更新する
-    func updateTodoDoneState(todoId: String, isDone: Bool) {
+    func toggleTodoDoneState(todoId: String) {
         guard let todoData = realm.object(ofType: TodoData.self, forPrimaryKey: todoId) else {
             return
         }
-        
+
+        let isDone = !todoData.isDone // 現在と反対の値を入力し、true/falseを切り替える
         try! realm.write {
             todoData.isDone = isDone
-            
-            // 状態を更新する
             taskCardManager.reloadTaskCardData()
         }
     }
+
     
     // 既存のTodoDataを削除する
     func deleteTodoData(todoId: String) {

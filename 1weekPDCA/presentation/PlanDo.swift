@@ -170,7 +170,9 @@ struct TaskCardListView: View {
                                         Image(systemName: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone ? "checkmark.circle.fill" : "circle")
                                             .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone))
                                             .onTapGesture {
-                                                taskCardManager.toggleTodoDoneState(for: taskIndex, todoIndex: todoIndex)
+                                                realmDataBaseManager.toggleTodoDoneState(
+                                                    todoId: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoId
+                                                )
                                                 // 動作確認用
                                                 print(taskCardManager.taskCardData.reduce(0) { count, card in
                                                     count + card.todoData.filter { $0.isDone }.count})
