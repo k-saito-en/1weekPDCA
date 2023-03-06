@@ -147,7 +147,13 @@ final class RealmDataBaseManager {
     }
     
     // 既存のTaskCardDataを更新する
-    func updateTaskCard(taskCardData: TaskCardData, with newTaskTitle: String) {
+    func updateTaskCard(taskCardId: String, with newTaskTitle: String) {
+        
+        // ID が一致する要素がなかった場合処理を中断する
+        guard let taskCardData = realm.object(ofType: TaskCardData.self, forPrimaryKey: taskCardId) else {
+            return
+        }
+        
         try! realm.write {
             taskCardData.taskTitle = newTaskTitle
             
@@ -157,7 +163,11 @@ final class RealmDataBaseManager {
     }
     
     // 既存のTaskCardDataを削除する
-    func deleteTaskCard(taskCardData: TaskCardData) {
+    func deleteTaskCard(taskCardId: String) {
+        guard let taskCardData = realm.object(ofType: TaskCardData.self, forPrimaryKey: taskCardId) else {
+            return
+        }
+        
         try! realm.write {
             realm.delete(taskCardData)
             
@@ -179,7 +189,11 @@ final class RealmDataBaseManager {
     }
     
     // 既存のTodoDataを更新する
-    func updateTodoData(todoData: TodoData, with newTodoTitle: String) {
+    func updateTodoData(todoId: String, with newTodoTitle: String) {
+        guard let todoData = realm.object(ofType: TodoData.self, forPrimaryKey: todoId) else {
+            return
+        }
+        
         try! realm.write {
             todoData.todoTitle = newTodoTitle
             
@@ -189,7 +203,11 @@ final class RealmDataBaseManager {
     }
     
     // TodoDataのisDoneを更新する
-    func updateTodoDoneState(todoData: TodoData, isDone: Bool) {
+    func updateTodoDoneState(todoId: String, isDone: Bool) {
+        guard let todoData = realm.object(ofType: TodoData.self, forPrimaryKey: todoId) else {
+            return
+        }
+        
         try! realm.write {
             todoData.isDone = isDone
             
@@ -199,7 +217,11 @@ final class RealmDataBaseManager {
     }
     
     // 既存のTodoDataを削除する
-    func deleteTodoData(todoData: TodoData) {
+    func deleteTodoData(todoId: String) {
+        guard let todoData = realm.object(ofType: TodoData.self, forPrimaryKey: todoId) else {
+            return
+        }
+        
         try! realm.write {
             realm.delete(todoData)
             
