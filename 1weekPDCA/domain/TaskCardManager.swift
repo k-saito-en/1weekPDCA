@@ -104,6 +104,8 @@ final class TodoData: Object, Identifiable {
 
 final class RealmDataBaseManager {
     
+    @EnvironmentObject var taskCardManager: TaskCardManager
+    
     let realm = try! Realm() // Realmインスタンスを生成
     
     // TaskCardDataのCRUDメソッド
@@ -132,6 +134,9 @@ final class RealmDataBaseManager {
     func addTaskCard(taskCardData: TaskCardData) {
         try! realm.write {
             realm.add(taskCardData)
+            
+            // 状態を更新する
+            taskCardManager.reloadTaskCardData()
         }
     }
     
@@ -139,6 +144,9 @@ final class RealmDataBaseManager {
     func updateTaskCard(taskCardData: TaskCardData, with newTaskTitle: String) {
         try! realm.write {
             taskCardData.taskTitle = newTaskTitle
+            
+            // 状態を更新する
+            taskCardManager.reloadTaskCardData()
         }
     }
     
@@ -146,6 +154,9 @@ final class RealmDataBaseManager {
     func deleteTaskCard(taskCardData: TaskCardData) {
         try! realm.write {
             realm.delete(taskCardData)
+            
+            // 状態を更新する
+            taskCardManager.reloadTaskCardData()
         }
     }
     
@@ -155,6 +166,9 @@ final class RealmDataBaseManager {
     func addTodoData(todoData: TodoData, to taskCardData: TaskCardData) {
         try! realm.write {
             taskCardData.todoData.append(todoData)
+            
+            // 状態を更新する
+            taskCardManager.reloadTaskCardData()
         }
     }
     
@@ -162,6 +176,9 @@ final class RealmDataBaseManager {
     func updateTodoData(todoData: TodoData, with newTodoTitle: String) {
         try! realm.write {
             todoData.todoTitle = newTodoTitle
+            
+            // 状態を更新する
+            taskCardManager.reloadTaskCardData()
         }
     }
     
@@ -169,6 +186,9 @@ final class RealmDataBaseManager {
     func updateTodoDoneState(todoData: TodoData, isDone: Bool) {
         try! realm.write {
             todoData.isDone = isDone
+            
+            // 状態を更新する
+            taskCardManager.reloadTaskCardData()
         }
     }
     
@@ -176,6 +196,9 @@ final class RealmDataBaseManager {
     func deleteTodoData(todoData: TodoData) {
         try! realm.write {
             realm.delete(todoData)
+            
+            // 状態を更新する
+            taskCardManager.reloadTaskCardData()
         }
     }
 }
