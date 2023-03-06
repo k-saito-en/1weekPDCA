@@ -288,7 +288,7 @@ struct PlanDoView: View {
             ScrollView {
                 WeekProgressBarCardView().environmentObject(taskCardManager)
                 
-                TaskCardListView().environmentObject(taskCardManager)
+                TaskCardListView().environmentObject(taskCardManager).onAppear(perform: taskCardManager.reloadTaskCardData)
                 
                 // キーボード入力がしやすいように持ち上げ
                 Color.clear.frame(width:15, height: 300)
