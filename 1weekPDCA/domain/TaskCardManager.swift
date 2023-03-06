@@ -137,14 +137,16 @@ final class RealmDataBaseManager {
     }
     
     // 新しいTaskCardDataを追加する
-    func addTaskCard(taskCardData: TaskCardData) {
+    func addTaskCard() {
+        let newTaskCardData = TaskCardData()
         try! realm.write {
-            realm.add(taskCardData)
+            realm.add(newTaskCardData)
             
             // 状態を更新する
             taskCardManager.reloadTaskCardData()
         }
     }
+
     
     // 既存のTaskCardDataを更新する
     func updateTaskTitle(taskCardId: String, with newTaskTitle: String) {
@@ -179,7 +181,13 @@ final class RealmDataBaseManager {
     // TodoDataのCRUDメソッド
     
     // 新しいTodoDataを追加する
-    func addTodoData(todoData: TodoData, to taskCardData: TaskCardData) {
+    func addTodoData(taskId: String) {
+        guard let taskCardData = realm.object(ofType: TaskCardData.self, forPrimaryKey: taskId) else {
+            return
+        }
+        
+        let todoData = TodoData()
+        
         try! realm.write {
             taskCardData.todoData.append(todoData)
             
@@ -187,7 +195,7 @@ final class RealmDataBaseManager {
             taskCardManager.reloadTaskCardData()
         }
     }
-    
+
     // 既存のTodoDataを更新する
     func updateTodoText(todoId: String, with newTodoTitle: String) {
         guard let todoData = realm.object(ofType: TodoData.self, forPrimaryKey: todoId) else {

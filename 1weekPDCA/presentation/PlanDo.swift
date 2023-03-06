@@ -173,9 +173,6 @@ struct TaskCardListView: View {
                                                 realmDataBaseManager.toggleTodoDoneState(
                                                     todoId: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoId
                                                 )
-                                                // 動作確認用
-                                                print(taskCardManager.taskCardData.reduce(0) { count, card in
-                                                    count + card.todoData.filter { $0.isDone }.count})
                                             }
                                         
                                         
@@ -214,7 +211,9 @@ struct TaskCardListView: View {
                             Spacer()
                             Button(action: {
                                 // 新しいToDoカードを追加する
-//                                taskCardManager.appendTodo(index: index)
+                                realmDataBaseManager.addTodoData(
+                                    taskId: taskCardManager.taskCardData[taskIndex].taskId
+                                )
                             }) {
                                 RoundedRectangle(cornerRadius: 10)
                                     .frame(width: UIScreen.main.bounds.width / 10 * 7, height: 40)
@@ -267,7 +266,7 @@ struct PlanDoView: View {
     @StateObject var taskCardManager = TaskCardManager()
     @State private var newTaskCardIsTaskDone = false
     
-    
+    let realmdataBaseManager = RealmDataBaseManager()
     
     
     var body: some View {
@@ -290,7 +289,7 @@ struct PlanDoView: View {
                     Spacer()
                     // task を追加
                     Button(action: {
-//                        self.taskCardManager.appendTask()
+                        realmdataBaseManager.addTaskCard()
                     }) {
                         ZStack {
                             Image(systemName: "circle.fill")
