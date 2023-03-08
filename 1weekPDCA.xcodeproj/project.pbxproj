@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3844900454EEF833C1FE37BF /* Pods_1weekPDCA_UnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 074E78C8B0CCF3D8545BA17F /* Pods_1weekPDCA_UnitTests.framework */; };
 		5C24155B299A2DCE00259CEB /* PlanDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C24155A299A2DCE00259CEB /* PlanDo.swift */; };
+		5C30857629B832BD003649DE /* RealmDataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C30857529B832BD003649DE /* RealmDataBaseManager.swift */; };
 		5C32275B29A14D6000498F2D /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32275A29A14D6000498F2D /* ColorUtils.swift */; };
 		5C32275D29A14DE600498F2D /* DateTimeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32275C29A14DE600498F2D /* DateTimeUtils.swift */; };
 		5C4B8CED2994ADE100B6348E /* TabBar_model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4B8CEC2994ADE100B6348E /* TabBar_model.swift */; };
@@ -45,6 +46,7 @@
 		360C89A90F466F1B3063CE05 /* Pods_1weekPDCA_1weekPDCAUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_1weekPDCA_1weekPDCAUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D63D9445BED265BCCE36233 /* Pods-1weekPDCA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-1weekPDCA.release.xcconfig"; path = "Target Support Files/Pods-1weekPDCA/Pods-1weekPDCA.release.xcconfig"; sourceTree = "<group>"; };
 		5C24155A299A2DCE00259CEB /* PlanDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDo.swift; sourceTree = "<group>"; };
+		5C30857529B832BD003649DE /* RealmDataBaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDataBaseManager.swift; sourceTree = "<group>"; };
 		5C32275A29A14D6000498F2D /* ColorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
 		5C32275C29A14DE600498F2D /* DateTimeUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeUtils.swift; sourceTree = "<group>"; };
 		5C4B8CEC2994ADE100B6348E /* TabBar_model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar_model.swift; sourceTree = "<group>"; };
@@ -88,19 +90,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C30857429B83290003649DE /* infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				5C30857529B832BD003649DE /* RealmDataBaseManager.swift */,
+			);
+			path = infrastructure;
+			sourceTree = "<group>";
+		};
 		5C5EC4A229A640D8006D5D65 /* 1weekPDCA_UnitTests */ = {
 			isa = PBXGroup;
 			children = (
 				5C5EC4A329A640D8006D5D65 /* PlanDo_Unittest.swift */,
 			);
 			path = 1weekPDCA_UnitTests;
-			sourceTree = "<group>";
-		};
-		5C62FE6E2992299E0046A41F /* infrastructure */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = infrastructure;
 			sourceTree = "<group>";
 		};
 		5C86E3742987A0CB00AB639E /* application */ = {
@@ -161,7 +164,7 @@
 				5C86E3762987A11100AB639E /* presentation */,
 				5C86E3742987A0CB00AB639E /* application */,
 				5C86E3752987A0E200AB639E /* domain */,
-				5C62FE6E2992299E0046A41F /* infrastructure */,
+				5C30857429B83290003649DE /* infrastructure */,
 				5CA6AC18298799D5004AE124 /* Preview Content */,
 			);
 			path = 1weekPDCA;
@@ -393,6 +396,7 @@
 			files = (
 				5C32275B29A14D6000498F2D /* ColorUtils.swift in Sources */,
 				5C4B8CF02994CE4800B6348E /* ColorStyle.swift in Sources */,
+				5C30857629B832BD003649DE /* RealmDataBaseManager.swift in Sources */,
 				5CBAF8FF29A499090019FC5C /* CalculateProgressUtils.swift in Sources */,
 				5C62FE7229922EE70046A41F /* TextStyle.swift in Sources */,
 				5C24155B299A2DCE00259CEB /* PlanDo.swift in Sources */,
