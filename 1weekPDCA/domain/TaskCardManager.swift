@@ -7,49 +7,135 @@
 
 import Foundation
 import SwiftUI
+import RealmSwift
 
 // PlanDo 画面の表示状況を管理
-// リポジトリパターンの DB からデータコピー、変更されたデータを保持する役割
 class TaskCardManager: ObservableObject{
+    
+    let realmDataBaseManager = RealmDataBaseManager()
     
     @Published var taskCardData = [
         (
+            taskId: String,
             taskTitle: String,
-            todoData: [(todoText: String, isDone: Bool)]
+            todoData: [(todoId: String, todoText: String, isDone: Bool)]
         )
     ]()
     
-    func appendTodo(index: Int) {
-        taskCardData[index].todoData.append((todoText: "", isDone: false))
+    // Create 処理
+    func createTask(taskCardManager: TaskCardManager) {
+        
+        let newTaskCardData = TaskCardData()
+        newTaskCardData.taskId = UUID().uuidString
+        newTaskCardData.taskTitle = ""
+        
+        let newTodoData = TodoData()
+        newTodoData.todoId = UUID().uuidString
+        newTodoData.todoTitle = ""
+        newTodoData.isDone = false
+        
+        newTaskCardData.todoData.append(newTodoData)
+        
+        taskCardData.append((newTaskCardData.taskId, newTaskCardData.taskTitle, [(newTodoData.todoId, newTodoData.todoTitle, newTodoData.isDone)]))
+        
+        realmDataBaseManager.realmCreateTaskCard(newTaskCardData: newTaskCardData, taskCardManager: taskCardManager)
+    }
+
+    
+    func createTodo(taskIndex: Int, taskcardManager: TaskCardManager) {
+        
+        let newTodoData = TodoData()
+        newTodoData.todoId = UUID().uuidString
+        newTodoData.todoTitle = ""
+        newTodoData.isDone = false
+        
+        taskCardData[taskIndex].todoData.append((newTodoData.todoId, newTodoData.todoTitle, newTodoData.isDone))
+        
+        realmDataBaseManager.realmCreateTodoData(
+            taskId: taskCardData[taskIndex].taskId,
+            newTodoData: newTodoData,
+            taskCardManager: taskcardManager
+        )
+    }
+
+    // Read 処理
+    func reloadTaskCardData() {
+        // DB を taskCardData に反映して View を更新
+        taskCardData = realmDataBaseManager.realmReadAllTaskCards()
     }
     
-    func appendTask() {
-        taskCardData.append((taskTitle: "", [(todoText: "", isDone: false)]))
+    // Update 処理
+    func updateTaskTitle(taskIndex: Int, newTaskTitle: String, taskCardManager: TaskCardManager) {
+        realmDataBaseManager.realmUpdateTaskTitle(
+            taskId: taskCardData[taskIndex].taskId,
+            with: newTaskTitle,
+            taskCardManager: taskCardManager
+        )
     }
     
-    func deleteTodo(index: Int, todoIndex: Int, value: DragGesture.Value) {
+    func updateTodoText(taskIndex: Int, todoIndex: Int, newTodoText: String, taskCardManager: TaskCardManager) {
+        realmDataBaseManager.realmUpdateTodoText(
+            todoId: taskCardData[taskIndex].todoData[todoIndex].todoId,
+            with: newTodoText,
+            taskCardManager: taskCardManager
+        )
+    }
+    
+    func toggleTodoDoneState(taskIndex: Int, todoIndex: Int, taskCardManager: TaskCardManager) {
+        taskCardData[taskIndex].todoData[todoIndex].isDone.toggle()
+        
+        realmDataBaseManager.realmToggleTodoDoneState(
+            todoId: taskCardData[taskIndex].todoData[todoIndex].todoId,
+            taskCardManager: taskCardManager
+        )
+    }
+    
+    // Delete 処理
+    func deleteTask(taskIndex: Int, value: DragGesture.Value, taskCardManager: TaskCardManager) {
         if value.translation.width < -100 {
-            taskCardData[index].todoData.remove(at: todoIndex)
+            
+            realmDataBaseManager.realmDeleteTaskCard(
+                taskId: taskCardData[taskIndex].taskId,
+                taskCardManager: taskCardManager)
+            
+            taskCardData.remove(at: taskIndex)
+            
             print("Swiped left!")
+            
         } else if value.translation.width > 100 {
-            taskCardData[index].todoData.remove(at: todoIndex)
+            
+            realmDataBaseManager.realmDeleteTaskCard(
+                taskId: taskCardData[taskIndex].taskId,
+                taskCardManager: taskCardManager)
+            
+            taskCardData.remove(at: taskIndex)
+            
             print("Swiped right!")
         }
     }
     
-    func deleteTask(index: Int, value: DragGesture.Value) {
+    func deleteTodo(taskIndex: Int, todoIndex: Int, value: DragGesture.Value, taskCardManager: TaskCardManager) {
+        
         if value.translation.width < -100 {
-            taskCardData.remove(at: index)
+            
+            realmDataBaseManager.realmDeleteTodoCard(
+                todoId: taskCardData[taskIndex].todoData[todoIndex].todoId,
+                taskCardManager: taskCardManager
+            )
+            
+            taskCardData[taskIndex].todoData.remove(at: todoIndex)
+            
             print("Swiped left!")
         } else if value.translation.width > 100 {
-            taskCardData.remove(at: index)
+            
+            realmDataBaseManager.realmDeleteTodoCard(
+                todoId: taskCardData[taskIndex].todoData[todoIndex].todoId,
+                taskCardManager: taskCardManager
+            )
+            
+            taskCardData[taskIndex].todoData.remove(at: todoIndex)
+            
             print("Swiped right!")
         }
     }
-    
-    func toggleTodoDoneState(for index: Int, todoIndex: Int) {
-        taskCardData[index].todoData[todoIndex].isDone.toggle()
-    }
-
-
 }

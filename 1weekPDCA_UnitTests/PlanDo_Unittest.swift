@@ -170,7 +170,7 @@ class TaskCardListViewTests: XCTestCase {
     func testAppendTask() throws {
         
         // タスク追加動作をはさむ
-        taskCardManager.appendTask()
+        taskCardManager.createTask(taskCardManager: taskCardManager)
         let taskCardView = TaskCardListView().environmentObject(taskCardManager)
 
         
@@ -185,8 +185,8 @@ class TaskCardListViewTests: XCTestCase {
     func testAppendTodo() throws {
         
         // todo 追加動作をはさむ
-        taskCardManager.appendTask()
-        taskCardManager.appendTodo(index: 0)
+        taskCardManager.createTask(taskCardManager: taskCardManager)
+        taskCardManager.createTodo(taskIndex: 0, taskcardManager: taskCardManager)
         let taskCardView = TaskCardListView().environmentObject(taskCardManager)
 
         
@@ -202,7 +202,7 @@ class TaskCardListViewTests: XCTestCase {
             
         // task を 3 回追加
         for _ in 0 ... 3 {
-            taskCardManager.appendTask()
+            taskCardManager.createTask(taskCardManager: taskCardManager)
         }
         
         // task カードを右にドラッグした際のジェスチャー情報をスタブ化
@@ -213,7 +213,7 @@ class TaskCardListViewTests: XCTestCase {
             velocity: .zero
         )
 
-        taskCardManager.deleteTask(index: 0, value: dummyValue)
+        taskCardManager.deleteTask(taskIndex: 0, value: dummyValue, taskCardManager: taskCardManager)
         
         let taskCardView = TaskCardListView().environmentObject(taskCardManager)
         let taskCards = try taskCardView.inspect().forEach(0)
@@ -225,11 +225,11 @@ class TaskCardListViewTests: XCTestCase {
     func testDeleteTodo() throws {
         
         // task カードを追加
-        taskCardManager.appendTask()
+        taskCardManager.createTask(taskCardManager: taskCardManager)
         
         // todo を 5 回追加
         for _ in 0 ... 5 {
-            taskCardManager.appendTodo(index: 0 )
+            taskCardManager.createTodo(taskIndex: 0, taskcardManager: taskCardManager)
         }
         
         // task カードを右にドラッグした際のジェスチャー情報をスタブ化
@@ -240,7 +240,7 @@ class TaskCardListViewTests: XCTestCase {
             velocity: .zero
         )
         
-        taskCardManager.deleteTodo(index: 0, todoIndex: 1, value: dummyValue)
+        taskCardManager.deleteTodo(taskIndex: 0, todoIndex: 1, value: dummyValue, taskCardManager: taskCardManager)
         
         let taskCardView = TaskCardListView().environmentObject(taskCardManager)
         let todoCards = try taskCardView.inspect().forEach(0).find(CardView<AnyView>.self).zStack().vStack(0).vStack(1).forEach(2)
@@ -251,10 +251,56 @@ class TaskCardListViewTests: XCTestCase {
 
 }
 
+class RealmDataBaseManagerTests: XCTestCase {
+    
+    let taskCardManager = TaskCardManager()
+    let reaimDataBaseManager = RealmDataBaseManager()
+    
+    // task カードを右にドラッグした際のジェスチャー情報をスタブ化
+    let dummyValue = DragGesture.Value(
+        time: Date().addingTimeInterval(-0.5),
+        location: .init(x: 20.0, y: 0),
+        startLocation: .zero,
+        velocity: .zero
+    )
+    
+    // アプリ再起動後にデータが存在するかをテスト
+    func testReloadTaskCardData() throws {
+        
+        let taskCardView = TaskCardListView().environmentObject(taskCardManager)
+        
+        // TaskCard を作成
+        for _ in 0..<3 {
+            taskCardManager.createTask(taskCardManager: taskCardManager)
+        }
+        
+        // さらに TodoCard を追加
+        taskCardManager.createTodo(taskIndex: 0, taskcardManager: taskCardManager)
+        
+        // Taskcard を１つ消去
+        taskCardManager.deleteTask(taskIndex: 0, value: dummyValue, taskCardManager: taskCardManager)
+        
+        // TodoCard を１つ消去
+        taskCardManager.deleteTodo(taskIndex: 0, todoIndex: 0, value: dummyValue, taskCardManager: taskCardManager)
+        
+        // データを全消去してアプリ再起動動作を再現
+        taskCardManager.taskCardData.removeAll()
+        taskCardManager.reloadTaskCardData()
+        
+        let taskCard = try taskCardView.inspect().findAll(CardView<AnyView>.self)
+        let todoCard = try taskCardView.inspect().forEach(0).find(CardView<AnyView>.self).zStack().vStack(0).vStack(1).forEach(2)
+        
+        XCTAssertEqual(taskCard.count, taskCardManager.taskCardData.count)
+        XCTAssertEqual(todoCard.count, taskCardManager.taskCardData[0].todoData.count)
+        
+    }
+}
+
 
 //MARK: テスト用の関数群
 struct testFunctions {
     
+    let realmDataBaseManager = RealmDataBaseManager()
     // 前の月曜日の日付を取得
     func getMondayDateString() -> String {
         let calendar = Calendar.current
@@ -295,6 +341,5 @@ struct testFunctions {
         let daysRemaining = calendar.dateComponents([.day], from: today, to: endOfYear).day!
         return "\(daysRemaining)"
     }
-
     
 }

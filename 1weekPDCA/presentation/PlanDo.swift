@@ -75,7 +75,7 @@ struct WeekProgressBarCardView: View {
     let calendar = Calendar.current
     
     var body: some View {
-        let weekProgress = caluculateProgressUtils.calculateWeekProgress(taskCardManager.taskCardData)
+        let weekProgress = caluculateProgressUtils.calculateWeekProgress(taskCardData: taskCardManager.taskCardData)
         let weekRange = dateTimeUtils.getWeekRange()
         
         CardView {
@@ -116,27 +116,42 @@ struct TaskCardListView: View {
             NoTaskView()
                 
         } else {
-            ForEach(taskCardManager.taskCardData.indices, id: \.self) { index in
+            ForEach(taskCardManager.taskCardData.indices, id: \.self) { taskIndex in
                 CardView {
                     VStack {
                         HStack {
                             // 30文字までに制限？
-                            TextField("task title", text: $taskCardManager.taskCardData[index].taskTitle, axis: .vertical)
-                                .textStyle(for: .title, color: .uiColorGray)
-                                .fixedSize(horizontal: false, vertical: true)
+                            TextField(
+                                "task title",
+                                text: $taskCardManager.taskCardData[taskIndex].taskTitle,
+                                axis: .vertical
+                            )
+                            .textStyle(for: .title, color: .uiColorGray)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .onChange(
+                                of: taskCardManager.taskCardData[taskIndex].taskTitle,
+                                perform: { newValue in
+                                    taskCardManager.updateTaskTitle(
+                                        taskIndex: taskIndex,
+                                        newTaskTitle: newValue,
+                                        taskCardManager: taskCardManager
+                                    )
+                                }
+                            )
                             
                             Spacer()
                             
-                            customProgressCircle(circleProgress: caluculateProgressUtils.caluculateCircleProgress(index: index, taskCardManager: taskCardManager))
+                            customProgressCircle(circleProgress: caluculateProgressUtils.caluculateCircleProgress(index: taskIndex, taskCardManager: taskCardManager))
                                 .frame(width: 30, height: 30)
                                 .padding(.trailing, 20)
                             
                         }
+                        
                         // 空のViewを追加し、高さを10の隙間を開ける
                         Color.clear.frame(height: 10)
                         
                         // 追加された todo カードを表示する
-                        ForEach(taskCardManager.taskCardData[index].todoData.indices, id: \.self) { todoIndex in
+                        ForEach(taskCardManager.taskCardData[taskIndex].todoData.indices, id: \.self) { todoIndex in
                             // todo カードの実装
                             HStack {
                                 Spacer()
@@ -144,27 +159,35 @@ struct TaskCardListView: View {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .frame(maxWidth: UIScreen.main.bounds.width / 10 * 7, maxHeight: .infinity)
-                                        .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[index].todoData[todoIndex].isDone))
+                                        .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone))
                                     
                                     HStack {
                                         // ラジオボタンの実装
-                                        Image(systemName: taskCardManager.taskCardData[index].todoData[todoIndex].isDone ? "checkmark.circle.fill" : "circle")
-                                            .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[index].todoData[todoIndex].isDone))
+                                        Image(systemName: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone ? "checkmark.circle.fill" : "circle")
+                                            .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone))
                                             .onTapGesture {
-                                                taskCardManager.toggleTodoDoneState(for: index, todoIndex: todoIndex)
-                                                // 動作確認用
-                                                print(taskCardManager.taskCardData.reduce(0) { count, card in
-                                                    count + card.todoData.filter { $0.isDone }.count})
+                                                taskCardManager.toggleTodoDoneState(taskIndex: taskIndex, todoIndex: todoIndex, taskCardManager: taskCardManager)
                                             }
                                         
                                         
                                         VStack {
                                             Color.clear.frame(width:10, height: 4)
                                             
-                                            TextField("ToDo", text: $taskCardManager.taskCardData[index].todoData[todoIndex].todoText, axis: .vertical)
+                                            TextField("ToDo", text: $taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText, axis: .vertical)
                                                 .textStyle(for: .body, color: .uiColorWhite)
                                                 .frame(width: UIScreen.main.bounds.width / 10 * 6)
                                                 .fixedSize(horizontal: false, vertical: true)
+                                                .onChange(
+                                                    of: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText,
+                                                    perform: { newValue in
+                                                        taskCardManager.updateTodoText(
+                                                            taskIndex: taskIndex,
+                                                            todoIndex: todoIndex,
+                                                            newTodoText: newValue,
+                                                            taskCardManager: taskCardManager
+                                                        )
+                                                    }
+                                                )
                                             
                                             Color.clear.frame(width:10, height: 4)
                                         }
@@ -175,7 +198,7 @@ struct TaskCardListView: View {
                             // スワイプで todo を削除
                             .gesture(DragGesture()
                                 .onEnded { value in
-                                    taskCardManager.deleteTodo(index: index, todoIndex: todoIndex, value: value)
+                                    taskCardManager.deleteTodo(taskIndex: taskIndex, todoIndex: todoIndex, value: value, taskCardManager: taskCardManager)
                                 })
                         }
                         
@@ -183,7 +206,7 @@ struct TaskCardListView: View {
                             Spacer()
                             Button(action: {
                                 // 新しいToDoカードを追加する
-                                taskCardManager.appendTodo(index: index)
+                                taskCardManager.createTodo(taskIndex: taskIndex, taskcardManager: taskCardManager)
                             }) {
                                 RoundedRectangle(cornerRadius: 10)
                                     .frame(width: UIScreen.main.bounds.width / 10 * 7, height: 40)
@@ -197,7 +220,7 @@ struct TaskCardListView: View {
                 // スワイプで task を削除
                 .gesture(DragGesture()
                     .onEnded { value in
-                        taskCardManager.deleteTask(index: index, value: value)
+                        taskCardManager.deleteTask(taskIndex: taskIndex, value: value, taskCardManager: taskCardManager)
                     }
                 )
                 
@@ -236,9 +259,6 @@ struct PlanDoView: View {
     @StateObject var taskCardManager = TaskCardManager()
     @State private var newTaskCardIsTaskDone = false
     
-    
-    
-    
     var body: some View {
         ZStack {
             
@@ -247,7 +267,7 @@ struct PlanDoView: View {
             ScrollView {
                 WeekProgressBarCardView().environmentObject(taskCardManager)
                 
-                TaskCardListView().environmentObject(taskCardManager)
+                TaskCardListView().environmentObject(taskCardManager).onAppear(perform: taskCardManager.reloadTaskCardData)
                 
                 // キーボード入力がしやすいように持ち上げ
                 Color.clear.frame(width:15, height: 300)
@@ -259,7 +279,7 @@ struct PlanDoView: View {
                     Spacer()
                     // task を追加
                     Button(action: {
-                        self.taskCardManager.appendTask()
+                        taskCardManager.createTask(taskCardManager: taskCardManager)
                     }) {
                         ZStack {
                             Image(systemName: "circle.fill")
