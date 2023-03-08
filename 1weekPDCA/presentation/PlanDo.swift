@@ -166,7 +166,7 @@ struct TaskCardListView: View {
                                         Image(systemName: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone ? "checkmark.circle.fill" : "circle")
                                             .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone))
                                             .onTapGesture {
-                                                taskCardManager.toggleTodoDoneState(taskIndex: taskIndex, todoIndex: todoIndex)
+                                                taskCardManager.toggleTodoDoneState(taskIndex: taskIndex, todoIndex: todoIndex, taskCardManager: taskCardManager)
                                             }
                                         
                                         
@@ -198,7 +198,7 @@ struct TaskCardListView: View {
                             // スワイプで todo を削除
                             .gesture(DragGesture()
                                 .onEnded { value in
-                                    taskCardManager.deleteTodo(index: taskIndex, todoIndex: todoIndex, value: value)
+                                    taskCardManager.deleteTodo(taskIndex: taskIndex, todoIndex: todoIndex, value: value, taskCardManager: taskCardManager)
                                 })
                         }
                         
@@ -206,7 +206,7 @@ struct TaskCardListView: View {
                             Spacer()
                             Button(action: {
                                 // 新しいToDoカードを追加する
-                                taskCardManager.createTodo(index: taskIndex)
+                                taskCardManager.createTodo(taskIndex: taskIndex, taskcardManager: taskCardManager)
                             }) {
                                 RoundedRectangle(cornerRadius: 10)
                                     .frame(width: UIScreen.main.bounds.width / 10 * 7, height: 40)
@@ -220,7 +220,7 @@ struct TaskCardListView: View {
                 // スワイプで task を削除
                 .gesture(DragGesture()
                     .onEnded { value in
-                        taskCardManager.deleteTask(index: taskIndex, value: value)
+                        taskCardManager.deleteTask(taskIndex: taskIndex, value: value, taskCardManager: taskCardManager)
                     }
                 )
                 
@@ -279,7 +279,7 @@ struct PlanDoView: View {
                     Spacer()
                     // task を追加
                     Button(action: {
-                        taskCardManager.createTask()
+                        taskCardManager.createTask(taskCardManager: taskCardManager)
                     }) {
                         ZStack {
                             Image(systemName: "circle.fill")

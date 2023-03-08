@@ -170,7 +170,7 @@ class TaskCardListViewTests: XCTestCase {
     func testAppendTask() throws {
         
         // タスク追加動作をはさむ
-        taskCardManager.appendTask()
+        taskCardManager.createTask()
         let taskCardView = TaskCardListView().environmentObject(taskCardManager)
 
         
@@ -185,8 +185,8 @@ class TaskCardListViewTests: XCTestCase {
     func testAppendTodo() throws {
         
         // todo 追加動作をはさむ
-        taskCardManager.appendTask()
-        taskCardManager.appendTodo(index: 0)
+        taskCardManager.createTask()
+        taskCardManager.createTodo(index: 0)
         let taskCardView = TaskCardListView().environmentObject(taskCardManager)
 
         
@@ -202,7 +202,7 @@ class TaskCardListViewTests: XCTestCase {
             
         // task を 3 回追加
         for _ in 0 ... 3 {
-            taskCardManager.appendTask()
+            taskCardManager.createTask()
         }
         
         // task カードを右にドラッグした際のジェスチャー情報をスタブ化
@@ -225,11 +225,11 @@ class TaskCardListViewTests: XCTestCase {
     func testDeleteTodo() throws {
         
         // task カードを追加
-        taskCardManager.appendTask()
+        taskCardManager.createTask()
         
         // todo を 5 回追加
         for _ in 0 ... 5 {
-            taskCardManager.appendTodo(index: 0 )
+            taskCardManager.createTodo(index: 0 )
         }
         
         // task カードを右にドラッグした際のジェスチャー情報をスタブ化
