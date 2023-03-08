@@ -107,10 +107,8 @@ struct TaskCardListView: View {
     
     @EnvironmentObject var taskCardManager: TaskCardManager
     
-    
     let colorUtils = ColorUtils()
     let caluculateProgressUtils = CalculateProgressUtils()
-    let realmDataBaseManager = RealmDataBaseManager()
     
     var body: some View {
         if taskCardManager.taskCardData.isEmpty {
@@ -133,9 +131,9 @@ struct TaskCardListView: View {
                             .onChange(
                                 of: taskCardManager.taskCardData[taskIndex].taskTitle,
                                 perform: { newValue in
-                                    realmDataBaseManager.updateTaskTitle(
-                                        taskCardId: taskCardManager.taskCardData[taskIndex].taskId,
-                                        with: newValue,
+                                    taskCardManager.updateTaskTitle(
+                                        taskIndex: taskIndex,
+                                        newTaskTitle: newValue,
                                         taskCardManager: taskCardManager
                                     )
                                 }
@@ -168,10 +166,7 @@ struct TaskCardListView: View {
                                         Image(systemName: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone ? "checkmark.circle.fill" : "circle")
                                             .foregroundColor(colorUtils.getIsDoneColor(for: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].isDone))
                                             .onTapGesture {
-                                                realmDataBaseManager.toggleTodoDoneState(
-                                                    todoId: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoId,
-                                                    taskCardManager: taskCardManager
-                                                )
+                                                taskCardManager.toggleTodoDoneState(taskIndex: taskIndex, todoIndex: todoIndex)
                                             }
                                         
                                         
@@ -185,10 +180,12 @@ struct TaskCardListView: View {
                                                 .onChange(
                                                     of: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText,
                                                     perform: { newValue in
-                                                        realmDataBaseManager.updateTodoText(
-                                                            todoId: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoId,
-                                                            with: newValue,
-                                                            taskCardManager: taskCardManager)
+                                                        taskCardManager.updateTodoText(
+                                                            taskIndex: taskIndex,
+                                                            todoIndex: todoIndex,
+                                                            newTodoText: newValue,
+                                                            taskCardManager: taskCardManager
+                                                        )
                                                     }
                                                 )
                                             
@@ -201,11 +198,7 @@ struct TaskCardListView: View {
                             // スワイプで todo を削除
                             .gesture(DragGesture()
                                 .onEnded { value in
-                                    realmDataBaseManager.deleteTodoCard(
-                                        todoId: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoId,
-                                        value: value,
-                                        taskCardManager: taskCardManager
-                                    )
+                                    taskCardManager.deleteTodo(index: taskIndex, todoIndex: todoIndex, value: value)
                                 })
                         }
                         
@@ -213,10 +206,7 @@ struct TaskCardListView: View {
                             Spacer()
                             Button(action: {
                                 // 新しいToDoカードを追加する
-                                realmDataBaseManager.addTodoData(
-                                    taskId: taskCardManager.taskCardData[taskIndex].taskId,
-                                    taskCardManager: taskCardManager
-                                )
+                                taskCardManager.createTodo(index: taskIndex)
                             }) {
                                 RoundedRectangle(cornerRadius: 10)
                                     .frame(width: UIScreen.main.bounds.width / 10 * 7, height: 40)
@@ -230,11 +220,7 @@ struct TaskCardListView: View {
                 // スワイプで task を削除
                 .gesture(DragGesture()
                     .onEnded { value in
-                        realmDataBaseManager.deleteTaskCard(
-                            taskId: taskCardManager.taskCardData[taskIndex].taskId,
-                            value: value,
-                            taskCardManager: taskCardManager
-                        )
+                        taskCardManager.deleteTask(index: taskIndex, value: value)
                     }
                 )
                 
@@ -273,9 +259,6 @@ struct PlanDoView: View {
     @StateObject var taskCardManager = TaskCardManager()
     @State private var newTaskCardIsTaskDone = false
     
-    let realmdataBaseManager = RealmDataBaseManager()
-    
-    
     var body: some View {
         ZStack {
             
@@ -296,7 +279,7 @@ struct PlanDoView: View {
                     Spacer()
                     // task を追加
                     Button(action: {
-                        realmdataBaseManager.addTaskCard(taskCardManager: taskCardManager)
+                        taskCardManager.createTask()
                     }) {
                         ZStack {
                             Image(systemName: "circle.fill")
