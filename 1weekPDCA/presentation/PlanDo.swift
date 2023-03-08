@@ -107,8 +107,6 @@ struct TaskCardListView: View {
     
     @EnvironmentObject var taskCardManager: TaskCardManager
     
-    // TextField が編集中かどうかを管理
-    @FocusState private var isTextFieldFocused: Bool
     
     let colorUtils = ColorUtils()
     let caluculateProgressUtils = CalculateProgressUtils()
@@ -132,7 +130,16 @@ struct TaskCardListView: View {
                             )
                             .textStyle(for: .title, color: .uiColorGray)
                             .fixedSize(horizontal: false, vertical: true)
-                            .focused($isTextFieldFocused)
+                            .onChange(
+                                of: taskCardManager.taskCardData[taskIndex].taskTitle,
+                                perform: { newValue in
+                                    realmDataBaseManager.updateTaskTitle(
+                                        taskCardId: taskCardManager.taskCardData[taskIndex].taskId,
+                                        with: newValue,
+                                        taskCardManager: taskCardManager
+                                    )
+                                }
+                            )
                             
                             Spacer()
                             
@@ -140,16 +147,6 @@ struct TaskCardListView: View {
                                 .frame(width: 30, height: 30)
                                 .padding(.trailing, 20)
                             
-                        }
-                        .onChange(of: isTextFieldFocused) { isFocused in
-                            if !isFocused {
-                                // TextFieldが編集モードではなくなったときに DB へ保存し状態更新
-                                realmDataBaseManager.updateTaskTitle(
-                                    taskCardId: taskCardManager.taskCardData[taskIndex].taskId,
-                                    with: taskCardManager.taskCardData[taskIndex].taskTitle,
-                                    taskCardManager: taskCardManager
-                                )
-                            }
                         }
                         
                         // 空のViewを追加し、高さを10の隙間を開ける
@@ -185,18 +182,17 @@ struct TaskCardListView: View {
                                                 .textStyle(for: .body, color: .uiColorWhite)
                                                 .frame(width: UIScreen.main.bounds.width / 10 * 6)
                                                 .fixedSize(horizontal: false, vertical: true)
-                                                .focused($isTextFieldFocused)
+                                                .onChange(
+                                                    of: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText,
+                                                    perform: { newValue in
+                                                        realmDataBaseManager.updateTodoText(
+                                                            todoId: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoId,
+                                                            with: newValue,
+                                                            taskCardManager: taskCardManager)
+                                                    }
+                                                )
                                             
                                             Color.clear.frame(width:10, height: 4)
-                                        }
-                                        .onChange(of: isTextFieldFocused) { isFocused in
-                                            if !isFocused {
-                                                // TextFieldが編集モードではなくなったときに DB へ保存し状態更新
-                                                realmDataBaseManager.updateTodoText(
-                                                    todoId: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoId,
-                                                    with: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText, taskCardManager: taskCardManager
-                                                )
-                                            }
                                         }
                                     }
                                 }

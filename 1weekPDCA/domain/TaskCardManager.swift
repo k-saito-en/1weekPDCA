@@ -30,6 +30,7 @@ class TaskCardManager: ObservableObject{
 //    }
     
     func deleteTodo(index: Int, todoIndex: Int, value: DragGesture.Value) {
+        
         if value.translation.width < -100 {
             taskCardData[index].todoData.remove(at: todoIndex)
             print("Swiped left!")
