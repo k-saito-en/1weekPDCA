@@ -52,6 +52,7 @@ struct customProgressCircle: View {
                 .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
                 .foregroundColor(colorUtils.getProgressColor(for: circleProgress))
                 .rotationEffect(Angle(degrees: 270.0))
+                .animation(.easeInOut, value: circleProgress) // アニメーションを追加
             
             // 一回り小さな円
             Circle()
@@ -223,7 +224,6 @@ struct TaskCardListView: View {
                         taskCardManager.deleteTask(taskIndex: taskIndex, value: value, taskCardManager: taskCardManager)
                     }
                 )
-                
             }
         }
     }
