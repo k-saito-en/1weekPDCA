@@ -58,6 +58,7 @@ struct customProgressCircle: View {
             Circle()
                 .fill(colorUtils.getProgressColor(for: circleProgress).opacity(0.5))
                 .frame(width: 35, height: 35)
+                .animation(.easeInOut, value: circleProgress)
         }
     }
 }
