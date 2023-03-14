@@ -26,6 +26,8 @@ struct CustomProgressBar: View {
                 
                 Rectangle().frame(width: min(CGFloat(progress) * geometry.size.width, geometry.size.width), height: 10)
                     .foregroundColor(colorUtils.getProgressColor(for: progress))
+                    .animation(.easeInOut, value: progress)
+                
             }.cornerRadius(45.0)
         }
     }
