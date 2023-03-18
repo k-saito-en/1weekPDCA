@@ -196,7 +196,7 @@ struct TaskCardListView: View {
                                             
                                             TextField("ToDo", text: $taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText, axis: .vertical)
                                                 .textStyle(for: .body, color: .uiColorWhite)
-                                                .frame(width: UIScreen.main.bounds.width / 10 * 6)
+                                                .frame(width: UIScreen.main.bounds.width / 10 * 5)
                                                 .fixedSize(horizontal: false, vertical: true)
                                                 .onChange(
                                                     of: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText,
@@ -212,15 +212,16 @@ struct TaskCardListView: View {
                                             
                                             Color.clear.frame(width:10, height: 4)
                                         }
+                                        
+                                        Button(action: {
+                                            taskCardManager.deleteTodo(taskIndex: taskIndex, todoIndex: todoIndex, taskCardManager: taskCardManager)
+                                        }) {
+                                            Image(systemName: "minus")
+                                                .foregroundColor(Color.uiColorGray).opacity(0.5)
+                                        }
                                     }
                                 }
                             }
-                            
-                            // スワイプで todo を削除
-                            .gesture(DragGesture()
-                                .onEnded { value in
-                                    taskCardManager.deleteTodo(taskIndex: taskIndex, todoIndex: todoIndex, taskCardManager: taskCardManager)
-                                })
                         }
                         
                         HStack {
