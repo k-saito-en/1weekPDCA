@@ -299,7 +299,7 @@ struct PlanDoView: View {
                 TaskCardListView().environmentObject(taskCardManager).onAppear(perform: taskCardManager.reloadTaskCardData)
                 
                 // キーボード入力がしやすいように持ち上げ
-                Color.clear.frame(width:15, height: 300)
+                Color.clear.frame(width:15, height: 150)
             }
             
             VStack {
