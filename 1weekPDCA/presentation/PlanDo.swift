@@ -130,10 +130,17 @@ struct TaskCardListView: View {
                             Button(action: {
                                 taskCardManager.deleteTask(taskIndex: taskIndex, taskCardManager: taskCardManager)
                             }) {
-                                Image(systemName: "minus")
-                                    .resizable()
-                                    .frame(width: 15, height: 3)
-                                    .foregroundColor(Color.uiColorGray).opacity(0.5)
+                                
+                                ZStack {
+                                
+                                    Color.clear.frame(width: 20, height: 10)
+                                    
+                                    Image(systemName: "minus")
+                                        .resizable()
+                                        .frame(width: 15, height: 3)
+                                        .foregroundColor(Color.uiColorGray).opacity(0.5)
+                                }
+                                
                             }
                             .shadow(radius: 5)
                             
@@ -216,8 +223,15 @@ struct TaskCardListView: View {
                                         Button(action: {
                                             taskCardManager.deleteTodo(taskIndex: taskIndex, todoIndex: todoIndex, taskCardManager: taskCardManager)
                                         }) {
-                                            Image(systemName: "minus")
-                                                .foregroundColor(Color.uiColorGray).opacity(0.5)
+                                            
+                                            ZStack {
+                                                
+                                                Color.clear.frame(width: 20, height: 10)
+                                                
+                                                Image(systemName: "minus")
+                                                    .foregroundColor(Color.uiColorGray).opacity(0.5)
+                                            }
+                                            
                                         }
                                     }
                                 }
