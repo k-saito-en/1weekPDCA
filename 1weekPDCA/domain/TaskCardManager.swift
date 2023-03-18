@@ -91,51 +91,24 @@ class TaskCardManager: ObservableObject{
     }
     
     // Delete 処理
-    func deleteTask(taskIndex: Int, value: DragGesture.Value, taskCardManager: TaskCardManager) {
-        if value.translation.width < -100 {
-            
-            realmDataBaseManager.realmDeleteTaskCard(
-                taskId: taskCardData[taskIndex].taskId,
-                taskCardManager: taskCardManager)
-            
-            taskCardData.remove(at: taskIndex)
-            
-            print("Swiped left!")
-            
-        } else if value.translation.width > 100 {
-            
-            realmDataBaseManager.realmDeleteTaskCard(
-                taskId: taskCardData[taskIndex].taskId,
-                taskCardManager: taskCardManager)
-            
-            taskCardData.remove(at: taskIndex)
-            
-            print("Swiped right!")
-        }
+    func deleteTask(taskIndex: Int, taskCardManager: TaskCardManager) {
+        
+        realmDataBaseManager.realmDeleteTaskCard(
+            taskId: taskCardData[taskIndex].taskId,
+            taskCardManager: taskCardManager)
+        
+        taskCardData.remove(at: taskIndex)
+        
     }
     
-    func deleteTodo(taskIndex: Int, todoIndex: Int, value: DragGesture.Value, taskCardManager: TaskCardManager) {
+    func deleteTodo(taskIndex: Int, todoIndex: Int, taskCardManager: TaskCardManager) {
         
-        if value.translation.width < -100 {
-            
             realmDataBaseManager.realmDeleteTodoCard(
                 todoId: taskCardData[taskIndex].todoData[todoIndex].todoId,
                 taskCardManager: taskCardManager
             )
             
             taskCardData[taskIndex].todoData.remove(at: todoIndex)
-            
-            print("Swiped left!")
-        } else if value.translation.width > 100 {
-            
-            realmDataBaseManager.realmDeleteTodoCard(
-                todoId: taskCardData[taskIndex].todoData[todoIndex].todoId,
-                taskCardManager: taskCardManager
-            )
-            
-            taskCardData[taskIndex].todoData.remove(at: todoIndex)
-            
-            print("Swiped right!")
-        }
+        
     }
 }
