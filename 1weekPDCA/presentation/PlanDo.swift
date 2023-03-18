@@ -124,6 +124,23 @@ struct TaskCardListView: View {
                 CardView {
                     VStack {
                         HStack {
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                taskCardManager.deleteTask(taskIndex: taskIndex, taskCardManager: taskCardManager)
+                            }) {
+                                Image(systemName: "minus")
+                                    .resizable()
+                                    .frame(width: 15, height: 3)
+                                    .foregroundColor(Color.uiColorGray).opacity(0.5)
+                            }
+                            .shadow(radius: 5)
+                            
+                            
+                        }
+                        
+                        HStack {
                             // 30文字までに制限？
                             TextField(
                                 "task title",
@@ -202,7 +219,7 @@ struct TaskCardListView: View {
                             // スワイプで todo を削除
                             .gesture(DragGesture()
                                 .onEnded { value in
-                                    taskCardManager.deleteTodo(taskIndex: taskIndex, todoIndex: todoIndex, value: value, taskCardManager: taskCardManager)
+                                    taskCardManager.deleteTodo(taskIndex: taskIndex, todoIndex: todoIndex, taskCardManager: taskCardManager)
                                 })
                         }
                         
@@ -221,12 +238,6 @@ struct TaskCardListView: View {
                         }
                     }
                 }
-                // スワイプで task を削除
-                .gesture(DragGesture()
-                    .onEnded { value in
-                        taskCardManager.deleteTask(taskIndex: taskIndex, value: value, taskCardManager: taskCardManager)
-                    }
-                )
             }
         }
     }
