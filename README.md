@@ -1,12 +1,13 @@
+> ⚠️ 現在開発中につき、現時点での実装済み機能のビルドは`develop`ブランチで行ってください
+
 [![1weekPDCA_CI](https://github.com/k-saito-en/1weekPDCA/actions/workflows/1weekPDCA_CI.yml/badge.svg)](https://github.com/k-saito-en/1weekPDCA/actions/workflows/1weekPDCA_CI.yml) 
 
 <img alt="GitHub issues" src="https://img.shields.io/github/issues/k-saito-en/1weekPDCA"> <img alt="GitHub" src="https://img.shields.io/github/license/k-saito-en/1weekPDCA">
 
 ![1weekPDCA_README](https://user-images.githubusercontent.com/111550856/221393945-ee5fa6cd-49a5-4266-9a74-5842946ea1d3.png)
 
-
-
 # 1weekPDCA
+
 ## ▼ 🤔 What? これは何?
 
 このアプリは、**PDCAサイクル** と **目標を大目標・中目標・小目標と階層化することによって達成確率が上がるというアルゴリズム** に基づき、自己実現の手助けをするアプリです。
