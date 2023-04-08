@@ -26,6 +26,8 @@ struct CustomProgressBar: View {
                 
                 Rectangle().frame(width: min(CGFloat(progress) * geometry.size.width, geometry.size.width), height: 10)
                     .foregroundColor(colorUtils.getProgressColor(for: progress))
+                    .animation(.easeInOut, value: progress)
+                
             }.cornerRadius(45.0)
         }
     }
@@ -52,11 +54,13 @@ struct customProgressCircle: View {
                 .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
                 .foregroundColor(colorUtils.getProgressColor(for: circleProgress))
                 .rotationEffect(Angle(degrees: 270.0))
+                .animation(.easeInOut, value: circleProgress) // アニメーションを追加
             
             // 一回り小さな円
             Circle()
                 .fill(colorUtils.getProgressColor(for: circleProgress).opacity(0.5))
                 .frame(width: 35, height: 35)
+                .animation(.easeInOut, value: circleProgress)
         }
     }
 }
@@ -120,6 +124,30 @@ struct TaskCardListView: View {
                 CardView {
                     VStack {
                         HStack {
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                taskCardManager.deleteTask(taskIndex: taskIndex, taskCardManager: taskCardManager)
+                            }) {
+                                
+                                ZStack {
+                                
+                                    Color.clear.frame(width: 20, height: 10)
+                                    
+                                    Image(systemName: "minus")
+                                        .resizable()
+                                        .frame(width: 15, height: 3)
+                                        .foregroundColor(Color.uiColorGray).opacity(0.5)
+                                }
+                                
+                            }
+                            .shadow(radius: 5)
+                            
+                            
+                        }
+                        
+                        HStack {
                             // 30文字までに制限？
                             TextField(
                                 "task title",
@@ -175,7 +203,7 @@ struct TaskCardListView: View {
                                             
                                             TextField("ToDo", text: $taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText, axis: .vertical)
                                                 .textStyle(for: .body, color: .uiColorWhite)
-                                                .frame(width: UIScreen.main.bounds.width / 10 * 6)
+                                                .frame(width: UIScreen.main.bounds.width / 10 * 5)
                                                 .fixedSize(horizontal: false, vertical: true)
                                                 .onChange(
                                                     of: taskCardManager.taskCardData[taskIndex].todoData[todoIndex].todoText,
@@ -191,15 +219,23 @@ struct TaskCardListView: View {
                                             
                                             Color.clear.frame(width:10, height: 4)
                                         }
+                                        
+                                        Button(action: {
+                                            taskCardManager.deleteTodo(taskIndex: taskIndex, todoIndex: todoIndex, taskCardManager: taskCardManager)
+                                        }) {
+                                            
+                                            ZStack {
+                                                
+                                                Color.clear.frame(width: 20, height: 10)
+                                                
+                                                Image(systemName: "minus")
+                                                    .foregroundColor(Color.uiColorGray).opacity(0.5)
+                                            }
+                                            
+                                        }
                                     }
                                 }
                             }
-                            
-                            // スワイプで todo を削除
-                            .gesture(DragGesture()
-                                .onEnded { value in
-                                    taskCardManager.deleteTodo(taskIndex: taskIndex, todoIndex: todoIndex, value: value, taskCardManager: taskCardManager)
-                                })
                         }
                         
                         HStack {
@@ -217,13 +253,6 @@ struct TaskCardListView: View {
                         }
                     }
                 }
-                // スワイプで task を削除
-                .gesture(DragGesture()
-                    .onEnded { value in
-                        taskCardManager.deleteTask(taskIndex: taskIndex, value: value, taskCardManager: taskCardManager)
-                    }
-                )
-                
             }
         }
     }
@@ -270,7 +299,7 @@ struct PlanDoView: View {
                 TaskCardListView().environmentObject(taskCardManager).onAppear(perform: taskCardManager.reloadTaskCardData)
                 
                 // キーボード入力がしやすいように持ち上げ
-                Color.clear.frame(width:15, height: 300)
+                Color.clear.frame(width:15, height: 150)
             }
             
             VStack {
