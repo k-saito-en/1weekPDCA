@@ -37,7 +37,7 @@ func font(for style: TextStyle) -> Font {
 extension Text {
     func textStyle(for style: TextStyle, color: Color) -> Text {
         // _weekPDCA は自分で定義した WeekPDCA クラスのインスタンス
-        self.font(_weekPDCA.font(for: style))
+        self.font(weekPDCA.font(for: style))
             .foregroundColor(color)
     }
 }
@@ -46,7 +46,7 @@ extension Text {
 extension TextField {
     func textStyle(for style: TextStyle, color: Color) -> some View {
         // _weekPDCA は自分で定義した WeekPDCA クラスのインスタンス
-        self.font(_weekPDCA.font(for: style)) 
+        self.font(weekPDCA.font(for: style))
             .foregroundColor(color)
     }
 }
