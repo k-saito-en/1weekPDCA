@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CheckView: View {
+struct Check: View {
     var body: some View {
         ZStack {
             
@@ -15,35 +15,30 @@ struct CheckView: View {
             
             ScrollView {
                 
-                VStack {
+                ZStack {
                     
-                    Color.clear.frame(width:200, height: 20)
-                    
-                    ZStack {
+                    Rectangle()
+                        .fill(Color.cardColorGray)
+                        .cornerRadius(25)
+                        .frame(height: 60)
+                        .padding(.horizontal, 20)
+                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+                   
+                    HStack {
                         
-                        Rectangle()
-                            .fill(Color.cardColorGray)
-                            .cornerRadius(25)
-                            .frame(height: 60)
-                            .padding(.horizontal, 20)
-                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
-                       
-                        HStack {
-                            
-                            Text("12 / 24")
-                                .textStyle(for: .title, color: Color.uiColorGray)
-    //                            .padding(.leading, 40)
-                            
-                            Color.clear.frame(width:200, height: 40)
-                            
-                            Text("Sun")
-                                .textStyle(for: .title, color: Color.uiColorGray)
-                            
-                        }
-                        .frame(width: .infinity, height: 60)
-                        .padding(.horizontal, 30)
+                        Text("12 / 24")
+                            .textStyle(for: .title, color: Color.uiColorGray)
+//                            .padding(.leading, 40)
+                        
+                        Color.clear.frame(width:200, height: 40)
+                        
+                        Text("Sun")
+                            .textStyle(for: .title, color: Color.uiColorGray)
                         
                     }
+                    .frame(width: .infinity, height: 60)
+                    .padding(.horizontal, 30)
+                    
                 }
             }
         }
@@ -52,6 +47,6 @@ struct CheckView: View {
 
 struct Check_Previews: PreviewProvider {
     static var previews: some View {
-        CheckView()
+        Check()
     }
 }
