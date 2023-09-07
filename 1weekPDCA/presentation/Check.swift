@@ -15,6 +15,8 @@ struct CheckView: View {
             
             ScrollView {
                 
+                Color.clear.frame(width:200, height: 20)
+                
                 ZStack {
                     
                     Rectangle()
