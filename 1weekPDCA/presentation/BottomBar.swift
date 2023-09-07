@@ -12,7 +12,7 @@ import SwiftUI
 let bottomBarItems = [
     BottomBarItem(image: "graduationcap.fill", view: AnyView(MockActView())),
     BottomBarItem(image: "square.fill", view: AnyView(PlanDoView())),
-    BottomBarItem(image: "checkmark.circle.fill", view: AnyView(MockCheckView()))
+    BottomBarItem(image: "checkmark.circle.fill", view: AnyView(CheckView()))
 ]
 
 //MARK: ボトムバーの実装
